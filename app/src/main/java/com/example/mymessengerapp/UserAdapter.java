@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import com.squareup.picasso.Picasso;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,29 +26,37 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.viewholder> {
 
     @NonNull
     @Override
-    public viewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return null;
+    public UserAdapter.viewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(mainActivity).inflate(R.layout.user_item,parent,false);
+        return new viewholder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull viewholder holder, int position) {
-        // Bind the data to the ViewHolder
-        Users user = usersArrayList.get(position);
-        // Update the ViewHolder based on the data of "user"
+    public void onBindViewHolder(@NonNull UserAdapter.viewholder holder, int position) {
+
+        Users users = usersArrayList.get(position);
+        holder.username.setText(users.userName);
+        holder.userstatus.setText(users.status);
+        Picasso.get().load(users.profilepic).into(holder.userimg);
+
+
+
     }
 
     @Override
     public int getItemCount() {
-        // Return the total number of items
         return usersArrayList.size();
     }
 
     public class viewholder extends RecyclerView.ViewHolder {
-        // Define your item views here
-
+        CircleImageView userimg;
+        TextView username;
+        TextView userstatus;
         public viewholder(@NonNull View itemView) {
             super(itemView);
-            // Initialize your item views here
+            userimg = itemView.findViewById(R.id.userimg);
+            username = itemView.findViewById(R.id.username);
+            userstatus = itemView.findViewById(R.id.userstatus);
         }
     }
 }
