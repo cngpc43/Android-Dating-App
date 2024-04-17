@@ -29,7 +29,10 @@ public class splash extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        getSupportActionBar().hide();
+        if (getSupportActionBar() != null){
+            getSupportActionBar().hide();
+        }
+
         logo = findViewById(R.id.logoimg);
         own1 = findViewById(R.id.from);
         own2 = findViewById(R.id.group_name);
@@ -49,6 +52,6 @@ public class splash extends AppCompatActivity {
                 startActivity(intent);
                 finish();
             }
-        },4000);
+        },1000);
     }
 }
