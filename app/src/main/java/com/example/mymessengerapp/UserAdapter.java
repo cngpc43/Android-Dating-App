@@ -7,7 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import com.squareup.picasso.Picasso;
-
+import java.util.ArrayList;
+// Import image view
+import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -49,7 +51,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.viewholder> {
     }
 
     public class viewholder extends RecyclerView.ViewHolder {
-        CircleImageView userimg;
+        ImageView userimg;
         TextView username;
         TextView userstatus;
         public viewholder(@NonNull View itemView) {

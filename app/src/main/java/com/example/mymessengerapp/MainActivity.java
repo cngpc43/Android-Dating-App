@@ -32,13 +32,16 @@ public class MainActivity extends AppCompatActivity {
     UserAdapter  adapter;
     FirebaseDatabase database;
     ArrayList<Users> usersArrayList;
-    ImageView imglogout;
-    ImageView cumbut,setbut;
+    ImageView notification;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        if(getSupportActionBar()!=null){
+
         getSupportActionBar().hide();
+        }
 
         database=FirebaseDatabase.getInstance();
         auth = FirebaseAuth.getInstance();
@@ -48,9 +51,25 @@ public class MainActivity extends AppCompatActivity {
 
         usersArrayList = new ArrayList<>();
 
-
+        mainUserRecyclerView = findViewById(R.id.mainUserRecyclerView);
         mainUserRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new UserAdapter(MainActivity.this,usersArrayList);
         mainUserRecyclerView.setAdapter(adapter);
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot dataSnapshot: snapshot.getChildren())
+                {
+                    Users users = dataSnapshot.getValue(Users.class);
+                    usersArrayList.add(users);
+                }
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 }
