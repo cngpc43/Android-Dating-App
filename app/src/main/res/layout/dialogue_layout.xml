@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="350dp"
+    android:layout_height="200dp"
+    android:orientation="vertical"
+    android:layout_gravity="center|center_vertical"
+    android:background="@drawable/dialogue_shape"
+    android:padding="@dimen/_20sdp"
+    android:layout_alignParentBottom="true"
+
+    >
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Do you really want to log out?"
+        android:textSize="18dp"
+        android:gravity="center"
+        android:fontFamily="@font/poppins_bold"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <Button
+            android:id="@+id/yesbnt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Yes"
+            android:backgroundTint="@android:color/holo_red_dark"/>
+        <Button
+            android:id="@+id/nobnt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="No"
+            android:backgroundTint="@color/black"/>
+    </LinearLayout>
+
+
+</LinearLayout>

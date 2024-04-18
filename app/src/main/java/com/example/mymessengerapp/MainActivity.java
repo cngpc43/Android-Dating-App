@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     FirebaseDatabase database;
     ArrayList<Users> usersArrayList;
     ImageView notification;
+    ImageView user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +51,6 @@ public class MainActivity extends AppCompatActivity {
         DatabaseReference reference = database.getReference().child("user");
 
         usersArrayList = new ArrayList<>();
-
         mainUserRecyclerView = findViewById(R.id.mainUserRecyclerView);
         mainUserRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new UserAdapter(MainActivity.this,usersArrayList);
@@ -75,6 +75,14 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(MainActivity.this,login.class);
             startActivity(intent);
         }
+        user = findViewById(R.id.user);
+        user.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, setting.class);
+                startActivity(intent);
+            }
+        });
 
     }
 }
