@@ -67,32 +67,7 @@
         app:layout_constraintTop_toBottomOf="@+id/toolBar"
         />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:orientation="horizontal"
-        android:id="@+id/bottomBar"
-        app:layout_constraintBottom_toBottomOf="parent"
-        >
-        <ImageView
-            android:id="@+id/camBut"
-            android:layout_width="@dimen/_70sdp"
-            android:layout_height="@dimen/_70sdp"
-            android:src="@drawable/logo_dating" />
-        <View
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_weight="1"/>
-        <ImageView
-            android:layout_width="47dp"
-            android:layout_height="38dp"
-            android:layout_gravity="end|center_vertical"
-            android:src="@drawable/message_icon"
-            android:layout_marginEnd="20dp"
-            />
-
-    </LinearLayout>
+    <include layout="@layout/bottom_bar"/>
 
 
 
