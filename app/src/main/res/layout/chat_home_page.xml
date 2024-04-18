@@ -14,8 +14,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints">
-    </ImageView>
+        tools:ignore="MissingConstraints" />
 
     <com.google.android.material.search.SearchBar
         android:id="@+id/sb_search"
@@ -43,38 +42,49 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lv_list_chat">
 
-        <Button
-            android:layout_width="76dp"
-            android:layout_height="76dp"
-
-            android:layout_weight="1"
-            android:background="@drawable/button_background"
-            android:drawableTop="@drawable/logo_list_chat"
-            android:padding="10dp" />
-
-        <Button
-            android:layout_width="76dp"
+        <ImageButton
+            android:layout_width="0dp"
             android:layout_height="76dp"
             android:layout_weight="1"
             android:background="@drawable/button_background"
-            android:drawableTop="@drawable/logo_list_chat"
-            android:padding="10dp" />
+            android:backgroundTint="#F1F0FE"
+            android:padding="10dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/baseline_mail_outline_32"
+            tools:ignore="ContentDescription" />
 
-        <Button
-            android:layout_width="76dp"
+        <ImageButton
+            android:layout_width="0dp"
             android:layout_height="76dp"
             android:layout_weight="1"
             android:background="@drawable/button_background"
-            android:drawableTop="@drawable/logo_list_chat"
-            android:padding="10dp" />
+            android:backgroundTint="#F1F0FE"
+            android:padding="10dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/baseline_local_phone_32"
+            tools:ignore="ContentDescription" />
 
-        <Button
-            android:layout_width="76dp"
+        <ImageButton
+            android:layout_width="0dp"
             android:layout_height="76dp"
             android:layout_weight="1"
             android:background="@drawable/button_background"
-            android:drawableTop="@drawable/logo_list_chat"
-            android:padding="10dp" />
+            android:backgroundTint="#F1F0FE"
+            android:padding="10dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/baseline_people_alt_32"
+            tools:ignore="ContentDescription" />
+
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="76dp"
+            android:layout_weight="1"
+            android:background="@drawable/button_background"
+            android:backgroundTint="#F1F0FE"
+            android:padding="10dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/baseline_contacts_32"
+            tools:ignore="ContentDescription" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
