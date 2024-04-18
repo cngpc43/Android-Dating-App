@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/ll_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="22dp"
+        android:src="@drawable/login_logo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints">
+    </ImageView>
+
+    <com.google.android.material.search.SearchBar
+        android:id="@+id/sb_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/ll_header" />
+
+    <ListView
+        android:id="@+id/lv_list_chat"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintBottom_toTopOf="@+id/ll_bottom"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sb_search" />
+
+    <LinearLayout
+        android:id="@+id/ll_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lv_list_chat">
+
+        <Button
+            android:layout_width="76dp"
+            android:layout_height="76dp"
+
+            android:layout_weight="1"
+            android:background="@drawable/button_background"
+            android:drawableTop="@drawable/logo_list_chat"
+            android:padding="10dp" />
+
+        <Button
+            android:layout_width="76dp"
+            android:layout_height="76dp"
+            android:layout_weight="1"
+            android:background="@drawable/button_background"
+            android:drawableTop="@drawable/logo_list_chat"
+            android:padding="10dp" />
+
+        <Button
+            android:layout_width="76dp"
+            android:layout_height="76dp"
+            android:layout_weight="1"
+            android:background="@drawable/button_background"
+            android:drawableTop="@drawable/logo_list_chat"
+            android:padding="10dp" />
+
+        <Button
+            android:layout_width="76dp"
+            android:layout_height="76dp"
+            android:layout_weight="1"
+            android:background="@drawable/button_background"
+            android:drawableTop="@drawable/logo_list_chat"
+            android:padding="10dp" />
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
