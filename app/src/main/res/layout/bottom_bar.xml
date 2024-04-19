@@ -1,5 +1,4 @@
-
-    <LinearLayout
+ <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
@@ -11,7 +10,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         >
         <ImageView
-            android:id="@+id/camBut"
+            android:id="@+id/home"
             android:layout_width="0dp"
             android:layout_height="@dimen/_70sdp"
             android:src="@drawable/logo_dating"
@@ -26,12 +25,17 @@
             android:layout_marginEnd="20dp"
             android:layout_weight="1"
             />
-        <ImageView
-            android:id="@+id/user"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/_30sdp"
-            android:layout_gravity="center_vertical"
-            android:src="@drawable/user_icon"
-            android:layout_weight="1"
-            />
+     <FrameLayout
+         android:id="@+id/user"
+         android:layout_width="0dp"
+         android:layout_height="@dimen/_70sdp"
+         android:layout_weight="1">
+
+         <ImageView
+
+             android:layout_width="wrap_content"
+             android:layout_height="@dimen/_30sdp"
+             android:layout_gravity="center"
+             android:src="@drawable/user_icon" />
+     </FrameLayout>
     </LinearLayout>

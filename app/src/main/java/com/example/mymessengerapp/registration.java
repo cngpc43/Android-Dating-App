@@ -3,7 +3,7 @@ package com.example.mymessengerapp;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
@@ -12,10 +12,13 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
+// Import Log
+import android.util.Log;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -40,15 +43,17 @@ public class registration extends AppCompatActivity {
     String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
     FirebaseDatabase database;
     FirebaseStorage storage;
-    ProgressDialog progressDialog;
+    Dialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Establishing The Account");
-        progressDialog.setCancelable(false);
+        dialog = new Dialog(this);
+        dialog.setContentView(R.layout.dialog_progress);
+//        dialog.setMessage("Establishing The Account");
+        ProgressBar progressBar = dialog.findViewById(R.id.progressBar);
+        dialog.setCancelable(false);
         if (getSupportActionBar()!=null){
         getSupportActionBar().hide();
         }
@@ -84,16 +89,16 @@ public class registration extends AppCompatActivity {
 
                 if (TextUtils.isEmpty(name) || TextUtils.isEmpty(emaill) ||
                         TextUtils.isEmpty(Password) || TextUtils.isEmpty(cPassword)){
-                    progressDialog.dismiss();
+                    dialog.dismiss();
                     Toast.makeText(registration.this, "Please Enter Valid Information", Toast.LENGTH_SHORT).show();
                 }else  if (!emaill.matches(emailPattern)){
-                    progressDialog.dismiss();
+                    dialog.dismiss();
                     rg_email.setError("Type A Valid Email Here");
                 }else if (Password.length()<6){
-                    progressDialog.dismiss();
+                    dialog.dismiss();
                     rg_password.setError("Password Must Be 6 Characters Or More");
                 }else if (!Password.equals(cPassword)){
-                    progressDialog.dismiss();
+                    dialog.dismiss();
                     rg_password.setError("The Password Doesn't Match");
                 }else {
                     auth.createUserWithEmailAndPassword(emaill,Password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -118,7 +123,8 @@ public class registration extends AppCompatActivity {
                                                             @Override
                                                             public void onComplete(@NonNull Task<Void> task) {
                                                                 if (task.isSuccessful()){
-                                                                    progressDialog.show();
+                                                                    Toast.makeText(registration.this, "Account created successfully", Toast.LENGTH_SHORT).show();
+                                                                    dialog.show();
                                                                     Intent intent = new Intent(registration.this,MainActivity.class);
                                                                     startActivity(intent);
                                                                     finish();
@@ -126,7 +132,13 @@ public class registration extends AppCompatActivity {
                                                                     Toast.makeText(registration.this, "Error in creating the user", Toast.LENGTH_SHORT).show();
                                                                 }
                                                             }
-                                                        });
+                                                        }).addOnFailureListener(new OnFailureListener() {
+                                                            @Override
+                                                            public void onFailure(@NonNull Exception e) {
+                                                                e.printStackTrace();
+                                                            }
+                                                        }
+                                                        );
                                                     }
                                                 });
                                             }
@@ -140,7 +152,8 @@ public class registration extends AppCompatActivity {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isSuccessful()){
-                                                progressDialog.show();
+                                                Toast.makeText(registration.this, "Account created successfully", Toast.LENGTH_SHORT).show();
+                                                dialog.show();
                                                 Intent intent = new Intent(registration.this,MainActivity.class);
                                                 startActivity(intent);
                                                 finish();
@@ -148,9 +161,15 @@ public class registration extends AppCompatActivity {
                                                 Toast.makeText(registration.this, "Error in creating the user", Toast.LENGTH_SHORT).show();
                                             }
                                         }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            e.printStackTrace();
+                                        }
                                     });
                                 }
                             }else {
+                                Log.d("Registration", "Failed to create user in Firebase Authentication");
                                 Toast.makeText(registration.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         }

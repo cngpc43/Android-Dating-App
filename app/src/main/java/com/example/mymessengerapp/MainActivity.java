@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
@@ -15,6 +16,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -33,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     FirebaseDatabase database;
     ArrayList<Users> usersArrayList;
     ImageView notification;
+    FrameLayout user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,18 +53,30 @@ public class MainActivity extends AppCompatActivity {
         DatabaseReference reference = database.getReference().child("user");
 
         usersArrayList = new ArrayList<>();
-
         mainUserRecyclerView = findViewById(R.id.mainUserRecyclerView);
+        int spacingInPixels = getResources().getDimensionPixelSize(R.dimen._16sdp);
+        mainUserRecyclerView.addItemDecoration(new SpaceItemDecoration(spacingInPixels));
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        layoutManager.setStackFromEnd(true);
+        mainUserRecyclerView.setLayoutManager(layoutManager);
+        adapter = new UserAdapter(MainActivity.this,usersArrayList);
+        mainUserRecyclerView.setAdapter(adapter);
+        PagerSnapHelper snapHelper = new PagerSnapHelper();
+        snapHelper.attachToRecyclerView(mainUserRecyclerView);
         mainUserRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new UserAdapter(MainActivity.this,usersArrayList);
         mainUserRecyclerView.setAdapter(adapter);
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String currentUserId = auth.getCurrentUser().getUid();
                 for (DataSnapshot dataSnapshot: snapshot.getChildren())
                 {
                     Users users = dataSnapshot.getValue(Users.class);
-                    usersArrayList.add(users);
+                    if(users != null && !users.getUserId().equals(currentUserId)){
+                        usersArrayList.add(users);
+                    }
                 }
                 adapter.notifyDataSetChanged();
             }
@@ -75,6 +90,14 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(MainActivity.this,login.class);
             startActivity(intent);
         }
+        user = findViewById(R.id.user);
+        user.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, setting.class);
+                startActivity(intent);
+            }
+        });
 
     }
 }
