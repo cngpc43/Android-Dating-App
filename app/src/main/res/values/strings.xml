@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">MyMessengerApp</string>
     <string name="sign_up"><u>Sign up</u></string>
+    <string name="team_name"><u>KHTeam</u></string>
+    <string name="search_hint"><u>Search</u></string>
 </resources>

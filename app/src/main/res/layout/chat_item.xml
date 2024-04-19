@@ -21,18 +21,19 @@
         android:padding="2dp"
         tools:ignore="UselessLeaf">
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_chat_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Chi Cuong"
             android:textSize="16sp"
             android:textStyle="bold" />
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:text="What are you doing ?" />
+            android:text="What are you doing ?"
+            android:textSize="16sp" />
     </LinearLayout>
 
     <TextView
