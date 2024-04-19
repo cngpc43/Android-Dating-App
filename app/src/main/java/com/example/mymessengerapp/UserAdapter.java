@@ -39,7 +39,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.viewholder> {
         Users users = usersArrayList.get(position);
         holder.username.setText(users.userName);
         holder.userstatus.setText(users.status);
-        Picasso.get().load(users.profilepic).into(holder.userimg);
+//        Picasso.get().load(users.profilepic).into(holder.userimg);
 
 
 
