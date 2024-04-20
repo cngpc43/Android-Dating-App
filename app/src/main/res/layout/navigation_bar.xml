@@ -1,53 +1,45 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_alignParentBottom="true"
-    android:orientation="horizontal"
-    android:id="@+id/bottomBar"
-    android:background="@color/white"
-    app:layout_constraintBottom_toBottomOf="parent"
-    >
-
-    <FrameLayout
-        android:layout_width="0dp"
-        android:layout_height="@dimen/_50sdp"
-        android:layout_weight="1"
+ <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:id="@+id/bottomBar"
+        android:background="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
         >
-
         <ImageView
             android:id="@+id/home"
-            android:layout_width="@dimen/_70sdp"
-            android:layout_height="@dimen/_60sdp"
-            android:layout_gravity="center|center_vertical"
-            android:src="@drawable/logo_dating" />
-    </FrameLayout>
-
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_70sdp"
+            android:src="@drawable/logo_dating"
+            android:layout_weight="1"
+            />
     <FrameLayout
         android:id="@+id/message"
         android:layout_width="0dp"
-        android:layout_height="@dimen/_50sdp"
+        android:layout_height="@dimen/_70sdp"
         android:layout_weight="1">
-
         <ImageView
-            android:layout_width="30dp"
-            android:layout_height="33dp"
-            android:layout_gravity="center|center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:layout_gravity="end|center_vertical"
             android:src="@drawable/message_icon"
             />
     </FrameLayout>
 
-    <FrameLayout
-        android:id="@+id/user"
-        android:layout_width="0dp"
-        android:layout_height="@dimen/_50sdp"
-        android:layout_weight="1">
+     <FrameLayout
+         android:id="@+id/user"
+         android:layout_width="0dp"
+         android:layout_height="@dimen/_70sdp"
+         android:layout_weight="1">
 
-        <ImageView
-            android:layout_width="@dimen/_28sdp"
-            android:layout_height="@dimen/_25sdp"
-            android:layout_gravity="center|center_vertical"
-            android:src="@drawable/user_icon" />
-    </FrameLayout>
-</LinearLayout>
+         <ImageView
+
+             android:layout_width="wrap_content"
+             android:layout_height="@dimen/_30sdp"
+             android:layout_gravity="center"
+             android:src="@drawable/user_icon" />
+     </FrameLayout>
+    </LinearLayout>

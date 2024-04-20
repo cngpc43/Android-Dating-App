@@ -32,7 +32,7 @@ public class chat_home_page extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        EdgeToEdge.enable(this);
+        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_chat_home_page);
         if(getSupportActionBar()!=null){
             getSupportActionBar().hide();
@@ -63,10 +63,6 @@ public class chat_home_page extends AppCompatActivity {
             }
         });
         ImageView home = findViewById(R.id.home);
-        home.setOnClickListener(v -> {
-            Intent intent = new Intent(chat_home_page.this, MainActivity.class);
-            startActivity(intent);
-        });
         message = findViewById(R.id.message);
         home.setOnClickListener(v -> {
             Intent intent = new Intent(chat_home_page.this, MainActivity.class);
