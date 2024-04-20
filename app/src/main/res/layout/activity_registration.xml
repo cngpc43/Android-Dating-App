@@ -6,247 +6,275 @@
     android:layout_height="match_parent"
     tools:context=".registration">
 
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="98dp"
-        android:layout_height="100dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.031"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.021"
-        app:srcCompat="@drawable/logo_dating" />
-
-    <TextView
-        android:id="@+id/loginbut"
-        android:layout_width="@dimen/_124sdp"
-        android:layout_height="24dp"
-        android:layout_marginBottom="48dp"
-        android:gravity="center"
-        android:text="Log in"
-        android:textColor="@color/black"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/textView4"
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
-        android:text="KHTeam"
-        android:textSize="12pt"
-        android:textStyle="bold"
-        app:layout_constraintHorizontal_bias="0.019"
-        app:layout_constraintLeft_toRightOf="@id/imageView2"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="24dp" />
 
-    <Button
-        android:id="@+id/signupbutton"
-        android:layout_width="@dimen/_250sdp"
-        android:layout_height="@dimen/_45sdp"
-        android:backgroundTint="@color/black"
-        android:text="Sign up"
-        android:textSize="8pt"
-        android:textStyle="bold"
-        android:gravity="center"
-        app:layout_constraintBottom_toTopOf="@id/loginbut"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/textView1"
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineEnd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/poppins_regular"
-        android:gravity="center"
-        android:text="Hi! Welcome to Bucac"
-        android:textColor="@color/black"
-        android:textSize="10pt"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.195"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.142" />
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="24dp" />
 
-    <EditText
-        android:id="@+id/rgusername"
-        android:layout_width="350dp"
-        android:layout_height="@dimen/_52sdp"
-        android:background="@drawable/rectangle_box"
-        android:ems="10"
-        android:inputType="textEmailAddress"
-        android:paddingLeft="12dp"
-        android:textColor="@color/black"
-        android:textSize="@dimen/_15sdp"
-        android:textStyle="bold"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textView7"
-        app:layout_constraintStart_toStartOf="@id/textView7"/>
 
-    <TextView
-        android:id="@+id/textView5"
-        android:layout_width="91dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="8dp"
-        android:gravity="center_vertical"
-        android:text="Email:"
-        android:textColor="#545655"
-        android:textSize="@dimen/_13sdp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.112"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/rgusername" />
-
-    <TextView
-        android:id="@+id/profile_picture"
-        android:layout_width="91dp"
-        android:layout_height="40dp"
-        android:layout_marginLeft="36dp"
+    <LinearLayout
+        android:id="@+id/ll_sign_up_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Choose your profile picture:"
-        android:textColor="#545655"
-        android:textSize="@dimen/_12sdp"
-        android:textStyle="bold"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/rgrepassword" />
-
-    <EditText
-        android:id="@+id/rgpassword"
-        android:layout_width="350dp"
-        android:layout_height="@dimen/_52sdp"
-        android:background="@drawable/rectangle_box"
-        android:ems="10"
-        android:inputType="textEmailAddress"
-        android:paddingLeft="12dp"
-        android:textColor="@color/black"
-        android:textSize="@dimen/_15sdp"
-        android:textStyle="bold"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textView8"
-        app:layout_constraintStart_toStartOf="@id/textView8" />
-
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/profilerg0"
-        android:layout_width="64dp"
-        android:layout_height="63dp"
-        android:layout_marginTop="8dp"
-        android:src="@drawable/photo_placeholder"
+        android:gravity="center"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.159"
-        app:layout_constraintStart_toEndOf="@id/profile_picture"
-        app:layout_constraintTop_toBottomOf="@id/rgrepassword" />
+        app:layout_constraintHorizontal_bias="0.366"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <EditText
-        android:id="@+id/rgemail"
-        android:layout_width="350dp"
-        android:layout_height="@dimen/_52sdp"
-        android:background="@drawable/rectangle_box"
-        android:ems="10"
-        android:inputType="textEmailAddress"
-        android:paddingLeft="12dp"
-        android:textColor="@color/black"
-        android:textSize="@dimen/_15sdp"
-        android:textStyle="bold"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textView5"
-        app:layout_constraintStart_toStartOf="@id/textView5" />
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            app:srcCompat="@drawable/logo_dating" />
 
-    <TextView
-        android:id="@+id/textView7"
-        android:layout_width="@dimen/_91sdp"
-        android:layout_height="40dp"
-        android:layout_marginLeft="36dp"
-        android:layout_marginTop="8dp"
-        android:gravity="center_vertical"
-        android:text="Username:"
-        android:textColor="#545655"
-        android:textSize="@dimen/_13sdp"
-        android:textStyle="bold"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/create_account" />
-
-    <TextView
-        android:id="@+id/textView8"
-        android:layout_width="91dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="8dp"
-        android:gravity="center_vertical"
-        android:text="Password:"
-        android:textColor="#545655"
-        android:textSize="@dimen/_12sdp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.115"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/rgemail" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/app_name"
+            android:textColor="@color/black"
+            android:textSize="12pt"
+            android:textStyle="bold" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/create_account"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:fontFamily="@font/poppins_regular"
         android:text="Create your new account"
-        android:textColor="#808080"
-        android:textSize="8pt"
+        android:textSize="9pt"
         android:textStyle="bold"
-        app:layout_constraintHorizontal_bias="0.179"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textView1" />
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/ll_sign_up_header" />
+
+    <TextView
+        android:id="@+id/tv_sign_up_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:text="User name"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/create_account"
+        tools:ignore="UnusedAttribute" />
 
     <EditText
-        android:id="@+id/rgrepassword"
-        android:layout_width="350dp"
+        android:id="@+id/rgusername"
+        android:layout_width="360dp"
         android:layout_height="@dimen/_52sdp"
+        android:layout_marginTop="4dp"
         android:background="@drawable/rectangle_box"
         android:ems="10"
+        android:hint="Enter your user-name"
         android:inputType="textEmailAddress"
-        android:paddingLeft="12dp"
+        android:paddingStart="12dp"
+        android:textColor="@color/black"
+        android:textSize="15dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/guidelineEnd"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/tv_sign_up_username"
+        tools:ignore="RtlSymmetry,SpUsage" />
+
+    <TextView
+        android:id="@+id/tv_sign_up_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:text="E-mail"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/rgusername"
+        tools:ignore="UnusedAttribute" />
+
+    <EditText
+        android:id="@+id/rgemail"
+        android:layout_width="360dp"
+        android:layout_height="@dimen/_52sdp"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/rectangle_box"
+        android:ems="10"
+        android:hint="@string/enter_email"
+        android:inputType="textEmailAddress"
+        android:paddingStart="12dp"
         android:textColor="@color/black"
         android:textSize="@dimen/_15sdp"
         android:textStyle="bold"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textView10"
-        app:layout_constraintStart_toStartOf="@id/textView10" />
+        app:layout_constraintEnd_toEndOf="@+id/guidelineEnd"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/tv_sign_up_email"
+        tools:ignore="RtlSymmetry,SpUsage" />
+
 
     <TextView
+        android:id="@+id/tv_sign_up_password"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:text="Password"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/rgemail"
+        tools:ignore="UnusedAttribute" />
+
+    <EditText
+        android:id="@+id/rgpassword"
+        android:layout_width="360dp"
+        android:layout_height="@dimen/_52sdp"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/rectangle_box"
+        android:ems="10"
+        android:hint="@string/enter_pass"
+        android:paddingStart="12dp"
+        android:password="true"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_15sdp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/guidelineEnd"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/tv_sign_up_password"
+        tools:ignore="Deprecated,RtlSymmetry,SpUsage" />
+
+    <TextView
+        android:id="@+id/tv_cfirm_password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:text="Confirm password"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/rgpassword"
+        tools:ignore="UnusedAttribute" />
+
+    <EditText
+        android:id="@+id/rgrepassword"
+        android:layout_width="360dp"
+        android:layout_height="@dimen/_52sdp"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/rectangle_box"
+        android:ems="10"
+        android:hint="Confirm your password"
+        android:paddingStart="12dp"
+        android:password="true"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_15sdp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/guidelineEnd"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/tv_cfirm_password"
+        tools:ignore="Deprecated,RtlSymmetry,SpUsage" />
+
+    <LinearLayout
+        android:id="@+id/ll_pick_avt"
+        android:layout_width="360dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="@+id/guidelineEnd"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/rgrepassword">
+
+        <TextView
+            android:id="@+id/tv_pick_avt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:gravity="center"
+            android:paddingStart="2dp"
+            android:text="Choose your avatar"
+            android:textStyle="bold"
+            tools:ignore="UnusedAttribute" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/profilerg0"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_gravity="center"
+            android:src="@drawable/photo_placeholder" />
+
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/tv_cfirm_sec"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:fontFamily="@font/poppins_regular"
         android:text="Securing your personal information is our priority."
         android:textSize="5pt"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.232"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/profilerg0" />
+        app:layout_constraintTop_toBottomOf="@id/ll_pick_avt" />
 
-    <TextView
-        android:id="@+id/textView10"
-        android:layout_width="91dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="8dp"
-        android:gravity="center_vertical"
-        android:text="Re-enter password:"
-        android:textColor="#545655"
-        android:textSize="@dimen/_12sdp"
-        android:textStyle="bold"
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/signupbutton"
+        android:layout_width="360dp"
+        android:layout_height="65dp"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="@color/primary"
+        android:gravity="center"
+        android:text="@string/sign_up"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.112"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/rgpassword" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_cfirm_sec" />
+
+    <LinearLayout
+        android:id="@+id/ll_dont_have_account"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/signupbutton">
+
+        <TextView
+            android:id="@+id/textView9"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            android:gravity="center"
+            android:text="Already have account?"
+            android:textColor="#808080" />
+
+        <TextView
+            android:id="@+id/loginbut"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/login"
+            android:textColor="#357BF5"
+            android:textStyle="bold" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

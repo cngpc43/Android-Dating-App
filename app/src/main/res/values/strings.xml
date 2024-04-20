@@ -1,6 +1,10 @@
 <resources>
-    <string name="app_name">MyMessengerApp</string>
-    <string name="sign_up"><u>Sign up</u></string>
-    <string name="team_name"><u>KHTeam</u></string>
-    <string name="search_hint"><u>Search</u></string>
+    <string name="app_name">Tindeo</string>
+    <string name="welcome">Hi! Welcome to Tindeo</string>
+    <string name="sign_up">SIGN UP</string>
+    <string name="login">LOGIN</string>
+    <string name="team_name">KHTeam</string>
+    <string name="search_hint">Search</string>
+    <string name="enter_email">Enter your e-mail</string>
+    <string name="enter_pass">Enter your password</string>
 </resources>

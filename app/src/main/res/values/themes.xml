@@ -2,10 +2,13 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.MyMessengerApp" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">@color/primary</item>
+        <item name="android:fontFamily">@font/poppins_regular</item>
+        <item name="fontFamily">@font/poppins_regular</item>
     </style>
 
     <style name="Theme.MyMessengerApp" parent="Base.Theme.MyMessengerApp" />
+
     <style name="dialogue">
         <item name="android:windowBackground">@drawable/empty_background</item>
         <item name="windowNoTitle">true</item>
