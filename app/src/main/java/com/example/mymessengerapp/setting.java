@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -32,9 +33,12 @@ public class setting  extends AppCompatActivity {
     TextView status;
     FirebaseDatabase database;
     FirebaseStorage storage;
+
     ImageView home,chat;
     RangeSlider age_range;
     TextView age_range_preview;
+    FrameLayout user, message;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,6 +107,7 @@ public class setting  extends AppCompatActivity {
             }
         });
 
+
         age_range_preview = findViewById(R.id.age_range_preview);
         age_range = findViewById(R.id.age_range_slider);
         age_range.setValues(13F,24F);
@@ -121,6 +126,20 @@ public class setting  extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(setting.this,account_settings.class);
+
+        message = findViewById(R.id.message);
+        message.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(setting.this,chat_home_page.class);
+                startActivity(intent);
+            }
+        });
+        user = findViewById(R.id.user);
+        user.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(setting.this,setting.class);
                 startActivity(intent);
             }
         });
