@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.material.slider.RangeSlider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -21,6 +22,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.squareup.picasso.Picasso;
 
+import java.util.List;
+
 public class setting  extends AppCompatActivity {
     LinearLayout logout;
     FirebaseAuth auth;
@@ -29,6 +32,8 @@ public class setting  extends AppCompatActivity {
     FirebaseDatabase database;
     FirebaseStorage storage;
     ImageView home,chat;
+    RangeSlider age_range;
+    TextView age_range_preview;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,6 +99,18 @@ public class setting  extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(setting.this,MainActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        age_range_preview = findViewById(R.id.age_range_preview);
+        age_range = findViewById(R.id.age_range_slider);
+        age_range.setValues(13F,24F);
+
+        age_range.addOnChangeListener(new RangeSlider.OnChangeListener() {
+            @Override
+            public void onValueChange(@NonNull RangeSlider rangeSlider, float v, boolean b) {
+                List<Float> age_range_list = age_range.getValues();
+                age_range_preview.setText(String.valueOf(age_range.getValues().get(0).intValue()) + "-" + String.valueOf(age_range.getValues().get(1).intValue()));
             }
         });
     }

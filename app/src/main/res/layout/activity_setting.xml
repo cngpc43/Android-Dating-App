@@ -123,7 +123,7 @@
             app:layout_constraintTop_toBottomOf="@id/discovery">
 
             <LinearLayout
-                android:id="@+id/gender"
+                android:id="@+id/location"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/rounded_top_corners"
@@ -137,6 +137,45 @@
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
                     android:padding="10dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Location"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/location_preview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="HCM"
+                        android:textColor="#919492"
+                        android:textSize="16sp" />
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_chevron_right" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/gender"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/unrounded_corners"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp">
 
                     <TextView
                         android:layout_width="0dp"
@@ -227,7 +266,6 @@
                         android:id="@+id/age_range_preview"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="18-24"
                         android:textColor="#919492"
                         android:textSize="16sp" />
                 </LinearLayout>
@@ -238,7 +276,7 @@
                     android:layout_height="wrap_content"
                     android:valueFrom="13"
                     android:valueTo="100"
-                    app:labelBehavior="withinBounds" />
+                    android:stepSize="1" />
             </LinearLayout>
         </LinearLayout>
 
