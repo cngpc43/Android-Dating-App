@@ -40,46 +40,9 @@
 
                 <!-- User avatar and details -->
                 <ImageView
-
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:src="@drawable/photocamera"
-
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/ic_chevron_right_grey" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/discovery"
-            android:text="DISCOVERY"
-            android:textStyle="bold"
-            android:paddingLeft="20dp"
-            android:paddingTop="10dp"
-            app:layout_constraintTop_toBottomOf="@id/accountsetting"
-            app:layout_constraintLeft_toLeftOf="parent" />
-
-        <LinearLayout
-            android:id="@+id/discovery_category"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            app:layout_constraintTop_toBottomOf="@id/discovery">
-
-            <LinearLayout
-                android:id="@+id/location"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/rounded_top_corners"
-                android:orientation="horizontal"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp">
-
 
                     />
                 <LinearLayout
@@ -326,18 +289,6 @@
                 </LinearLayout>
             </LinearLayout>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/profile_control"
-            android:text="CONTROL YOUR PROFILE"
-            android:textStyle="bold"
-            android:paddingLeft="20dp"
-            android:paddingTop="10dp"
-            app:layout_constraintTop_toBottomOf="@id/discovery_category"
-            app:layout_constraintLeft_toLeftOf="parent" />
-
-
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -445,25 +396,6 @@
                             android:text="Log out"
                             android:textColor="@android:color/holo_red_dark"
                             android:textSize="16sp" />
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/rounded_corners"
-            android:orientation="horizontal"
-            android:padding="10dp"
-            app:layout_constraintTop_toBottomOf="@id/accountsetting"
-            android:layout_marginTop="20dp"
-            >
-            <LinearLayout
-                android:id="@+id/logout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:padding="10dp"
-                android:background="@drawable/rounded_corners">
 
 
                     </LinearLayout>

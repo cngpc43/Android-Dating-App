@@ -106,7 +106,14 @@ public class setting  extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
+        message = findViewById(R.id.message);
+        message.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(setting.this, chat_home_page.class);
+                startActivity(intent);
+            }
+        });
 
         age_range_preview = findViewById(R.id.age_range_preview);
         age_range = findViewById(R.id.age_range_slider);
