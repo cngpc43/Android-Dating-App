@@ -99,7 +99,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:gravity="center"
-        android:text="E-mail"
+        android:text="Phone number"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/guideline"
         app:layout_constraintTop_toBottomOf="@+id/rgusername"
@@ -112,8 +112,8 @@
         android:layout_marginTop="4dp"
         android:background="@drawable/rectangle_box"
         android:ems="10"
-        android:hint="@string/enter_email"
-        android:inputType="textEmailAddress"
+        android:hint="@string/enter_num_phone"
+        android:inputType="phone"
         android:paddingStart="12dp"
         android:textColor="@color/black"
         android:textSize="@dimen/_15sdp"
@@ -122,7 +122,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="@+id/guideline"
         app:layout_constraintTop_toBottomOf="@+id/tv_sign_up_email"
-        tools:ignore="RtlSymmetry,SpUsage" />
+        tools:ignore="RtlSymmetry,SpUsage,TextFields" />
 
 
     <TextView

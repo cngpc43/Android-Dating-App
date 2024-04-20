@@ -2,23 +2,18 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
     <item
-        android:id="@+id/item_1"
+        android:id="@+id/home"
         android:enabled="true"
-        android:icon="@drawable/baseline_mail_outline_32"
+        android:icon="@drawable/logo_dating"
         tools:ignore="MenuTitle" />
     <item
-        android:id="@+id/item_2"
+        android:id="@+id/messageChat"
         android:enabled="true"
-        android:icon="@drawable/baseline_local_phone_32"
+        android:icon="@drawable/baseline_chat_24"
         tools:ignore="MenuTitle" />
     <item
-        android:id="@+id/item_3"
+        android:id="@+id/userSetting"
         android:enabled="true"
-        android:icon="@drawable/baseline_people_alt_32"
-        tools:ignore="MenuTitle" />
-    <item
-        android:id="@+id/item_4"
-        android:enabled="true"
-        android:icon="@drawable/baseline_contacts_32"
+        android:icon="@drawable/baseline_person_outline_24"
         tools:ignore="MenuTitle" />
 </menu>

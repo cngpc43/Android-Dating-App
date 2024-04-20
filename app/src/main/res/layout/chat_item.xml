@@ -3,12 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/ll_chat_item"
     android:layout_width="match_parent"
-    android:layout_height="49dp"
+    android:layout_height="wrap_content"
     android:orientation="horizontal">
 
     <ImageView
         android:layout_width="49dp"
-        android:layout_height="match_parent"
+        android:layout_height="49dp"
         android:padding="4dp"
         android:scaleType="fitCenter"
         android:src="@drawable/user_icon"
@@ -41,5 +41,5 @@
         android:layout_height="match_parent"
         android:paddingTop="4dp"
         android:text="07:40 AM"
-        android:textSize="12sp" />
+        android:textSize="10sp" />
 </LinearLayout>

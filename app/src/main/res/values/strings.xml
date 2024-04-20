@@ -7,4 +7,5 @@
     <string name="search_hint">Search</string>
     <string name="enter_email">Enter your e-mail</string>
     <string name="enter_pass">Enter your password</string>
+    <string name="enter_num_phone">Enter your phone number</string>
 </resources>

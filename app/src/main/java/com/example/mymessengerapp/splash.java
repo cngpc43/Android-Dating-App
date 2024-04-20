@@ -23,18 +23,17 @@ public class splash extends AppCompatActivity {
     Animation topAnim, bottomAnim;
 
 
-
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        if (getSupportActionBar() != null){
+        if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
 
         logo = findViewById(R.id.logoimg);
-        own1 = findViewById(R.id.from);
+        own1 = findViewById(R.id.tv_title);
         own2 = findViewById(R.id.group_name);
 
 //        topAnim = AnimationUtils.loadAnimation(this,R.anim.top_animation);
@@ -48,10 +47,10 @@ public class splash extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(splash.this,MainActivity.class);
+                Intent intent = new Intent(splash.this, MainActivity.class);
                 startActivity(intent);
                 finish();
             }
-        },1000);
+        }, 1000);
     }
 }
