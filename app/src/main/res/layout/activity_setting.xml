@@ -6,97 +6,45 @@
     android:layout_height="match_parent"
     tools:context=".setting">
 
-<!--    <ImageView-->
-<!--        android:id="@+id/settingprofile"-->
-<!--        android:layout_width="179dp"-->
-<!--        android:layout_height="149dp"-->
+    <!--    <ImageView-->
+    <!--        android:id="@+id/settingprofile"-->
+    <!--        android:layout_width="179dp"-->
+    <!--        android:layout_height="149dp"-->
 
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:layout_constraintVertical_bias="0.649"-->
-<!--        app:srcCompat="@drawable/photocamera" />-->
-    <LinearLayout
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toTopOf="parent"-->
+    <!--        app:layout_constraintVertical_bias="0.649"-->
+    <!--        app:srcCompat="@drawable/photocamera" />-->
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="10dp">
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/bottomBar">
         <LinearLayout
-            android:id="@+id/settingprofile"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/rounded_corners"
-            android:orientation="horizontal"
-            android:padding="10dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            >
-
-            <!-- User avatar and details -->
-            <ImageView
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:src="@drawable/photocamera"
-
-                />
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="10dp">
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:gravity="center_vertical"
-                android:padding="@dimen/_15sdp"
-                >
-                <TextView
-                    android:id="@+id/profile_username"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Name"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    />
-                <TextView
-                    android:id="@+id/profile_status"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Status"
-                    android:textSize="16sp"
-                    />
-            </LinearLayout>
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/accountsetting"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/rounded_corners"
-            android:orientation="horizontal"
-            android:padding="10dp"
-            app:layout_constraintTop_toBottomOf="@+id/settingprofile"
-            android:layout_marginTop="15dp"
-            >
-
-            <!-- User avatar and details -->
-
-            <!--        <androidx.cardview.widget.CardView-->
-            <!--            android:layout_width="match_parent"-->
-            <!--            android:layout_height="match_parent" />-->
-            <LinearLayout
+                android:id="@+id/settingprofile"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/account_settings"
+                android:background="@drawable/rounded_corners"
                 android:orientation="horizontal"
-                android:gravity="center_vertical"
                 android:padding="10dp"
-                android:background="@drawable/rounded_corners">
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                >
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Account Settings"
-                    android:textSize="16sp" />
-
+                <!-- User avatar and details -->
                 <ImageView
+
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:src="@drawable/photocamera"
+
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:src="@drawable/ic_chevron_right_grey" />
@@ -132,157 +80,251 @@
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp">
 
+
+                    />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center_vertical"
+                    android:padding="@dimen/_15sdp"
+                    >
+                    <TextView
+                        android:id="@+id/profile_username"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Name"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        />
+                    <TextView
+                        android:id="@+id/profile_status"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Status"
+                        android:textSize="16sp"
+                        />
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/accountsetting"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_corners"
+                android:orientation="horizontal"
+                android:padding="10dp"
+                app:layout_constraintTop_toBottomOf="@+id/settingprofile"
+                android:layout_marginTop="15dp"
+                >
+
+                <!-- User avatar and details -->
+
+                <!--        <androidx.cardview.widget.CardView-->
+                <!--            android:layout_width="match_parent"-->
+                <!--            android:layout_height="match_parent" />-->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:id="@+id/account_settings"
+                    android:orientation="horizontal"
                     android:gravity="center_vertical"
+                    android:padding="10dp"
+                    android:background="@drawable/rounded_corners">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Account Settings"
+                        android:textSize="16sp" />
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_chevron_right_grey" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/discovery"
+                android:text="DISCOVERY"
+                android:textStyle="bold"
+                android:paddingLeft="20dp"
+                android:paddingTop="10dp"
+                app:layout_constraintTop_toBottomOf="@id/accountsetting"
+                app:layout_constraintLeft_toLeftOf="parent" />
+
+            <LinearLayout
+                android:id="@+id/discovery_category"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                app:layout_constraintTop_toBottomOf="@id/discovery">
+
+                <LinearLayout
+                    android:id="@+id/location"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/rounded_top_corners"
+                    android:orientation="horizontal"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="10dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Location"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/location_preview"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="HCM"
+                            android:textColor="#919492"
+                            android:textSize="16sp"
+                            android:paddingRight="5dp"/>
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_chevron_right_grey" />
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/gender"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/unrounded_corners"
                     android:orientation="horizontal"
                     android:padding="10dp">
 
-                    <TextView
-                        android:layout_width="0dp"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Location"
-                        android:textSize="16sp" />
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp">
 
-                    <TextView
-                        android:id="@+id/location_preview"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="HCM"
-                        android:textColor="#919492"
-                        android:textSize="16sp"
-                        android:paddingRight="5dp"/>
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Gender"
+                            android:textSize="16sp" />
 
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@drawable/ic_chevron_right_grey" />
+                        <TextView
+                            android:id="@+id/gender_preview"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Male"
+                            android:textColor="#919492"
+                            android:textSize="16sp"
+                            android:paddingRight="5dp"/>
 
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_chevron_right_grey" />
+
+                    </LinearLayout>
                 </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/gender"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/unrounded_corners"
-                android:orientation="horizontal"
-                android:padding="10dp">
 
                 <LinearLayout
+                    android:id="@+id/sexual_orientation"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
+                    android:background="@drawable/unrounded_corners"
                     android:orientation="horizontal"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp">
+                    android:padding="10dp">
 
-                    <TextView
-                        android:layout_width="0dp"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Gender"
-                        android:textSize="16sp" />
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp">
 
-                    <TextView
-                        android:id="@+id/gender_preview"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Male"
-                        android:textColor="#919492"
-                        android:textSize="16sp"
-                        android:paddingRight="5dp"/>
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Sexual Orientation"
+                            android:textSize="16sp" />
 
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@drawable/ic_chevron_right_grey" />
+                        <TextView
+                            android:id="@+id/sexual_orientation_preview"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Gay"
+                            android:textColor="#919492"
+                            android:textSize="16sp"
+                            android:paddingRight="5dp"/>
 
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_chevron_right_grey" />
+
+                    </LinearLayout>
                 </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/sexual_orientation"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/unrounded_corners"
-                android:orientation="horizontal"
-                android:padding="10dp">
 
                 <LinearLayout
+                    android:id="@+id/age_range"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp">
+                    android:background="@drawable/rounded_bottom_corners"
+                    android:orientation="vertical"
+                    android:padding="10dp">
 
-                    <TextView
-                        android:layout_width="0dp"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Sexual Orientation"
-                        android:textSize="16sp" />
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp">
 
-                    <TextView
-                        android:id="@+id/sexual_orientation_preview"
-                        android:layout_width="wrap_content"
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Age range"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/age_range_preview"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="#919492"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+
+                    <com.google.android.material.slider.RangeSlider
+                        android:id="@+id/age_range_slider"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Gay"
-                        android:textColor="#919492"
-                        android:textSize="16sp"
-                        android:paddingRight="5dp"/>
-
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@drawable/ic_chevron_right_grey" />
-
+                        android:valueFrom="13"
+                        android:valueTo="100"
+                        android:stepSize="1" />
                 </LinearLayout>
             </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/age_range"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/rounded_bottom_corners"
-                android:orientation="vertical"
-                android:padding="10dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Age range"
-                        android:textSize="16sp" />
-
-                    <TextView
-                        android:id="@+id/age_range_preview"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="#919492"
-                        android:textSize="16sp" />
-                </LinearLayout>
-
-                <com.google.android.material.slider.RangeSlider
-                    android:id="@+id/age_range_slider"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:valueFrom="13"
-                    android:valueTo="100"
-                    android:stepSize="1" />
-            </LinearLayout>
-        </LinearLayout>
 
         <TextView
             android:layout_width="match_parent"
@@ -295,76 +337,115 @@
             app:layout_constraintTop_toBottomOf="@id/discovery_category"
             app:layout_constraintLeft_toLeftOf="parent" />
 
-        <LinearLayout
-            android:id="@+id/profile_control_category"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            app:layout_constraintTop_toBottomOf="@id/profile_control">
 
-            <LinearLayout
-                android:id="@+id/show_me"
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/rounded_top_corners"
-                android:orientation="horizontal"
-                android:padding="10dp">
+                android:id="@+id/profile_control"
+                android:text="CONTROL YOUR PROFILE"
+                android:textStyle="bold"
+                android:paddingLeft="20dp"
+                android:paddingTop="10dp"
+                app:layout_constraintTop_toBottomOf="@id/discovery_category"
+                app:layout_constraintLeft_toLeftOf="parent" />
+
+            <LinearLayout
+                android:id="@+id/profile_control_category"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                app:layout_constraintTop_toBottomOf="@id/profile_control">
+
+                <LinearLayout
+                    android:id="@+id/show_me"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/rounded_top_corners"
+                    android:orientation="horizontal"
+                    android:padding="10dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Show me on KHTeam"
+                            android:textSize="16sp" />
+
+                        <Switch
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/show_me_switch" />
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/show_age"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/rounded_bottom_corners"
+                    android:orientation="horizontal"
+                    android:padding="10dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Don't show my age"
+                            android:textSize="16sp" />
+
+                        <Switch
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/show_age_switch" />
+
+                    </LinearLayout>
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
+                    android:background="@drawable/rounded_corners"
                     android:orientation="horizontal"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp">
-
-                    <TextView
-                        android:layout_width="0dp"
+                    android:padding="10dp"
+                    app:layout_constraintTop_toBottomOf="@id/accountsetting"
+                    android:layout_marginTop="20dp"
+                    >
+                    <LinearLayout
+                        android:id="@+id/logout"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Show me on KHTeam"
-                        android:textSize="16sp" />
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:padding="10dp"
+                        android:background="@drawable/rounded_corners">
 
-                    <Switch
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/show_me_switch" />
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Log out"
+                            android:textColor="@android:color/holo_red_dark"
+                            android:textSize="16sp" />
 
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/show_age"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/rounded_bottom_corners"
-                android:orientation="horizontal"
-                android:padding="10dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Don't show my age"
-                        android:textSize="16sp" />
-
-                    <Switch
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/show_age_switch" />
-
-                </LinearLayout>
-            </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -384,23 +465,13 @@
                 android:padding="10dp"
                 android:background="@drawable/rounded_corners">
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Log out"
-                    android:textColor="@android:color/holo_red_dark"
-                    android:textSize="16sp" />
 
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/ic_chevron_right_grey" />
+                    </LinearLayout>
+
+                </LinearLayout>
             </LinearLayout>
-
         </LinearLayout>
-    </LinearLayout>
-    </LinearLayout>
+    </ScrollView>
 
     <include layout="@layout/navigation_bar" />
 </androidx.constraintlayout.widget.ConstraintLayout>
