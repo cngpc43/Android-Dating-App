@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.material.slider.RangeSlider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -22,15 +23,22 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.squareup.picasso.Picasso;
 
+import java.util.List;
+
 public class setting  extends AppCompatActivity {
     LinearLayout logout;
+    LinearLayout account_settings;
     FirebaseAuth auth;
     TextView username;
     TextView status;
     FirebaseDatabase database;
     FirebaseStorage storage;
-    ImageView home;
+
+    ImageView home,chat;
+    RangeSlider age_range;
+    TextView age_range_preview;
     FrameLayout user, message;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,6 +106,27 @@ public class setting  extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+
+        age_range_preview = findViewById(R.id.age_range_preview);
+        age_range = findViewById(R.id.age_range_slider);
+        age_range.setValues(13F,24F);
+        age_range_preview.setText(String.valueOf(age_range.getValues().get(0).intValue()) + "-" + String.valueOf(age_range.getValues().get(1).intValue()));
+
+        age_range.addOnChangeListener(new RangeSlider.OnChangeListener() {
+            @Override
+            public void onValueChange(@NonNull RangeSlider rangeSlider, float v, boolean b) {
+                List<Float> age_range_list = age_range.getValues();
+                age_range_preview.setText(String.valueOf(age_range.getValues().get(0).intValue()) + "-" + String.valueOf(age_range.getValues().get(1).intValue()));
+            }
+        });
+
+        account_settings = findViewById(R.id.account_settings);
+        account_settings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(setting.this,account_settings.class);
+
         message = findViewById(R.id.message);
         message.setOnClickListener(new View.OnClickListener() {
             @Override
