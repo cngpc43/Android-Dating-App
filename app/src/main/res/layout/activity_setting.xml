@@ -402,5 +402,5 @@
     </LinearLayout>
     </LinearLayout>
 
-    <include layout="@layout/bottom_bar" />
+    <include layout="@layout/navigation_bar" />
 </androidx.constraintlayout.widget.ConstraintLayout>
