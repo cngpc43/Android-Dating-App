@@ -26,6 +26,7 @@ import java.util.List;
 
 public class setting  extends AppCompatActivity {
     LinearLayout logout;
+    LinearLayout account_settings;
     FirebaseAuth auth;
     TextView username;
     TextView status;
@@ -105,12 +106,22 @@ public class setting  extends AppCompatActivity {
         age_range_preview = findViewById(R.id.age_range_preview);
         age_range = findViewById(R.id.age_range_slider);
         age_range.setValues(13F,24F);
+        age_range_preview.setText(String.valueOf(age_range.getValues().get(0).intValue()) + "-" + String.valueOf(age_range.getValues().get(1).intValue()));
 
         age_range.addOnChangeListener(new RangeSlider.OnChangeListener() {
             @Override
             public void onValueChange(@NonNull RangeSlider rangeSlider, float v, boolean b) {
                 List<Float> age_range_list = age_range.getValues();
                 age_range_preview.setText(String.valueOf(age_range.getValues().get(0).intValue()) + "-" + String.valueOf(age_range.getValues().get(1).intValue()));
+            }
+        });
+
+        account_settings = findViewById(R.id.account_settings);
+        account_settings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(setting.this,account_settings.class);
+                startActivity(intent);
             }
         });
     }

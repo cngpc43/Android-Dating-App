@@ -83,6 +83,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:id="@+id/account_settings"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
                 android:padding="10dp"
@@ -98,7 +99,7 @@
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:src="@drawable/ic_chevron_right" />
+                    android:src="@drawable/ic_chevron_right_grey" />
             </LinearLayout>
         </LinearLayout>
 
@@ -151,12 +152,13 @@
                         android:layout_height="wrap_content"
                         android:text="HCM"
                         android:textColor="#919492"
-                        android:textSize="16sp" />
+                        android:textSize="16sp"
+                        android:paddingRight="5dp"/>
 
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:src="@drawable/ic_chevron_right" />
+                        android:src="@drawable/ic_chevron_right_grey" />
 
                 </LinearLayout>
             </LinearLayout>
@@ -190,12 +192,13 @@
                         android:layout_height="wrap_content"
                         android:text="Male"
                         android:textColor="#919492"
-                        android:textSize="16sp" />
+                        android:textSize="16sp"
+                        android:paddingRight="5dp"/>
 
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:src="@drawable/ic_chevron_right" />
+                        android:src="@drawable/ic_chevron_right_grey" />
 
                 </LinearLayout>
             </LinearLayout>
@@ -229,12 +232,13 @@
                         android:layout_height="wrap_content"
                         android:text="Gay"
                         android:textColor="#919492"
-                        android:textSize="16sp" />
+                        android:textSize="16sp"
+                        android:paddingRight="5dp"/>
 
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:src="@drawable/ic_chevron_right" />
+                        android:src="@drawable/ic_chevron_right_grey" />
 
                 </LinearLayout>
             </LinearLayout>
@@ -391,7 +395,7 @@
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:src="@drawable/ic_chevron_right" />
+                    android:src="@drawable/ic_chevron_right_grey" />
             </LinearLayout>
 
         </LinearLayout>
