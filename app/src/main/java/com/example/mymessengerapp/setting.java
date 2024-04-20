@@ -133,25 +133,25 @@ public class setting  extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(setting.this, account_settings.class);
-
-                message = findViewById(R.id.message);
-                message.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(setting.this, chat_home_page.class);
-                        startActivity(intent);
-                    }
-                });
-                user = findViewById(R.id.user);
-                user.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(setting.this, setting.class);
-                        startActivity(intent);
-                    }
-                });
+                startActivity(intent);
             }
 
+        });
+        message = findViewById(R.id.message);
+        message.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(setting.this, chat_home_page.class);
+                startActivity(intent);
+            }
+        });
+        user = findViewById(R.id.user);
+        user.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(setting.this, setting.class);
+                startActivity(intent);
+            }
         });
     }
 }
