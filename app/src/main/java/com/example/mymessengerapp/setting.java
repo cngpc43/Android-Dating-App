@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -28,7 +29,8 @@ public class setting  extends AppCompatActivity {
     TextView status;
     FirebaseDatabase database;
     FirebaseStorage storage;
-    ImageView home,chat;
+    ImageView home;
+    FrameLayout user, message;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,6 +95,22 @@ public class setting  extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(setting.this,MainActivity.class);
+                startActivity(intent);
+            }
+        });
+        message = findViewById(R.id.message);
+        message.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(setting.this,chat_home_page.class);
+                startActivity(intent);
+            }
+        });
+        user = findViewById(R.id.user);
+        user.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(setting.this,setting.class);
                 startActivity(intent);
             }
         });
