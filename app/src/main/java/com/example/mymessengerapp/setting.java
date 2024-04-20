@@ -34,7 +34,7 @@ public class setting  extends AppCompatActivity {
     FirebaseDatabase database;
     FirebaseStorage storage;
 
-    ImageView home,chat;
+    ImageView home, chat;
     RangeSlider age_range;
     TextView age_range_preview;
     FrameLayout user, message;
@@ -45,7 +45,7 @@ public class setting  extends AppCompatActivity {
         setContentView(R.layout.activity_setting);
         username = findViewById(R.id.profile_username);
         status = findViewById(R.id.profile_status);
-        if(getSupportActionBar()!=null){
+        if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
 
         }
@@ -75,16 +75,16 @@ public class setting  extends AppCompatActivity {
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Dialog dialog = new Dialog(setting.this,R.style.dialogue);
+                Dialog dialog = new Dialog(setting.this, R.style.dialogue);
                 dialog.setContentView(R.layout.dialogue_layout);
-                Button no,yes;
+                Button no, yes;
                 yes = dialog.findViewById(R.id.yesbnt);
                 no = dialog.findViewById(R.id.nobnt);
                 yes.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         FirebaseAuth.getInstance().signOut();
-                        Intent intent = new Intent(setting.this,login.class);
+                        Intent intent = new Intent(setting.this, login.class);
                         startActivity(intent);
                         finish();
                     }
@@ -102,7 +102,7 @@ public class setting  extends AppCompatActivity {
         home.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(setting.this,MainActivity.class);
+                Intent intent = new Intent(setting.this, MainActivity.class);
                 startActivity(intent);
             }
         });
@@ -110,7 +110,7 @@ public class setting  extends AppCompatActivity {
 
         age_range_preview = findViewById(R.id.age_range_preview);
         age_range = findViewById(R.id.age_range_slider);
-        age_range.setValues(13F,24F);
+        age_range.setValues(13F, 24F);
         age_range_preview.setText(String.valueOf(age_range.getValues().get(0).intValue()) + "-" + String.valueOf(age_range.getValues().get(1).intValue()));
 
         age_range.addOnChangeListener(new RangeSlider.OnChangeListener() {
@@ -125,24 +125,26 @@ public class setting  extends AppCompatActivity {
         account_settings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(setting.this,account_settings.class);
+                Intent intent = new Intent(setting.this, account_settings.class);
 
-        message = findViewById(R.id.message);
-        message.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(setting.this,chat_home_page.class);
-                startActivity(intent);
+                message = findViewById(R.id.message);
+                message.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(setting.this, chat_home_page.class);
+                        startActivity(intent);
+                    }
+                });
+                user = findViewById(R.id.user);
+                user.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(setting.this, setting.class);
+                        startActivity(intent);
+                    }
+                });
             }
-        });
-        user = findViewById(R.id.user);
-        user.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(setting.this,setting.class);
-                startActivity(intent);
-            }
+
         });
     }
-
 }

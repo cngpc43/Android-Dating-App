@@ -75,8 +75,8 @@
 
 
 
-    <include layout="@layout/bottom_bar" />
-=======
+    <include layout="@layout/navigation_bar" />
+
     <LinearLayout
         android:id="@+id/ll_bottom"
         android:layout_width="match_parent"

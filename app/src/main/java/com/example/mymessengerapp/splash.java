@@ -33,17 +33,7 @@ public class splash extends AppCompatActivity {
             getSupportActionBar().hide();
         }
 
-        logo = findViewById(R.id.logoimg);
-        own1 = findViewById(R.id.from);
-        own2 = findViewById(R.id.group_name);
 
-//        topAnim = AnimationUtils.loadAnimation(this,R.anim.top_animation);
-//        bottomAnim = AnimationUtils.loadAnimation(this,R.anim.bottom_animation);
-
-//        logo.setAnimation(topAnim);
-//        name.setAnimation(bottomAnim);
-//        own1.setAnimation(bottomAnim);
-//        own2.setAnimation(bottomAnim);
 
         new Handler().postDelayed(new Runnable() {
             @Override
