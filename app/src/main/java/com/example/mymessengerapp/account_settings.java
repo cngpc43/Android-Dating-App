@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class account_settings extends AppCompatActivity {
     ImageView back_icon;
     LinearLayout password;
+    LinearLayout email;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +36,15 @@ public class account_settings extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(account_settings.this, password_change.class);
+                startActivity(intent);
+            }
+        });
+
+        email = findViewById(R.id.email);
+        email.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(account_settings.this, email_confirm.class);
                 startActivity(intent);
             }
         });

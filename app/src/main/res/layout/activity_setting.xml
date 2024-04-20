@@ -115,7 +115,7 @@
                 android:text="DISCOVERY"
                 android:textStyle="bold"
                 android:paddingLeft="20dp"
-                android:paddingTop="10dp"
+                android:paddingTop="30dp"
                 app:layout_constraintTop_toBottomOf="@id/accountsetting"
                 app:layout_constraintLeft_toLeftOf="parent" />
 
@@ -124,8 +124,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
                 app:layout_constraintTop_toBottomOf="@id/discovery">
 
                 <LinearLayout
@@ -296,7 +294,7 @@
                 android:text="CONTROL YOUR PROFILE"
                 android:textStyle="bold"
                 android:paddingLeft="20dp"
-                android:paddingTop="10dp"
+                android:paddingTop="30dp"
                 app:layout_constraintTop_toBottomOf="@id/discovery_category"
                 app:layout_constraintLeft_toLeftOf="parent" />
 
@@ -378,7 +376,7 @@
                     android:orientation="horizontal"
                     android:padding="10dp"
                     app:layout_constraintTop_toBottomOf="@id/accountsetting"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="30dp"
                     >
                     <LinearLayout
                         android:id="@+id/logout"
