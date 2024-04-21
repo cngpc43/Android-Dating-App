@@ -1,20 +1,19 @@
 package com.example.mymessengerapp;
 
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class password_change extends AppCompatActivity {
+public class email_change extends AppCompatActivity {
     ImageView back_icon;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_password_change);
-
+        setContentView(R.layout.activity_email_change);
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
@@ -23,7 +22,7 @@ public class password_change extends AppCompatActivity {
         back_icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(password_change.this, account_settings.class);
+                Intent intent = new Intent(email_change.this, account_settings.class);
                 startActivity(intent);
             }
         });

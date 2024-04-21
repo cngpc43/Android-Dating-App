@@ -8,51 +8,26 @@
 
     <LinearLayout
         android:id="@+id/toolBar"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="63dp"
         android:orientation="horizontal"
         android:gravity="center_vertical"
         android:background="@color/white"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        >
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
-            <ImageView
-                android:layout_width="@dimen/_70sdp"
-                android:layout_height="@dimen/_70sdp"
-                android:layout_gravity="start|center_vertical"
-                android:background="@drawable/logo_dating"
-                />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="-13dp"
-                android:fontFamily="@font/poppins_bold"
-                android:text="tindeo"
-                android:textColor="#2a364e"
-                android:paddingTop="5dp"
-                android:textSize="@dimen/_20sdp" />
-        </LinearLayout>
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_weight="1"/>
+        app:layout_constraintStart_toStartOf="parent" >
         <ImageView
-            android:id="@+id/logoutimg"
-            android:layout_width="@dimen/_26sdp"
-            android:layout_height="@dimen/_26sdp"
-            android:layout_gravity="end|center_vertical"
-            android:layout_marginRight="@dimen/_20sdp"
-            android:background="@drawable/notification"
-            android:transitionName="loout_img" />
-
+            android:layout_width="@dimen/_70sdp"
+            android:layout_height="@dimen/_70sdp"
+            android:layout_gravity="start|center_vertical"
+            android:background="@drawable/logo_dating" />
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:layout_marginStart="-13dp"
+            android:gravity="center"
+            android:text="Tindeo"
+            android:textSize="24sp"
+            android:textStyle="bold" />
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView

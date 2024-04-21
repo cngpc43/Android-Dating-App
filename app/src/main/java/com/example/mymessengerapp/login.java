@@ -19,6 +19,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class login extends AppCompatActivity {
     TextView logsignup;
@@ -82,6 +83,14 @@ public class login extends AppCompatActivity {
                                 progressDialog.show();
                                 try {
                                     Intent intent = new Intent(login.this , MainActivity.class);
+                                    Bundle bundle = new Bundle();
+                                    FirebaseUser current_user = auth.getCurrentUser();
+                                    
+                                    bundle.putString("profilepic", current_user.getPhotoUrl().toString());
+                                    bundle.putString("mail", current_user.getEmail().toString());
+                                    bundle.putString("userName", current_user.getDisplayName().toString());
+                                    bundle.putString("userId", current_user.getUid().toString());
+
                                     startActivity(intent);
                                     finish();
                                 }catch (Exception e){

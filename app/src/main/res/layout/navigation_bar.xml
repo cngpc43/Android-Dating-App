@@ -8,7 +8,8 @@
     android:id="@+id/bottomBar"
     android:background="@color/white"
     app:layout_constraintBottom_toBottomOf="parent"
-    >
+    app:layout_constraintLeft_toLeftOf="parent"
+    app:layout_constraintRight_toRightOf="parent">
 
     <FrameLayout
         android:layout_width="0dp"
@@ -35,6 +36,20 @@
             android:layout_height="33dp"
             android:layout_gravity="center|center_vertical"
             android:src="@drawable/message_icon"
+            />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/notification"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_50sdp"
+        android:layout_weight="1">
+
+        <ImageView
+            android:layout_width="28dp"
+            android:layout_height="25dp"
+            android:layout_gravity="center|center_vertical"
+            android:src="@drawable/notification"
             />
     </FrameLayout>
 

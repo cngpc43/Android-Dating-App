@@ -34,8 +34,7 @@ public class MainActivity extends AppCompatActivity {
     UserAdapter  adapter;
     FirebaseDatabase database;
     ArrayList<Users> usersArrayList;
-    ImageView notification;
-    FrameLayout user, message;
+    FrameLayout user, message, notification;
 
 
     @Override
@@ -104,6 +103,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, chat_home_page.class);
+                startActivity(intent);
+            }
+        });
+
+        notification = findViewById(R.id.notification);
+        notification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, notification_page.class);
                 startActivity(intent);
             }
         });
