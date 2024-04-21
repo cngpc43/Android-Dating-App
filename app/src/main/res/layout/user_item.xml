@@ -1,116 +1,119 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:cardCornerRadius="12dp">
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/bordermain"
-    >
-<!--    <LinearLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:orientation="horizontal">-->
-<!--        <de.hdodenhof.circleimageview.CircleImageView-->
-<!--            android:id="@+id/userimg"-->
-<!--            android:layout_width="@dimen/_40sdp"-->
-<!--            android:layout_height="@dimen/_40sdp"-->
-<!--            android:layout_marginStart="@dimen/_10sdp"-->
-<!--            android:layout_marginTop="@dimen/_10sdp"-->
-<!--            android:layout_marginEnd="@dimen/_10sdp"-->
-<!--            android:layout_marginBottom="@dimen/_10sdp"-->
-<!--            android:src="@drawable/photocamera"/>-->
-<!--        <LinearLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:orientation="vertical"-->
-<!--            android:gravity="center">-->
-<!--            <TextView-->
-<!--                android:id="@+id/username"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:fontFamily="@font/poppins_bold"-->
-<!--                android:text="Name"-->
-<!--                android:textColor="@color/black"-->
-<!--                android:textSize="23.40dp"/>-->
 
-<!--            <TextView-->
-<!--                android:id="@+id/userstatus"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:textColor="@color/black"-->
-<!--                android:fontFamily="@font/poppins_regular"-->
-<!--                android:textSize="10.40dp"-->
-<!--                android:text="Status"/>-->
-<!--        </LinearLayout>-->
-<!--    </LinearLayout>-->
-    <ImageView
-        android:id="@+id/userimg"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/selfie"
-        android:background="@drawable/bordermain"
-        android:scaleType="centerCrop" />
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:orientation="vertical"
-        android:layout_alignParentBottom="true"
-        android:background="@drawable/gradient_black_transparent"
+        android:background="@drawable/bordermain">
+        <!--    <LinearLayout-->
+        <!--        android:layout_width="match_parent"-->
+        <!--        android:layout_height="match_parent"-->
+        <!--        android:orientation="horizontal">-->
+        <!--        <de.hdodenhof.circleimageview.CircleImageView-->
+        <!--            android:id="@+id/userimg"-->
+        <!--            android:layout_width="@dimen/_40sdp"-->
+        <!--            android:layout_height="@dimen/_40sdp"-->
+        <!--            android:layout_marginStart="@dimen/_10sdp"-->
+        <!--            android:layout_marginTop="@dimen/_10sdp"-->
+        <!--            android:layout_marginEnd="@dimen/_10sdp"-->
+        <!--            android:layout_marginBottom="@dimen/_10sdp"-->
+        <!--            android:src="@drawable/photocamera"/>-->
+        <!--        <LinearLayout-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:orientation="vertical"-->
+        <!--            android:gravity="center">-->
+        <!--            <TextView-->
+        <!--                android:id="@+id/username"-->
+        <!--                android:layout_width="match_parent"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:fontFamily="@font/poppins_bold"-->
+        <!--                android:text="Name"-->
+        <!--                android:textColor="@color/black"-->
+        <!--                android:textSize="23.40dp"/>-->
 
-        >
-        <TextView
-            android:id="@+id/username"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/poppins_bold"
-            android:text="DMDMWDMW"
-            android:textColor="@color/white"
-            android:textSize="23.40dp"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="50dp"
-            />
-        <TextView
-            android:id="@+id/userstatus"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:fontFamily="@font/poppins_regular"
-            android:textSize="15dp"
-            android:text="Status: I'm very happy"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="5dp"
-            />
+        <!--            <TextView-->
+        <!--                android:id="@+id/userstatus"-->
+        <!--                android:layout_width="match_parent"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:textColor="@color/black"-->
+        <!--                android:fontFamily="@font/poppins_regular"-->
+        <!--                android:textSize="10.40dp"-->
+        <!--                android:text="Status"/>-->
+        <!--        </LinearLayout>-->
+        <!--    </LinearLayout>-->
+        <ImageView
+            android:id="@+id/userimg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bordermain"
+            android:scaleType="centerCrop"
+            android:src="@drawable/selfie" />
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:layout_marginTop="10dp"
+            android:layout_height="200dp"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/gradient_black_transparent"
+            android:orientation="vertical"
+
             >
-            <ImageButton
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:background="@drawable/circle_red_shape"
-                android:src="@drawable/cross_16px"
-                android:scaleType="centerInside"
-                android:padding="9dp"/>
-            <View
-                android:layout_width="@dimen/_26sdp"
-                android:layout_height="match_parent"/>
-            <ImageButton
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:background="@drawable/circle_green_shape"
-                android:src="@drawable/heart"
-                android:scaleType="centerInside"
-                android:padding="5dp"/>
+
+            <TextView
+                android:id="@+id/username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="50dp"
+                android:fontFamily="@font/poppins_bold"
+                android:text="DMDMWDMW"
+                android:textColor="@color/white"
+                android:textSize="23.40dp" />
+
+            <TextView
+                android:id="@+id/userstatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="5dp"
+                android:fontFamily="@font/poppins_regular"
+                android:text="Status: I'm very happy"
+                android:textColor="@color/white"
+                android:textSize="15dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/circle_red_shape"
+                    android:padding="9dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/cross_16px" />
+
+                <View
+                    android:layout_width="@dimen/_26sdp"
+                    android:layout_height="match_parent" />
+
+                <ImageButton
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/circle_green_shape"
+                    android:padding="5dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/heart" />
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
 
 
-</RelativeLayout>
+    </RelativeLayout>
 </androidx.cardview.widget.CardView>

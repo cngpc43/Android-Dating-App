@@ -10,18 +10,17 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.mymessengerapp.adapter.ChatAdapter;
 import com.google.android.material.search.SearchView;
-import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class chat_home_page extends AppCompatActivity {
+public class ChatHomePage extends AppCompatActivity {
     FirebaseDatabase database;
     FirebaseStorage storage;
     ChatAdapter chatAdapter;
@@ -64,21 +63,21 @@ public class chat_home_page extends AppCompatActivity {
         });
         ImageView home = findViewById(R.id.home);
         home.setOnClickListener(v -> {
-            Intent intent = new Intent(chat_home_page.this, MainActivity.class);
+            Intent intent = new Intent(ChatHomePage.this, MainActivity.class);
             startActivity(intent);
         });
         message = findViewById(R.id.message);
         home.setOnClickListener(v -> {
-            Intent intent = new Intent(chat_home_page.this, MainActivity.class);
+            Intent intent = new Intent(ChatHomePage.this, MainActivity.class);
             startActivity(intent);
         });
         message.setOnClickListener(v -> {
-            Intent intent = new Intent(chat_home_page.this, chat_home_page.class);
+            Intent intent = new Intent(ChatHomePage.this, ChatHomePage.class);
             startActivity(intent);
         });
         user = findViewById(R.id.user);
         user.setOnClickListener(v -> {
-            Intent intent = new Intent(chat_home_page.this, setting.class);
+            Intent intent = new Intent(ChatHomePage.this, setting.class);
             startActivity(intent);
         });
     }

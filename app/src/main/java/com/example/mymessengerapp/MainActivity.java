@@ -4,21 +4,17 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.annotation.SuppressLint;
-import android.app.Dialog;
 import android.content.Intent;
-import android.os.Bundle;
-import android.provider.MediaStore;
 import android.view.View;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
+import com.example.mymessengerapp.adapter.UserAdapter;
+import com.example.mymessengerapp.model.Users;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -31,7 +27,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
     FirebaseAuth auth;
     RecyclerView mainUserRecyclerView;
-    UserAdapter  adapter;
+    UserAdapter adapter;
     FirebaseDatabase database;
     ArrayList<Users> usersArrayList;
     ImageView notification;
@@ -103,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
         message.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, chat_home_page.class);
+                Intent intent = new Intent(MainActivity.this, ChatHomePage.class);
                 startActivity(intent);
             }
         });

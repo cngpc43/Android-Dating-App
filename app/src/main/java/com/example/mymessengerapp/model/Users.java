@@ -1,9 +1,10 @@
-package com.example.mymessengerapp;
+package com.example.mymessengerapp.model;
 
 public class Users {
-    String profilepic,mail,userName,password,userId,lastMessage,status;
+    String profilepic, mail, userName, password, userId, lastMessage, status;
 
-    public  Users(){}
+    public Users() {
+    }
 
     public Users(String userId, String userName, String maill, String password, String profilepic, String status) {
         this.userId = userId;

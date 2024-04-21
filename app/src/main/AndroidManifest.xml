@@ -15,7 +15,10 @@
         android:theme="@style/Theme.MyMessengerApp"
         tools:targetApi="33">
         <activity
-            android:name=".chat_home_page"
+            android:name=".ChatActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ChatHomePage"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

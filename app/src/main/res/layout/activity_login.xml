@@ -186,7 +186,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/sign_up"
-            android:textColor="#357BF5"
+            android:textColor="@color/primary"
             android:textStyle="bold" />
     </LinearLayout>
 
