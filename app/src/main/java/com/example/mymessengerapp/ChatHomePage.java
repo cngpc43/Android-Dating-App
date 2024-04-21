@@ -86,7 +86,7 @@ public class ChatHomePage extends AppCompatActivity {
         notification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(chat_home_page.this, notification_page.class);
+                Intent intent = new Intent(ChatHomePage.this, notification_page.class);
                 startActivity(intent);
             }
         });

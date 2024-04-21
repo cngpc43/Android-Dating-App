@@ -8,12 +8,13 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class notification_page extends AppCompatActivity {
 
     ImageView home;
     FrameLayout user, message;
-
+    RecyclerView noti_list;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,6 +22,8 @@ public class notification_page extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
+//        noti_list = findViewById(R.id.notification_recyclerview);
+
 
         home = findViewById(R.id.home);
         home.setOnClickListener(new View.OnClickListener() {
@@ -34,7 +37,7 @@ public class notification_page extends AppCompatActivity {
         message.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(notification_page.this, chat_home_page.class);
+                Intent intent = new Intent(notification_page.this, ChatHomePage.class);
                 startActivity(intent);
             }
         });
@@ -45,6 +48,7 @@ public class notification_page extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(notification_page.this, setting.class);
                 startActivity(intent);
+
             }
         });
     }
