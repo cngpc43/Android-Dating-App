@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -27,7 +28,7 @@ public class chat_home_page extends AppCompatActivity {
     ChatAdapter chatAdapter;
     SearchView searchView;
     ListView lv_list_chat;
-    FrameLayout user, message;
+    FrameLayout user, message, notification;
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +81,15 @@ public class chat_home_page extends AppCompatActivity {
         user.setOnClickListener(v -> {
             Intent intent = new Intent(chat_home_page.this, setting.class);
             startActivity(intent);
+        });
+
+        notification = findViewById(R.id.notification);
+        notification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(chat_home_page.this, notification_page.class);
+                startActivity(intent);
+            }
         });
     }
 }
