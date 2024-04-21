@@ -3,7 +3,6 @@ package com.example.mymessengerapp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -121,7 +120,7 @@ public class setting  extends AppCompatActivity {
         message.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(setting.this, chat_home_page.class);
+                Intent intent = new Intent(setting.this, ChatHomePage.class);
                 startActivity(intent);
             }
         });

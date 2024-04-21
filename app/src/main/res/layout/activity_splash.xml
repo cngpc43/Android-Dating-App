@@ -26,6 +26,7 @@
         android:layout_height="wrap_content"
         android:text="@string/app_name"
         android:textAlignment="center"
+        android:textColor="@color/primary"
         android:textSize="40sp"
         android:textStyle="bold"
         app:layout_constraintTop_toBottomOf="@id/logoimg" />

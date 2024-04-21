@@ -1,4 +1,4 @@
-package com.example.mymessengerapp;
+package com.example.mymessengerapp.model;
 
 public class Users {
     String profilepic,mail,userName,password,userId,lastMessage,status, gender, dob, phone, location, sexual_orientation, height;

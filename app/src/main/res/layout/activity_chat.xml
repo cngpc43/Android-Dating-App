@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ChatActivity">
+
+    <!--  Chat tool bar (header)  -->
+    <RelativeLayout
+        android:id="@+id/chat_tool_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/primary"
+        android:paddingVertical="16dp">
+
+        <ImageButton
+            android:id="@+id/chat_back_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:background="@android:color/transparent"
+            android:padding="8dp"
+            android:src="@drawable/baseline_arrow_back"
+            android:tint="@color/secondary3"
+            tools:ignore="UseAppTint" />
+
+        <RelativeLayout
+            android:id="@+id/infor_chat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+
+            android:layout_toRightOf="@+id/chat_back_button">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/user_icon_chat"
+                android:layout_width="49dp"
+                android:layout_height="49dp"
+                android:padding="8dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/user_icon"
+                android:tint="@color/white"
+                app:shapeAppearanceOverlay="@style/RoundedCorners"
+                tools:ignore="UseAppTint" />
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="4dp"
+                android:layout_toEndOf="@+id/user_icon_chat">
+
+                <TextView
+                    android:id="@+id/user_name_chat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:shadowColor="@color/primary"
+                    android:text="Thi Thuy"
+                    android:textColor="@color/secondary3"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/user_status_chat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/user_name_chat"
+                    android:text="online"
+                    android:textColor="#affc41"
+                    android:textSize="12sp"
+                    tools:ignore="SmallSp" />
+            </RelativeLayout>
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/options_chat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/option_call"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:src="@drawable/baseline_phone_in_talk"
+                android:tint="@color/secondary3"
+                tools:ignore="UseAppTint" />
+
+            <ImageButton
+                android:id="@+id/option_call_video"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:background="@android:color/transparent"
+                android:src="@drawable/baseline_videocam"
+                android:tint="@color/secondary3"
+                tools:ignore="UseAppTint" />
+
+            <ImageButton
+                android:id="@+id/option_more"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:src="@drawable/baseline_more_vert"
+                android:tint="@color/secondary3"
+                tools:ignore="UseAppTint" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <!--  Chat  -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/chat_main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/send_chat"
+        android:layout_below="@+id/chat_tool_bar" />
+
+    <!--  Send chat (footer)  -->
+    <LinearLayout
+        android:id="@+id/send_chat"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/primary2"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/chat_input"
+            android:layout_width="305dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/rounded_corners"
+            android:drawableEnd="@drawable/baseline_attach_file"
+            android:drawableTint="@color/primary"
+            android:elevation="4dp"
+            android:hint="Write message here"
+            android:paddingHorizontal="8dp"
+            android:paddingTop="4dp"
+            android:textSize="14sp" />
+
+        <ImageButton
+            android:id="@+id/chat_send_button"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/rounded_corners"
+            android:backgroundTint="@color/primary"
+            android:elevation="4dp"
+            android:padding="4dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/baseline_keyboard_double_arrow_right"
+            android:tint="@color/white"
+            tools:ignore="UseAppTint" />
+
+    </LinearLayout>
+</RelativeLayout>

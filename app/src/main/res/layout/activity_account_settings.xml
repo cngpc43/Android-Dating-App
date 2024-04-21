@@ -1,101 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
     <LinearLayout
+        android:id="@+id/toolBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/toolBar"
-        android:orientation="horizontal"
         android:background="@drawable/unrounded_corners"
-        app:layout_constraintTop_toTopOf="parent"
+        android:orientation="horizontal"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent">
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
+            android:id="@+id/back_icon"
             android:layout_width="@dimen/_50sdp"
             android:layout_height="@dimen/_50sdp"
-            android:id="@+id/back_icon"
             android:layout_gravity="start|center_vertical"
             android:background="@drawable/ic_chevron_left"
-            android:scaleType="centerCrop"
-            android:clickable="true"/>
+            android:clickable="true"
+            android:scaleType="centerCrop" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:fontFamily="@font/poppins_bold"
+            android:paddingTop="5dp"
             android:text="Account settings"
             android:textColor="#2a364e"
-            android:paddingTop="5dp"
             android:textSize="@dimen/_20sdp" />
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/phone_number"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/phone_number"
+        android:layout_marginTop="30dp"
         android:background="@drawable/rounded_corners"
         android:orientation="horizontal"
         android:padding="10dp"
-        app:layout_constraintTop_toBottomOf="@id/toolBar"
-        android:layout_marginTop="30dp">
+        app:layout_constraintTop_toBottomOf="@id/toolBar">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:background="@drawable/rounded_corners"
             android:gravity="center_vertical"
-            android:padding="10dp"
-            android:background="@drawable/rounded_corners">
+            android:orientation="horizontal"
+            android:padding="10dp">
+
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="Phone number"
                 android:textSize="16sp"
-                android:textStyle="bold"
-                android:layout_weight="1"/>
+                android:textStyle="bold" />
+
             <TextView
+                android:id="@+id/name_preview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/name_preview"
                 android:text="123456789"
-                android:textColor="#919492"
-                />
+                android:textColor="#919492" />
         </LinearLayout>
 
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/changable"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/changable"
+        android:layout_marginTop="30dp"
         android:orientation="vertical"
         android:padding="10dp"
-        app:layout_constraintTop_toBottomOf="@id/phone_number"
-        android:layout_marginTop="30dp">
+        app:layout_constraintTop_toBottomOf="@id/phone_number">
+
         <LinearLayout
+            android:id="@+id/name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/name"
-            android:orientation="horizontal"
+            android:background="@drawable/rounded_top_corners"
             android:gravity="center_vertical"
-            android:padding="10dp"
-            android:background="@drawable/rounded_top_corners">
+            android:orientation="horizontal"
+            android:padding="10dp">
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:orientation="vertical">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Name"
                     android:textSize="16sp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -110,24 +115,27 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/email"
-            android:orientation="horizontal"
+            android:background="@drawable/unrounded_corners"
             android:gravity="center_vertical"
-            android:padding="10dp"
-            android:background="@drawable/unrounded_corners">
+            android:orientation="horizontal"
+            android:padding="10dp">
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:orientation="vertical">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Email"
                     android:textSize="16sp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -142,90 +150,98 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/password"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:id="@+id/password"
-            android:orientation="horizontal"
+            android:background="@drawable/rounded_bottom_corners"
             android:gravity="center_vertical"
-            android:padding="10dp"
-            android:background="@drawable/rounded_bottom_corners">
+            android:orientation="horizontal"
+            android:padding="10dp">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Password"
                 android:textSize="16sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
+
             <ImageView
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:src="@drawable/ic_chevron_right_grey" />
         </LinearLayout>
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
             android:text="Changing your password will log you out anywhere this account is logged in."
-            android:textColor="#919492"
-            android:paddingLeft="10dp" />
+            android:textColor="#919492" />
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/email_receive"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/email_receive"
+        android:layout_marginTop="30dp"
         android:background="@drawable/rounded_corners"
         android:orientation="horizontal"
         android:padding="10dp"
-        app:layout_constraintTop_toBottomOf="@id/changable"
-        android:layout_marginTop="30dp">
+        app:layout_constraintTop_toBottomOf="@id/changable">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:background="@drawable/rounded_corners"
             android:gravity="center_vertical"
-            android:padding="10dp"
-            android:background="@drawable/rounded_corners">
+            android:orientation="horizontal"
+            android:padding="10dp">
+
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="Emails from Tindeo"
                 android:textSize="16sp"
-                android:textStyle="bold"
-                android:layout_weight="1"/>
+                android:textStyle="bold" />
+
             <Switch
+                android:id="@+id/email_receive_switch"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/email_receive_switch" />
+                android:layout_height="wrap_content" />
         </LinearLayout>
 
     </LinearLayout>
 
     <TextView
+        android:id="@+id/email_receive_hint"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/email_receive_hint"
+        android:paddingLeft="20dp"
         android:text="Never miss your notification"
         android:textColor="#919492"
-        android:paddingLeft="20dp"
-        app:layout_constraintTop_toBottomOf="@id/email_receive"/>
+        app:layout_constraintTop_toBottomOf="@id/email_receive" />
 
     <LinearLayout
+        android:id="@+id/contact_us"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/contact_us"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:padding="20dp"
-        android:background="@drawable/rounded_corners"
         android:layout_marginTop="30dp"
+        android:background="@drawable/rounded_corners"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="20dp"
         app:layout_constraintTop_toBottomOf="@id/email_receive_hint">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="Contact us"
             android:textSize="16sp"
-            android:textStyle="bold"
-            android:layout_weight="1"/>
+            android:textStyle="bold" />
+
         <ImageView
             android:layout_width="20dp"
             android:layout_height="20dp"
