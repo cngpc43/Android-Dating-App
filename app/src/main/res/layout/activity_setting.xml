@@ -159,9 +159,10 @@
                             android:paddingRight="5dp"/>
 
                         <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:src="@drawable/ic_chevron_right_grey" />
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:src="@drawable/ic_chevron_right_grey"
+                            android:layout_marginRight="10dp"/>
 
                     </LinearLayout>
                 </LinearLayout>
@@ -189,20 +190,11 @@
                             android:text="Gender"
                             android:textSize="16sp" />
 
-                        <TextView
-                            android:id="@+id/gender_preview"
+                        <Spinner
+                            android:id="@+id/gender_spinner"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Male"
-                            android:textColor="#919492"
-                            android:textSize="16sp"
-                            android:paddingRight="5dp"/>
-
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:src="@drawable/ic_chevron_right_grey" />
-
+                            android:layout_height="match_parent"
+                            android:spinnerMode="dropdown" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -229,19 +221,11 @@
                             android:text="Sexual Orientation"
                             android:textSize="16sp" />
 
-                        <TextView
-                            android:id="@+id/sexual_orientation_preview"
+                        <Spinner
+                            android:id="@+id/sexual_spinner"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Gay"
-                            android:textColor="#919492"
-                            android:textSize="16sp"
-                            android:paddingRight="5dp"/>
-
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:src="@drawable/ic_chevron_right_grey" />
+                            android:layout_height="match_parent"
+                            android:spinnerMode="dropdown" />
 
                     </LinearLayout>
                 </LinearLayout>
@@ -330,7 +314,7 @@
                             android:text="Show me on KHTeam"
                             android:textSize="16sp" />
 
-                        <Switch
+                        <com.google.android.material.materialswitch.MaterialSwitch
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:id="@+id/show_me_switch" />
@@ -361,7 +345,7 @@
                             android:text="Don't show my age"
                             android:textSize="16sp" />
 
-                        <Switch
+                        <com.google.android.material.materialswitch.MaterialSwitch
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:id="@+id/show_age_switch" />
