@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -62,6 +63,7 @@ public class ChatHomePage extends AppCompatActivity {
                 // khong lam gi
             }
         });
+
         ImageView home = findViewById(R.id.home);
         home.setOnClickListener(v -> {
             Intent intent = new Intent(ChatHomePage.this, MainActivity.class);
@@ -81,7 +83,13 @@ public class ChatHomePage extends AppCompatActivity {
             Intent intent = new Intent(ChatHomePage.this, setting.class);
             startActivity(intent);
         });
-
+        lv_list_chat.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(ChatHomePage.this, ChatActivity.class);
+                startActivity(intent);
+            }
+        });
         notification = findViewById(R.id.notification);
         notification.setOnClickListener(new View.OnClickListener() {
             @Override
