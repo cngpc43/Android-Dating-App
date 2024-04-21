@@ -1,17 +1,23 @@
 package com.example.mymessengerapp;
 
 public class Users {
-    String profilepic,mail,userName,password,userId,lastMessage,status;
+    String profilepic,mail,userName,password,userId,lastMessage,status, gender, dob, phone, location, sexual_orientation, height;
 
     public  Users(){}
 
-    public Users(String userId, String userName, String maill, String password, String profilepic, String status) {
+    public Users(String userId, String userName, String mail, String password, String profilepic, String status, String gender, String dob, String phone, String location, String sexual_orientation, String height) {
         this.userId = userId;
         this.userName = userName;
-        this.mail = maill;
+        this.mail = mail;
         this.password = password;
         this.profilepic = profilepic;
         this.status = status;
+        this.gender = gender;
+        this.dob = dob;
+        this.phone = phone;
+        this.location = location;
+        this.sexual_orientation = sexual_orientation;
+        this.height = height;
     }
 
     public String getProfilepic() {

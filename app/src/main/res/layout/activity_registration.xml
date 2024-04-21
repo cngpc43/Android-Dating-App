@@ -99,7 +99,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:gravity="center"
-        android:text="E-mail"
+        android:text="Email"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/guideline"
         app:layout_constraintTop_toBottomOf="@+id/rgusername"
@@ -150,6 +150,7 @@
         android:textColor="@color/black"
         android:textSize="@dimen/_15sdp"
         android:textStyle="bold"
+        android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="@+id/guidelineEnd"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="@+id/guideline"
@@ -180,6 +181,7 @@
         android:password="true"
         android:textColor="@color/black"
         android:textSize="@dimen/_15sdp"
+        android:inputType="textPassword"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/guidelineEnd"
         app:layout_constraintHorizontal_bias="0.5"
@@ -205,7 +207,7 @@
             android:layout_marginEnd="8dp"
             android:gravity="center"
             android:paddingStart="2dp"
-            android:text="Choose your avatar"
+            android:text="Choose your avatar (optional)"
             android:textStyle="bold"
             tools:ignore="UnusedAttribute" />
 
@@ -219,18 +221,18 @@
     </LinearLayout>
 
 
-    <TextView
-        android:id="@+id/tv_cfirm_sec"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:fontFamily="@font/poppins_regular"
-        android:text="Securing your personal information is our priority."
-        android:textSize="5pt"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ll_pick_avt" />
+<!--    <TextView-->
+<!--        android:id="@+id/tv_cfirm_sec"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="16dp"-->
+<!--        android:fontFamily="@font/poppins_regular"-->
+<!--        android:text="Securing your personal information is our priority."-->
+<!--        android:textSize="5pt"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.5"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/ll_pick_avt" />-->
 
 
     <com.google.android.material.button.MaterialButton
@@ -238,14 +240,14 @@
         android:layout_width="360dp"
         android:layout_height="65dp"
         android:layout_marginTop="16dp"
-        android:backgroundTint="@color/primary"
+        android:backgroundTint="@color/black"
         android:gravity="center"
         android:text="@string/sign_up"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_cfirm_sec" />
+        app:layout_constraintTop_toBottomOf="@+id/ll_pick_avt" />
 
     <LinearLayout
         android:id="@+id/ll_dont_have_account"

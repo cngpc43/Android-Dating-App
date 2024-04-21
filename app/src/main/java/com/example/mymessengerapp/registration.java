@@ -51,8 +51,8 @@ public class registration extends AppCompatActivity {
         setContentView(R.layout.activity_registration);
         dialog = new Dialog(this);
         dialog.setContentView(R.layout.dialog_progress);
-//        dialog.setMessage("Establishing The Account");
         ProgressBar progressBar = dialog.findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.GONE);
         dialog.setCancelable(false);
         if (getSupportActionBar()!=null){
         getSupportActionBar().hide();
@@ -82,16 +82,21 @@ public class registration extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String name = rg_username.getText().toString();
-                String emaill = rg_email.getText().toString();
+                String email = rg_email.getText().toString();
                 String Password = rg_password.getText().toString();
                 String cPassword = rg_repassword.getText().toString();
                 String status = "Hey I'm Using This Application";
-
-                if (TextUtils.isEmpty(name) || TextUtils.isEmpty(emaill) ||
+                String gender = "";
+                String dob = "";
+                String phone = "";
+                String location = "";
+                String sexual_orientation = "";
+                String height = "";
+                if (TextUtils.isEmpty(name) || TextUtils.isEmpty(email) ||
                         TextUtils.isEmpty(Password) || TextUtils.isEmpty(cPassword)){
                     dialog.dismiss();
                     Toast.makeText(registration.this, "Please Enter Valid Information", Toast.LENGTH_SHORT).show();
-                }else  if (!emaill.matches(emailPattern)){
+                }else  if (!email.matches(emailPattern)){
                     dialog.dismiss();
                     rg_email.setError("Type A Valid Email Here");
                 }else if (Password.length()<6){
@@ -101,14 +106,13 @@ public class registration extends AppCompatActivity {
                     dialog.dismiss();
                     rg_password.setError("The Password Doesn't Match");
                 }else {
-                    auth.createUserWithEmailAndPassword(emaill,Password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    auth.createUserWithEmailAndPassword(email,Password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()){
                                 String id = task.getResult().getUser().getUid();
                                 DatabaseReference reference = database.getReference().child("user").child(id);
                                 StorageReference storageReference = storage.getReference().child("Upload").child(id);
-
                                 if (imageURI!=null){
                                     storageReference.putFile(imageURI).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                                         @Override
@@ -118,7 +122,8 @@ public class registration extends AppCompatActivity {
                                                     @Override
                                                     public void onSuccess(Uri uri) {
                                                         imageuri = uri.toString();
-                                                        Users users = new Users(id,name,emaill,Password,imageuri,status);
+
+                                                        Users users = new Users(id,name,email,Password,imageuri,status, gender, dob, phone, location, sexual_orientation, height);
                                                         reference.setValue(users).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                             @Override
                                                             public void onComplete(@NonNull Task<Void> task) {
@@ -146,8 +151,8 @@ public class registration extends AppCompatActivity {
                                     });
                                 }else {
                                     String status = "Hey I'm Using This Application";
-                                    imageuri = "https://firebasestorage.googleapis.com/v0/b/av-messenger-dc8f3.appspot.com/o/man.png?alt=media&token=880f431d-9344-45e7-afe4-c2cafe8a5257";
-                                    Users users = new Users(id,name,emaill,Password,imageuri,status);
+                                    imageuri = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fdenverselfiemuseum.com%2Fhow-to-take-a-good-selfie%2F&psig=AOvVaw1771YMnNLySijabLLD56Mz&ust=1713783421055000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCOir6vOS04UDFQAAAAAdAAAAABAE";
+                                    Users users = new Users(id,name,email,Password,imageuri,status, gender, dob, phone, location, sexual_orientation, height);
                                     reference.setValue(users).addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
