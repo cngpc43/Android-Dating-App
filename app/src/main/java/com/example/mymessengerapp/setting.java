@@ -3,14 +3,17 @@ package com.example.mymessengerapp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.android.material.slider.RangeSlider;
@@ -23,11 +26,12 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class setting  extends AppCompatActivity {
     LinearLayout logout;
-    LinearLayout account_settings;
+    LinearLayout account_settings, location;
     FirebaseAuth auth;
     TextView username;
     TextView status;
@@ -36,8 +40,9 @@ public class setting  extends AppCompatActivity {
 
     ImageView home, chat;
     RangeSlider age_range;
-    TextView age_range_preview;
-    FrameLayout user, message;
+    TextView age_range_preview, location_preview;
+    FrameLayout user, message, notification;
+    Spinner gender_spinner, sexual_spinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,6 +120,14 @@ public class setting  extends AppCompatActivity {
             }
         });
 
+        notification = findViewById(R.id.notification);
+        notification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(setting.this, notification_page.class);
+                startActivity(intent);
+            }
+        });
         age_range_preview = findViewById(R.id.age_range_preview);
         age_range = findViewById(R.id.age_range_slider);
         age_range.setValues(13F, 24F);
@@ -153,5 +166,41 @@ public class setting  extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        gender_spinner = findViewById(R.id.gender_spinner);
+        ArrayAdapter adapter = ArrayAdapter.createFromResource(this, R.array.gender_array, R.layout.gender_spinner_item);
+        adapter.setDropDownViewResource(R.layout.gender_spinner_dropdown);
+        gender_spinner.setAdapter(adapter);
+
+        sexual_spinner = findViewById(R.id.sexual_spinner);
+        ArrayAdapter adapter1 = ArrayAdapter.createFromResource(this, R.array.sexual_array, R.layout.gender_spinner_item);
+        adapter1.setDropDownViewResource(R.layout.gender_spinner_dropdown);
+        sexual_spinner.setAdapter(adapter1);
+
+        location = findViewById(R.id.location);
+        location_preview = findViewById(R.id.location_preview);
+        location.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int LAUNCH_SECOND_ACTIVITY = 1;
+                Intent intent = new Intent(setting.this, location_change.class);
+                startActivityForResult(intent, LAUNCH_SECOND_ACTIVITY);
+            }
+        });
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 1) {
+            if(resultCode == Activity.RESULT_OK){
+                String result=data.getStringExtra("result");
+                location_preview.setText(result);
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+                // Write your code if there's no result
+            }
+        }
+    } //onActivityResult
 }
