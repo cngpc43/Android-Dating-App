@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="350dp"
+    android:layout_width="match_parent"
     android:layout_height="200dp"
     android:orientation="vertical"
-    android:layout_gravity="center|center_vertical"
+    android:layout_gravity="center|bottom"
     android:background="@drawable/dialogue_shape"
     android:padding="@dimen/_20sdp"
     android:layout_alignParentBottom="true"
-
     >
     <TextView
         android:layout_width="match_parent"
@@ -16,11 +15,15 @@
         android:textSize="18dp"
         android:gravity="center"
         android:fontFamily="@font/poppins_bold"
+        android:textStyle="bold"
+        android:layout_marginTop="8dp"
         />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_marginTop="20dp"
+        >
         <Button
             android:id="@+id/yesbnt"
             android:layout_width="match_parent"
@@ -32,10 +35,12 @@
             android:id="@+id/nobnt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/black"
             android:gravity="center"
-            android:text="No"
-            android:backgroundTint="@color/black"/>
+            android:text="No" />
     </LinearLayout>
+
+
 
 
 </LinearLayout>
