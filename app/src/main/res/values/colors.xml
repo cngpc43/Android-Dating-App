@@ -9,4 +9,7 @@
     <color name="secondary1">#909090</color>
     <color name="secondary2">#231F20</color>
     <color name="secondary3">#F0EBE3</color>
+
+    <color name="message_sent">#FC819E</color>
+    <color name="message_receive">#92C7CF</color>
 </resources>

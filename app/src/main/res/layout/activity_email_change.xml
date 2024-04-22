@@ -1,47 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/toolBar"
-        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
         android:background="@drawable/unrounded_corners"
-        app:layout_constraintTop_toTopOf="parent"
+        android:backgroundTint="@color/primary"
+        android:orientation="horizontal"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent">
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
-            android:layout_width="@dimen/_50sdp"
-            android:layout_height="@dimen/_50sdp"
+        <ImageButton
             android:id="@+id/back_icon"
-            android:layout_gravity="start|center_vertical"
-            android:background="@drawable/ic_chevron_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:background="@android:color/transparent"
+            android:padding="8dp"
             android:scaleType="centerCrop"
-            android:clickable="true"/>
+            android:src="@drawable/baseline_arrow_back"
+            android:tint="@color/secondary3"
+            tools:ignore="UseAppTint" />
 
         <TextView
+            android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:id="@+id/title"
-            android:fontFamily="@font/poppins_bold"
             android:paddingTop="5dp"
-            android:text="Change e-mail"
-            android:textColor="#2a364e"
+            android:text="Change your e-mail"
+            android:textColor="@color/secondary3"
             android:textSize="@dimen/_20sdp" />
     </LinearLayout>
 
     <TextView
+        android:id="@+id/email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
         android:layout_marginLeft="20dp"
+        android:layout_marginTop="30dp"
         android:fontFamily="@font/poppins_regular"
-        android:id="@+id/email"
         android:text="Enter your new e-mail:"
         android:textColor="#919492"
         android:textSize="7pt"
@@ -50,28 +54,35 @@
         app:layout_constraintTop_toBottomOf="@id/toolBar" />
 
     <EditText
+        android:id="@+id/etEmail"
         android:layout_width="360dp"
         android:layout_height="52dp"
-        android:id="@+id/etEmail"
-        android:padding="10dp"
+        android:layout_marginTop="4dp"
         android:background="@drawable/rectangle_box"
-        app:layout_constraintTop_toBottomOf="@id/email"
-        app:layout_constraintLeft_toLeftOf="@id/email" />
+        android:elevation="4dp"
+        android:padding="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintLeft_toLeftOf="@id/email"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/email" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/confirm_button"
-        android:layout_width="250dp"
+        android:layout_width="360dp"
         android:layout_height="65dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="16dp"
         android:backgroundTint="@color/primary"
+        android:elevation="4dp"
         android:gravity="center"
         android:text="Save"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etEmail"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etEmail" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

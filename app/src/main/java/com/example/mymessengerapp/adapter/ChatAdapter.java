@@ -1,82 +1,66 @@
 package com.example.mymessengerapp.adapter;
 
-import android.content.Context;
 import android.view.LayoutInflater;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mymessengerapp.R;
+import com.example.mymessengerapp.model.ChatMessage;
 
-import java.util.ArrayList;
 import java.util.List;
 
-// display the chat names in the ListView and filter the chat names based on the search query
-public class ChatAdapter extends ArrayAdapter<String> {
-    private List<String> chatNames;
-    private List<String> chatNamesFiltered;
+public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder> {
+    private List<ChatMessage> chatMessages;
 
-    public ChatAdapter(Context context, List<String> chatNames) {
-        super(context, 0, chatNames);
-        this.chatNames = new ArrayList<>(chatNames);
-        this.chatNamesFiltered = new ArrayList<>(chatNames);
+    public ChatAdapter(List<ChatMessage> chatMessages) {
+        this.chatMessages = chatMessages;
     }
 
-    // display the chat names in the ListView, tạo model message để lưu hội thoại rồi đẩy data vào đây
     @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        if (convertView == null)
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.chat_item, parent, false);
-
-//        ImageView userIcon = convertView.findViewById(R.id.user_icon);
-//        TextView tvChatName = convertView.findViewById(R.id.tv_chat_name);
-//        TextView chatMessage = convertView.findViewById(R.id.chat_message);
-//        TextView chatTime = convertView.findViewById(R.id.chat_time);
-
-//        String chatName = getItem(position);
-//
-//        if (chatName != null)
-//            tvChatName.setText(chatName);
-//        if (userIcon != null)
-//            userIcon.setImageResource(R.drawable.ic_baseline_account_circle_24);
-//        if (chatMessage != null)
-//            chatMessage.setText("Hello");
-//        if (chatTime != null)
-//            chatTime.setText("12:00");
-
-        return convertView;
+    public ChatViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_message_item, parent, false);
+        return new ChatViewHolder(view);
     }
 
-    public void filter(String text) {
-        chatNamesFiltered.clear();
+    // Lay data message
+    @Override
+    public void onBindViewHolder(@NonNull ChatViewHolder holder, int position) {
+        ChatMessage chatMessage = chatMessages.get(position);
 
-        if (!text.isEmpty()) {
-            chatNamesFiltered.addAll(chatNames);
-            notifyDataSetChanged();
-            return;
+        // Neu gui thi de hien thi ben layout send, khong thi nguoc lai
+        if (chatMessage.isSent()) {
+            holder.sendLayout.setVisibility(View.VISIBLE);
+            holder.receiveLayout.setVisibility(View.GONE);
+            holder.sendMessage.setText(chatMessage.getMessage());
+        } else {
+            holder.receiveLayout.setVisibility(View.VISIBLE);
+            holder.sendLayout.setVisibility(View.GONE);
+            holder.receiveMessage.setText(chatMessage.getMessage());
         }
-
-        text = text.toLowerCase();
-        for (String item : chatNames) {
-            if (item.toLowerCase().contains(text)) {
-                chatNamesFiltered.add(item);
-            }
-        }
-
-        notifyDataSetChanged();
     }
 
     @Override
-    public int getCount() {
-        return chatNamesFiltered.size();
+    public int getItemCount() {
+        return chatMessages.size();
     }
 
-    @Override
-    public String getItem(int position) {
-        return chatNamesFiltered.get(position);
+    // De match moi UI id thoi, de biet duong ma set data vo (onBindViewHolder lam)
+    public static class ChatViewHolder extends RecyclerView.ViewHolder {
+        TextView sendMessage, receiveMessage;
+        View sendLayout, receiveLayout;
+
+        public ChatViewHolder(@NonNull View itemView) {
+            super(itemView);
+
+            sendMessage = itemView.findViewById(R.id.send_message);
+            receiveMessage = itemView.findViewById(R.id.receive_message);
+            sendLayout = itemView.findViewById(R.id.send_layout);
+            receiveLayout = itemView.findViewById(R.id.receive_layout);
+        }
     }
 }

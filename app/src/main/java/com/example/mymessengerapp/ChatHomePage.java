@@ -14,7 +14,7 @@ import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.mymessengerapp.adapter.ChatAdapter;
+import com.example.mymessengerapp.adapter.ChatHomeAdapter;
 import com.google.android.material.search.SearchView;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -25,7 +25,7 @@ import java.util.Arrays;
 public class ChatHomePage extends AppCompatActivity {
     FirebaseDatabase database;
     FirebaseStorage storage;
-    ChatAdapter chatAdapter;
+    ChatHomeAdapter chatHomeAdapter;
     SearchView searchView;
     ListView lv_list_chat;
     FrameLayout user, message, notification;
@@ -41,8 +41,8 @@ public class ChatHomePage extends AppCompatActivity {
         searchView = findViewById(R.id.sv_search);
         lv_list_chat = findViewById(R.id.lv_list_chat);
 
-        chatAdapter = new ChatAdapter(this, new ArrayList<>(Arrays.asList("Chat 1", "Chat 2", "Chat 3")));
-        lv_list_chat.setAdapter(chatAdapter);
+        chatHomeAdapter = new ChatHomeAdapter(this, new ArrayList<>(Arrays.asList("Chat 1", "Chat 2", "Chat 3")));
+        lv_list_chat.setAdapter(chatHomeAdapter);
 
         // Tìm kiếm tên chat, ở trên là data mẫu thôi, tự xem rồi fix lai
 //        TextInputEditText searchEditText = (TextInputEditText) searchView.getEditText();
@@ -55,7 +55,7 @@ public class ChatHomePage extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                chatAdapter.filter(s.toString());
+                chatHomeAdapter.filter(s.toString());
             }
 
             @Override

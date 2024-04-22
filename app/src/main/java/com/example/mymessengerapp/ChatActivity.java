@@ -11,11 +11,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.mymessengerapp.adapter.ChatAdapter;
+import com.example.mymessengerapp.model.ChatMessage;
 import com.example.mymessengerapp.model.ChatRoom;
 import com.example.mymessengerapp.model.Users;
 import com.google.android.material.imageview.ShapeableImageView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ChatActivity extends AppCompatActivity {
     EditText messageInput;
@@ -23,6 +29,8 @@ public class ChatActivity extends AppCompatActivity {
     TextView userName, userStatus;
     ShapeableImageView userAvatar;
     RecyclerView mainChat;
+    ChatAdapter chatAdapter;
+    List<ChatMessage> chatMessages;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -43,6 +51,15 @@ public class ChatActivity extends AppCompatActivity {
         backBtn = findViewById(R.id.chat_back_button);
         mainChat = findViewById(R.id.chat_main);
 
+        // Khoi tao chat message - day la hard data, thay bang firebase sau
+        chatMessages = new ArrayList<ChatMessage>();
+        chatMessages.add(new ChatMessage("Hello, how are you ?", false));
+        chatMessages.add(new ChatMessage("I am fine", true));
+
+        // Gui chat message vo recyclerView
+        chatAdapter = new ChatAdapter(chatMessages);
+        mainChat.setAdapter(chatAdapter);
+        mainChat.setLayoutManager(new LinearLayoutManager(this));
 
         // Set content for UI
 //        userName.setText();

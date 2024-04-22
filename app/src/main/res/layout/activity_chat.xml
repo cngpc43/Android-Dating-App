@@ -154,7 +154,7 @@
             android:padding="4dp"
             android:scaleType="fitCenter"
             android:src="@drawable/baseline_keyboard_double_arrow_right"
-            android:tint="@color/white"
+            android:tint="@color/secondary3"
             tools:ignore="UseAppTint" />
 
     </LinearLayout>
