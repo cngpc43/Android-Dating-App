@@ -3,12 +3,13 @@ package com.example.mymessengerapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 public class password_change extends AppCompatActivity {
-    ImageView back_icon;
+    ImageButton back_icon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
