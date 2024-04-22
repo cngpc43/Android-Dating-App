@@ -57,7 +57,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="Team 2"
+            android:text="Khanh Hoa"
 
             android:textSize="@dimen/_20sdp"
             android:textColor="@color/UIT"
