@@ -2,6 +2,7 @@ package com.example.mymessengerapp;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -10,9 +11,11 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.example.mymessengerapp.adapter.ChatHomeAdapter;
 import com.google.android.material.search.SearchView;
@@ -29,12 +32,16 @@ public class ChatHomePage extends AppCompatActivity {
     SearchView searchView;
     ListView lv_list_chat;
     FrameLayout user, message, notification;
-    @SuppressLint("MissingInflatedId")
+    LinearLayout chat_selected;
+
+//    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_chat_home_page);
+        chat_selected = findViewById(R.id.chat_selected);
+        chat_selected.setBackground(ContextCompat.getDrawable(this, R.drawable.selected_nav_item));
         if(getSupportActionBar()!=null){
             getSupportActionBar().hide();
         }
@@ -99,4 +106,5 @@ public class ChatHomePage extends AppCompatActivity {
             }
         });
     }
+
 }
