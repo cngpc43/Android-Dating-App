@@ -6,8 +6,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class notification_page extends AppCompatActivity {
@@ -15,6 +17,8 @@ public class notification_page extends AppCompatActivity {
     ImageView home;
     FrameLayout user, message;
     RecyclerView noti_list;
+    LinearLayout noti_selected;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,9 +26,8 @@ public class notification_page extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
-//        noti_list = findViewById(R.id.notification_recyclerview);
-
-
+        noti_selected = findViewById(R.id.noti_selected);
+        noti_selected.setBackground(ContextCompat.getDrawable(this, R.drawable.selected_nav_item));
         home = findViewById(R.id.home);
         home.setOnClickListener(new View.OnClickListener() {
             @Override

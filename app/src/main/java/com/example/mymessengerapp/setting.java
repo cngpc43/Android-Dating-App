@@ -2,6 +2,8 @@ package com.example.mymessengerapp;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+
 import android.app.Activity;
 
 import android.app.Dialog;
@@ -47,6 +49,7 @@ public class setting  extends AppCompatActivity {
     TextView age_range_preview, location_preview;
     FrameLayout user, message, notification;
     Spinner gender_spinner, sexual_spinner;
+    LinearLayout home_selected, user_selected, chat_selected, noti_selected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,18 +57,17 @@ public class setting  extends AppCompatActivity {
         setContentView(R.layout.activity_setting);
         username = findViewById(R.id.profile_username);
         status = findViewById(R.id.profile_status);
+        user_selected = findViewById(R.id.user_selected);
+        user_selected.setBackground(ContextCompat.getDrawable(this, R.drawable.selected_nav_item));
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
-
         }
         auth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
         DatabaseReference reference = database.getReference().child("user").child(auth.getUid());
-
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-
 //                password = snapshot.child("password").getValue().toString();
 //                String name = snapshot.child("userName").getValue().toString();
 //                String profile = snapshot.child("profilepic").getValue().toString();

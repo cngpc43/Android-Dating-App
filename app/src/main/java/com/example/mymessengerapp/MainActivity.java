@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,6 +13,7 @@ import android.content.Intent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.example.mymessengerapp.adapter.UserAdapter;
 import com.example.mymessengerapp.model.Users;
@@ -31,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
     FirebaseDatabase database;
     ArrayList<Users> usersArrayList;
     FrameLayout user, message, notification;
-
+    LinearLayout home_selected, user_selected, chat_selected, noti_selected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,10 +46,9 @@ public class MainActivity extends AppCompatActivity {
 
         database=FirebaseDatabase.getInstance();
         auth = FirebaseAuth.getInstance();
-
-
+        home_selected = findViewById(R.id.home_selected);
+        home_selected.setBackground(ContextCompat.getDrawable(this, R.drawable.selected_nav_item));
         DatabaseReference reference = database.getReference().child("user");
-
         usersArrayList = new ArrayList<>();
         mainUserRecyclerView = findViewById(R.id.mainUserRecyclerView);
         int spacingInPixels = getResources().getDimensionPixelSize(R.dimen._16sdp);
