@@ -109,7 +109,7 @@ public class ChatActivity extends AppCompatActivity {
 
                     // Neu k show thi hien no o tren chat_input view
                     attachmentPopup.setWidth(LinearLayout.LayoutParams.MATCH_PARENT); // Set width to match parent
-                    attachmentPopup.showAtLocation(messageInput, Gravity.NO_GRAVITY, 0, messageInput.getTop()); // Show at top of chat_input
+                    attachmentPopup.showAtLocation(messageInput, Gravity.NO_GRAVITY, 0, mainChat.getBottom() - 100); // Show at top of chat_input
                     return true;
                 }
             }

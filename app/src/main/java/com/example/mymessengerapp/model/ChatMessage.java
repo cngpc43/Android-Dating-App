@@ -1,7 +1,7 @@
 package com.example.mymessengerapp.model;
 
 public class ChatMessage {
-    private String message;
+    private String message, imgUrl, imgType;
     private boolean isSent;
 
     public ChatMessage() {
@@ -19,5 +19,21 @@ public class ChatMessage {
 
     public boolean isSent() {
         return isSent;
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
+    }
+
+    public String getImgType() {
+        return imgType;
+    }
+
+    public void setImgType(String imgType) {
+        this.imgType = imgType;
     }
 }

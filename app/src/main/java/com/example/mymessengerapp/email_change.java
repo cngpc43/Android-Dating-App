@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class email_change extends AppCompatActivity {
     ImageView back_icon;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
