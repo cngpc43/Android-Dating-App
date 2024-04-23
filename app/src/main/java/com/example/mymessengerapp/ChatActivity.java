@@ -88,26 +88,28 @@ public class ChatActivity extends AppCompatActivity {
             handleSendMessage(message);
         });
 
-        // Handle the attachment popup
-        // Initialize PopupWindow
+
+        // Init PopupWindow
         LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         View popupView = inflater.inflate(R.layout.attachment_popup, null);
         attachmentPopup = new PopupWindow(popupView, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
+        // Xu ly khi nhan vao icon attachment trong chat_input
         messageInput.setOnTouchListener((v, event) -> {
             final int DRAWABLE_RIGHT = 2;
 
             if (event.getAction() == MotionEvent.ACTION_UP) {
                 if (event.getRawX() >= (messageInput.getRight() - messageInput.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
-                    // Check if PopupWindow is showing
+                    // Kiem tra popup co shoing hay k
                     if (attachmentPopup.isShowing()) {
-                        // If it is showing, dismiss it
+                        // Neu dang show thi huy no di
                         attachmentPopup.dismiss();
-                    } else {
-                        // If it's not showing, show it above chat_input view
-                        attachmentPopup.setWidth(LinearLayout.LayoutParams.MATCH_PARENT); // Set width to match parent
-                        attachmentPopup.showAtLocation(messageInput, Gravity.NO_GRAVITY, 0, messageInput.getTop()); // Show at top of chat_input
+                        return true;
                     }
+
+                    // Neu k show thi hien no o tren chat_input view
+                    attachmentPopup.setWidth(LinearLayout.LayoutParams.MATCH_PARENT); // Set width to match parent
+                    attachmentPopup.showAtLocation(messageInput, Gravity.NO_GRAVITY, 0, messageInput.getTop()); // Show at top of chat_input
                     return true;
                 }
             }
