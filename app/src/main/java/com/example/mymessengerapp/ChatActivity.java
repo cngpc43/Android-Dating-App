@@ -1,6 +1,8 @@
 package com.example.mymessengerapp;
 
 import android.annotation.SuppressLint;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -41,7 +43,7 @@ public class ChatActivity extends AppCompatActivity {
 
     PopupWindow attachmentPopup;
 
-    @SuppressLint({"MissingInflatedId", "ClickableViewAccessibility"})
+    @SuppressLint({"MissingInflatedId", "ClickableViewAccessibility", "ResourceAsColor"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,7 +89,6 @@ public class ChatActivity extends AppCompatActivity {
 
             handleSendMessage(message);
         });
-
 
         // Init PopupWindow
         LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
