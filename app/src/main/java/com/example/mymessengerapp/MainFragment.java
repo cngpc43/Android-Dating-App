@@ -52,6 +52,8 @@ public class MainFragment extends Fragment {
         mainUserRecyclerView.addItemDecoration(new SpaceItemDecoration(spacingInPixels));
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        layoutManager.setReverseLayout(true);
+
         layoutManager.setStackFromEnd(true);
         mainUserRecyclerView.setLayoutManager(layoutManager);
         mainUserRecyclerView.setAdapter(adapter);
