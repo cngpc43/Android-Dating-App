@@ -14,7 +14,7 @@ import com.example.mymessengerapp.R;
 import java.util.ArrayList;
 import java.util.List;
 
-// display the chat names in the ListView and filter the chat names based on the search query
+
 public class ChatHomeAdapter extends ArrayAdapter<String> {
     private List<String> chatNames;
     private List<String> chatNamesFiltered;

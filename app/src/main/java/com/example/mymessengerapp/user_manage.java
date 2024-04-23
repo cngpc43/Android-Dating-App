@@ -84,7 +84,7 @@ public class user_manage extends AppCompatActivity {
                 location_preview.setText(result);
             }
             if (resultCode == Activity.RESULT_CANCELED) {
-                // Write your code if there's no result
+                // No result handler
             }
         }
     } //onActivityResult

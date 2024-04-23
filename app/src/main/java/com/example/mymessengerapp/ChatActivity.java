@@ -14,18 +14,14 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mymessengerapp.adapter.ChatAdapter;
 import com.example.mymessengerapp.model.ChatMessage;
-import com.example.mymessengerapp.model.ChatRoom;
-import com.example.mymessengerapp.model.Users;
+
 import com.google.android.material.imageview.ShapeableImageView;
 
 import java.util.ArrayList;

@@ -11,7 +11,6 @@ import com.example.mymessengerapp.R;
 import com.example.mymessengerapp.model.Users;
 
 import java.util.ArrayList;
-// Import image view
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;

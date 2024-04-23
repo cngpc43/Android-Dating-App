@@ -15,7 +15,6 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-// Import Log
 import android.util.Log;
 
 import com.example.mymessengerapp.model.Users;
