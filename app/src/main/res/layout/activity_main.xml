@@ -32,18 +32,26 @@
             android:textStyle="bold" />
 
     </LinearLayout>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/mainUserRecyclerView"
+    <FrameLayout
+        android:id="@+id/main_frame"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginTop="@dimen/_70sdp"
-        android:layout_marginBottom="@dimen/_70sdp"
+        android:layout_marginBottom="@dimen/_50sdp"
         app:layout_constraintBottom_toTopOf="@id/bottomBar"
-        app:layout_constraintTop_toBottomOf="@+id/toolBar"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/ll_header"
+        >
+
+<!--        <androidx.recyclerview.widget.RecyclerView-->
+<!--            android:id="@+id/mainUserRecyclerView"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+
+<!--            />-->
+    </FrameLayout>
+
 
     <include layout="@layout/navigation_bar"/>
 

@@ -33,47 +33,21 @@
             android:textStyle="bold" />
 
     </LinearLayout>
-
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:id="@+id/coorl_search"
+    <FrameLayout
+        android:id="@+id/chat_frame"
         android:layout_width="match_parent"
-        android:layout_height="90dp"
-        app:layout_constraintBottom_toTopOf="@+id/lv_list_chat"
-        app:layout_constraintTop_toBottomOf="@+id/ll_header">
-
-        <com.google.android.material.appbar.AppBarLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <com.google.android.material.search.SearchBar
-                android:id="@+id/sb_search"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/search_hint" />
-
-        </com.google.android.material.appbar.AppBarLayout>
-
-        <com.google.android.material.search.SearchView
-            android:id="@+id/sv_search"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/search_hint"
-            app:layout_anchor="@id/sb_search" />
-
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
-    <ListView
-        android:id="@+id/lv_list_chat"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/ll_bottom"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/coorl_search" />
+        android:layout_height="match_parent"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="@dimen/_70sdp"
+        android:layout_marginBottom="@dimen/_50sdp"
+        app:layout_constraintTop_toBottomOf="@+id/ll_header"
+        >
 
 
+    </FrameLayout>
 
-    <include layout="@layout/navigation_bar" />
+<!--    <include layout="@layout/navigation_bar" />-->
 
 <!--    <LinearLayout-->
 <!--        android:id="@+id/ll_bottom"-->
