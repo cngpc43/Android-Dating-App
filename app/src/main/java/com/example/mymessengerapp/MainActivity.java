@@ -1,18 +1,17 @@
 package com.example.mymessengerapp;
 
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.PagerSnapHelper;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.example.mymessengerapp.adapter.UserAdapter;
@@ -28,53 +27,41 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     FirebaseAuth auth;
-    RecyclerView mainUserRecyclerView;
+    //    RecyclerView mainUserRecyclerView;
     UserAdapter adapter;
     FirebaseDatabase database;
     ArrayList<Users> usersArrayList;
-    FrameLayout user, message, notification;
+    FrameLayout home, user, message, notification;
     LinearLayout home_selected, user_selected, chat_selected, noti_selected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        if(getSupportActionBar()!=null){
-
-        getSupportActionBar().hide();
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
         }
-
-        database=FirebaseDatabase.getInstance();
+        database = FirebaseDatabase.getInstance();
         auth = FirebaseAuth.getInstance();
         home_selected = findViewById(R.id.home_selected);
+        noti_selected = findViewById(R.id.noti_selected);
+        chat_selected = findViewById(R.id.chat_selected);
+        user_selected = findViewById(R.id.user_selected);
         home_selected.setBackground(ContextCompat.getDrawable(this, R.drawable.selected_nav_item));
-        DatabaseReference reference = database.getReference().child("user");
         usersArrayList = new ArrayList<>();
-        mainUserRecyclerView = findViewById(R.id.mainUserRecyclerView);
-        int spacingInPixels = getResources().getDimensionPixelSize(R.dimen._16sdp);
-        mainUserRecyclerView.addItemDecoration(new SpaceItemDecoration(spacingInPixels));
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        layoutManager.setStackFromEnd(true);
-        mainUserRecyclerView.setLayoutManager(layoutManager);
-        adapter = new UserAdapter(MainActivity.this,usersArrayList);
-        mainUserRecyclerView.setAdapter(adapter);
-        PagerSnapHelper snapHelper = new PagerSnapHelper();
-        snapHelper.attachToRecyclerView(mainUserRecyclerView);
-        mainUserRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new UserAdapter(MainActivity.this,usersArrayList);
-        mainUserRecyclerView.setAdapter(adapter);
+        DatabaseReference reference = database.getReference().child("user");
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                usersArrayList.clear();
                 String currentUserId = auth.getCurrentUser().getUid();
-                for (DataSnapshot dataSnapshot: snapshot.getChildren())
-                {
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     Users users = dataSnapshot.getValue(Users.class);
-                    if(users != null && !users.getUserId().equals(currentUserId)){
+                    if (users != null && !users.getUserId().equals(currentUserId)) {
                         usersArrayList.add(users);
                     }
                 }
+                adapter = new UserAdapter(MainActivity.this, usersArrayList);
                 adapter.notifyDataSetChanged();
             }
 
@@ -83,34 +70,60 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        if (auth.getCurrentUser() == null){
-            Intent intent = new Intent(MainActivity.this,login.class);
+        if (auth.getCurrentUser() == null) {
+            Intent intent = new Intent(MainActivity.this, login.class);
             startActivity(intent);
         }
+        loadFragment(new MainFragment(this));
         user = findViewById(R.id.user);
         user.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, setting.class);
-                startActivity(intent);
+                loadFragment(new UserSettingFragment());
+                home_selected.setBackground(null);
+                noti_selected.setBackground(null);
+                chat_selected.setBackground(null);
+                user_selected.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.selected_nav_item));
             }
         });
         message = findViewById(R.id.message);
         message.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ChatHomePage.class);
-                startActivity(intent);
+                loadFragment(new ChatFragment());
+                home_selected.setBackground(null);
+                noti_selected.setBackground(null);
+                user_selected.setBackground(null);
+                chat_selected.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.selected_nav_item));
             }
         });
-
+        home = findViewById(R.id.home);
+        home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadFragment(new MainFragment(MainActivity.this));
+                noti_selected.setBackground(null);
+                chat_selected.setBackground(null);
+                user_selected.setBackground(null);
+                home_selected.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.selected_nav_item));
+            }
+        });
         notification = findViewById(R.id.notification);
         notification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, notification_page.class);
-                startActivity(intent);
+                loadFragment(new NotificationFragment(MainActivity.this));
+                home_selected.setBackground(null);
+                chat_selected.setBackground(null);
+                user_selected.setBackground(null);
+                noti_selected.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.selected_nav_item));
             }
         });
+    }
+
+    private void loadFragment(Fragment fragment) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.main_frame, fragment);
+        transaction.commit();
     }
 }

@@ -19,8 +19,8 @@
         <com.google.android.material.imageview.ShapeableImageView
             android:layout_width="70dp"
             android:layout_height="70dp"
-            android:src="@drawable/logo_dating"
-            android:scaleType="fitXY"/>
+            android:scaleType="fitXY"
+            android:src="@drawable/logo_dating" />
 
         <com.google.android.material.textview.MaterialTextView
             android:layout_width="wrap_content"
@@ -33,20 +33,27 @@
 
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/mainUserRecyclerView"
+    <FrameLayout
+        android:id="@+id/main_frame"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
         android:layout_marginTop="@dimen/_70sdp"
-        android:layout_marginBottom="@dimen/_70sdp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="@dimen/_50sdp"
         app:layout_constraintBottom_toTopOf="@id/bottomBar"
-        app:layout_constraintTop_toBottomOf="@+id/toolBar"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/ll_header">
 
-    <include layout="@layout/navigation_bar"/>
+        <!--        <androidx.recyclerview.widget.RecyclerView-->
+        <!--            android:id="@+id/mainUserRecyclerView"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="match_parent"-->
 
+        <!--            />-->
+    </FrameLayout>
+
+
+    <include layout="@layout/navigation_bar" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

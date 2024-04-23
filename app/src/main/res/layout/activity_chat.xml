@@ -69,8 +69,8 @@
                     android:layout_below="@+id/user_name_chat"
                     android:text="online"
                     android:textColor="@android:color/holo_green_light"
-                    android:textStyle="bold"
                     android:textSize="12sp"
+                    android:textStyle="bold"
                     tools:ignore="SmallSp" />
             </RelativeLayout>
         </RelativeLayout>

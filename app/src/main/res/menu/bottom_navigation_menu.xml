@@ -9,7 +9,7 @@
     <item
         android:id="@+id/item_2"
         android:enabled="true"
-        android:icon="@drawable/baseline_local_phone_32"
+        android:icon="@drawable/baseline_local_phone_24"
         tools:ignore="MenuTitle" />
     <item
         android:id="@+id/item_3"
