@@ -3,6 +3,7 @@ package com.example.mymessengerapp;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.app.Dialog;
 import android.content.Intent;
 import android.net.Uri;
@@ -32,10 +33,9 @@ import com.google.firebase.storage.UploadTask;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-
 public class registration extends AppCompatActivity {
     TextView loginbut;
-    EditText rg_username, rg_email , rg_password, rg_repassword;
+    EditText rg_username, rg_email, rg_password, rg_repassword;
     Button rg_signup;
     CircleImageView rg_profileImg;
     FirebaseAuth auth;
@@ -55,8 +55,8 @@ public class registration extends AppCompatActivity {
         ProgressBar progressBar = dialog.findViewById(R.id.progressBar);
         progressBar.setVisibility(View.GONE);
         dialog.setCancelable(false);
-        if (getSupportActionBar()!=null){
-        getSupportActionBar().hide();
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
         }
         database = FirebaseDatabase.getInstance();
         storage = FirebaseStorage.getInstance();
@@ -73,7 +73,7 @@ public class registration extends AppCompatActivity {
         loginbut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(registration.this,login.class);
+                Intent intent = new Intent(registration.this, login.class);
                 startActivity(intent);
                 finish();
             }
@@ -94,76 +94,76 @@ public class registration extends AppCompatActivity {
                 String sexual_orientation = "";
                 String height = "";
                 if (TextUtils.isEmpty(name) || TextUtils.isEmpty(email) ||
-                        TextUtils.isEmpty(Password) || TextUtils.isEmpty(cPassword)){
+                        TextUtils.isEmpty(Password) || TextUtils.isEmpty(cPassword)) {
                     dialog.dismiss();
                     Toast.makeText(registration.this, "Please Enter Valid Information", Toast.LENGTH_SHORT).show();
-                }else  if (!email.matches(emailPattern)){
+                } else if (!email.matches(emailPattern)) {
                     dialog.dismiss();
                     rg_email.setError("Type A Valid Email Here");
-                }else if (Password.length()<6){
+                } else if (Password.length() < 6) {
                     dialog.dismiss();
                     rg_password.setError("Password Must Be 6 Characters Or More");
-                }else if (!Password.equals(cPassword)){
+                } else if (!Password.equals(cPassword)) {
                     dialog.dismiss();
                     rg_password.setError("The Password Doesn't Match");
-                }else {
-                    auth.createUserWithEmailAndPassword(email,Password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                } else {
+                    auth.createUserWithEmailAndPassword(email, Password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()){
+                            if (task.isSuccessful()) {
                                 String id = task.getResult().getUser().getUid();
                                 DatabaseReference reference = database.getReference().child("user").child(id);
                                 StorageReference storageReference = storage.getReference().child("Upload").child(id);
-                                if (imageURI!=null){
+                                if (imageURI != null) {
                                     storageReference.putFile(imageURI).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                                         @Override
                                         public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                                            if (task.isSuccessful()){
+                                            if (task.isSuccessful()) {
                                                 storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                                     @Override
                                                     public void onSuccess(Uri uri) {
                                                         imageuri = uri.toString();
 
-                                                        Users users = new Users(id,name,email,Password,imageuri,status, gender, dob, phone, location, sexual_orientation, height);
+                                                        Users users = new Users(id, name, email, Password, imageuri, status, gender, dob, phone, location, sexual_orientation, height);
                                                         reference.setValue(users).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                             @Override
                                                             public void onComplete(@NonNull Task<Void> task) {
-                                                                if (task.isSuccessful()){
+                                                                if (task.isSuccessful()) {
                                                                     Toast.makeText(registration.this, "Account created successfully", Toast.LENGTH_SHORT).show();
                                                                     dialog.show();
-                                                                    Intent intent = new Intent(registration.this,MainActivity.class);
+                                                                    Intent intent = new Intent(registration.this, MainActivity.class);
                                                                     startActivity(intent);
                                                                     finish();
-                                                                }else {
+                                                                } else {
                                                                     Toast.makeText(registration.this, "Error in creating the user", Toast.LENGTH_SHORT).show();
                                                                 }
                                                             }
                                                         }).addOnFailureListener(new OnFailureListener() {
-                                                            @Override
-                                                            public void onFailure(@NonNull Exception e) {
-                                                                e.printStackTrace();
-                                                            }
-                                                        }
+                                                                                    @Override
+                                                                                    public void onFailure(@NonNull Exception e) {
+                                                                                        e.printStackTrace();
+                                                                                    }
+                                                                                }
                                                         );
                                                     }
                                                 });
                                             }
                                         }
                                     });
-                                }else {
+                                } else {
                                     String status = "Hey I'm Using This Application";
                                     imageuri = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fdenverselfiemuseum.com%2Fhow-to-take-a-good-selfie%2F&psig=AOvVaw1771YMnNLySijabLLD56Mz&ust=1713783421055000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCOir6vOS04UDFQAAAAAdAAAAABAE";
-                                    Users users = new Users(id,name,email,Password,imageuri,status, gender, dob, phone, location, sexual_orientation, height);
+                                    Users users = new Users(id, name, email, Password, imageuri, status, gender, dob, phone, location, sexual_orientation, height);
                                     reference.setValue(users).addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
-                                            if (task.isSuccessful()){
+                                            if (task.isSuccessful()) {
                                                 Toast.makeText(registration.this, "Account created successfully", Toast.LENGTH_SHORT).show();
                                                 dialog.show();
-                                                Intent intent = new Intent(registration.this,MainActivity.class);
+                                                Intent intent = new Intent(registration.this, MainActivity.class);
                                                 startActivity(intent);
                                                 finish();
-                                            }else {
+                                            } else {
                                                 Toast.makeText(registration.this, "Error in creating the user", Toast.LENGTH_SHORT).show();
                                             }
                                         }
@@ -174,7 +174,7 @@ public class registration extends AppCompatActivity {
                                         }
                                     });
                                 }
-                            }else {
+                            } else {
                                 Log.d("Registration", "Failed to create user in Firebase Authentication");
                                 Toast.makeText(registration.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                             }
@@ -192,7 +192,7 @@ public class registration extends AppCompatActivity {
                 Intent intent = new Intent();
                 intent.setType("image/*");
                 intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent,"Select Picture"),10);
+                startActivityForResult(Intent.createChooser(intent, "Select Picture"), 10);
             }
         });
     }
@@ -200,8 +200,8 @@ public class registration extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode==10){
-            if (data!=null){
+        if (requestCode == 10) {
+            if (data != null) {
                 imageURI = data.getData();
                 rg_profileImg.setImageURI(imageURI);
             }

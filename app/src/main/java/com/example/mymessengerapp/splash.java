@@ -23,25 +23,23 @@ public class splash extends AppCompatActivity {
     Animation topAnim, bottomAnim;
 
 
-
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        if (getSupportActionBar() != null){
+        if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
-
 
 
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(splash.this,MainActivity.class);
+                Intent intent = new Intent(splash.this, MainActivity.class);
                 startActivity(intent);
                 finish();
             }
-        },1000);
+        }, 1000);
     }
 }
