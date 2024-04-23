@@ -17,9 +17,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import java.util.ArrayList;
 
 public class MainFragment extends Fragment {
@@ -63,9 +65,9 @@ public class MainFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 usersArrayList.clear();
                 String currentUserId = auth.getCurrentUser().getUid();
-                for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     Users users = dataSnapshot.getValue(Users.class);
-                    if(users != null && !users.getUserId().equals(currentUserId)){
+                    if (users != null && !users.getUserId().equals(currentUserId)) {
                         usersArrayList.add(users);
                     }
                 }

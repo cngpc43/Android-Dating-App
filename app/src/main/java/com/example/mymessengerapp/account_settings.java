@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class account_settings extends AppCompatActivity {
     ImageButton back_icon;
     LinearLayout password, email, name;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -67,6 +67,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:drawableLeft="@drawable/baseline_person_outline_24"
+        android:drawablePadding="8dp"
         android:gravity="center"
         android:text="User name"
         android:textStyle="bold"
@@ -81,7 +83,7 @@
         android:layout_marginTop="4dp"
         android:background="@drawable/rectangle_box"
         android:ems="10"
-        android:hint="Enter your user-name"
+        android:hint="Enter your user name"
         android:inputType="textEmailAddress"
         android:paddingStart="12dp"
         android:textColor="@color/black"
@@ -97,9 +99,11 @@
         android:id="@+id/tv_sign_up_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
+        android:drawableLeft="@drawable/baseline_local_phone_24"
+        android:drawablePadding="8dp"
         android:gravity="center"
-        android:text="Email"
+        android:text="Phone number"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/guideline"
         app:layout_constraintTop_toBottomOf="@+id/rgusername"
@@ -112,7 +116,7 @@
         android:layout_marginTop="4dp"
         android:background="@drawable/rectangle_box"
         android:ems="10"
-        android:hint="@string/enter_email"
+        android:hint="@string/enter_phone"
         android:inputType="textEmailAddress"
         android:paddingStart="12dp"
         android:textColor="@color/black"
@@ -124,12 +128,13 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_sign_up_email"
         tools:ignore="RtlSymmetry,SpUsage" />
 
-
     <TextView
         android:id="@+id/tv_sign_up_password"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
+        android:drawableLeft="@drawable/baseline_password_24"
+        android:drawablePadding="8dp"
         android:gravity="center"
         android:text="Password"
         android:textStyle="bold"
@@ -145,12 +150,12 @@
         android:background="@drawable/rectangle_box"
         android:ems="10"
         android:hint="@string/enter_pass"
+        android:inputType="textPassword"
         android:paddingStart="12dp"
         android:password="true"
         android:textColor="@color/black"
         android:textSize="@dimen/_15sdp"
         android:textStyle="bold"
-        android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="@+id/guidelineEnd"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="@+id/guideline"
@@ -161,7 +166,9 @@
         android:id="@+id/tv_cfirm_password"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
+        android:drawableLeft="@drawable/baseline_password_24"
+        android:drawablePadding="8dp"
         android:gravity="center"
         android:text="Confirm password"
         android:textStyle="bold"
@@ -177,11 +184,11 @@
         android:background="@drawable/rectangle_box"
         android:ems="10"
         android:hint="Confirm your password"
+        android:inputType="textPassword"
         android:paddingStart="12dp"
         android:password="true"
         android:textColor="@color/black"
         android:textSize="@dimen/_15sdp"
-        android:inputType="textPassword"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/guidelineEnd"
         app:layout_constraintHorizontal_bias="0.5"
@@ -193,7 +200,7 @@
         android:id="@+id/ll_pick_avt"
         android:layout_width="360dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="@+id/guidelineEnd"
@@ -221,29 +228,30 @@
     </LinearLayout>
 
 
-<!--    <TextView-->
-<!--        android:id="@+id/tv_cfirm_sec"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginTop="16dp"-->
-<!--        android:fontFamily="@font/poppins_regular"-->
-<!--        android:text="Securing your personal information is our priority."-->
-<!--        android:textSize="5pt"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintHorizontal_bias="0.5"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@id/ll_pick_avt" />-->
-
+    <!--    <TextView-->
+    <!--        android:id="@+id/tv_cfirm_sec"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginTop="16dp"-->
+    <!--        android:fontFamily="@font/poppins_regular"-->
+    <!--        android:text="Securing your personal information is our priority."-->
+    <!--        android:textSize="5pt"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintHorizontal_bias="0.5"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@id/ll_pick_avt" />-->
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/signupbutton"
         android:layout_width="360dp"
         android:layout_height="65dp"
         android:layout_marginTop="16dp"
+        android:background="@drawable/rectangle_box"
         android:backgroundTint="@color/primary"
         android:gravity="center"
         android:text="@string/sign_up"
-        android:textSize="20sp"
+        android:textSize="22sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"

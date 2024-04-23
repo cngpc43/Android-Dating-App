@@ -36,9 +36,10 @@ public class login extends AppCompatActivity {
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Please Wait...");
         progressDialog.setCancelable(false);
-        if(getSupportActionBar()!=null){
-        getSupportActionBar().hide();
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
         }
+
         auth = FirebaseAuth.getInstance();
         button = findViewById(R.id.logbutton);
         email = findViewById(R.id.editTexLogEmail);
@@ -48,9 +49,36 @@ public class login extends AppCompatActivity {
         logsignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(login.this,registration.class);
+                Intent intent = new Intent(login.this, registration.class);
                 startActivity(intent);
                 finish();
+            }
+        });
+
+        // Set the animation of the icon
+        email.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                // Go icon khi EditText dang focus va nguoc lai
+                if (hasFocus) {
+                    email.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+                    return;
+                }
+
+                email.setCompoundDrawablesWithIntrinsicBounds(R.drawable.baseline_local_phone_24, 0, 0, 0);
+            }
+        });
+
+        password.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                // Go icon khi EditText dang focus va nguoc lai
+                if (hasFocus) {
+                    password.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+                    return;
+                }
+
+                password.setCompoundDrawablesWithIntrinsicBounds(R.drawable.baseline_password_24, 0, 0, 0);
             }
         });
 
@@ -61,27 +89,27 @@ public class login extends AppCompatActivity {
                 String Email = email.getText().toString();
                 String pass = password.getText().toString();
 
-                if ((TextUtils.isEmpty(Email))){
+                if ((TextUtils.isEmpty(Email))) {
                     progressDialog.dismiss();
                     Toast.makeText(login.this, "Enter The Email", Toast.LENGTH_SHORT).show();
-                }else if (TextUtils.isEmpty(pass)){
+                } else if (TextUtils.isEmpty(pass)) {
                     progressDialog.dismiss();
                     Toast.makeText(login.this, "Enter The Password", Toast.LENGTH_SHORT).show();
-                }else if (!Email.matches(emailPattern)){
+                } else if (!Email.matches(emailPattern)) {
                     progressDialog.dismiss();
                     email.setError("Give Proper Email Address");
-                }else if (password.length()<6){
+                } else if (password.length() < 6) {
                     progressDialog.dismiss();
                     password.setError("More Then Six Characters");
                     Toast.makeText(login.this, "Password Needs To Be Longer Then Six Characters", Toast.LENGTH_SHORT).show();
-                }else {
-                    auth.signInWithEmailAndPassword(Email,pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                } else {
+                    auth.signInWithEmailAndPassword(Email, pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()){
+                            if (task.isSuccessful()) {
                                 progressDialog.show();
                                 try {
-                                    Intent intent = new Intent(login.this , MainActivity.class);
+                                    Intent intent = new Intent(login.this, MainActivity.class);
                                     Bundle bundle = new Bundle();
                                     FirebaseUser current_user = auth.getCurrentUser();
 
@@ -93,10 +121,10 @@ public class login extends AppCompatActivity {
 
                                     startActivity(intent);
                                     finish();
-                                }catch (Exception e){
+                                } catch (Exception e) {
                                     Toast.makeText(login.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                                 }
-                            }else {
+                            } else {
                                 Toast.makeText(login.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         }

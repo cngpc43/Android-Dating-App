@@ -1,9 +1,11 @@
 package com.example.mymessengerapp;
+
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 
@@ -25,21 +27,21 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     FirebaseAuth auth;
-//    RecyclerView mainUserRecyclerView;
+    //    RecyclerView mainUserRecyclerView;
     UserAdapter adapter;
     FirebaseDatabase database;
     ArrayList<Users> usersArrayList;
-    FrameLayout home,user, message, notification;
+    FrameLayout home, user, message, notification;
     LinearLayout home_selected, user_selected, chat_selected, noti_selected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        if(getSupportActionBar()!=null){
-        getSupportActionBar().hide();
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
         }
-        database=FirebaseDatabase.getInstance();
+        database = FirebaseDatabase.getInstance();
         auth = FirebaseAuth.getInstance();
         home_selected = findViewById(R.id.home_selected);
         noti_selected = findViewById(R.id.noti_selected);
@@ -53,9 +55,9 @@ public class MainActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 usersArrayList.clear();
                 String currentUserId = auth.getCurrentUser().getUid();
-                for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     Users users = dataSnapshot.getValue(Users.class);
-                    if(users != null && !users.getUserId().equals(currentUserId)){
+                    if (users != null && !users.getUserId().equals(currentUserId)) {
                         usersArrayList.add(users);
                     }
                 }
@@ -68,8 +70,8 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        if (auth.getCurrentUser() == null){
-            Intent intent = new Intent(MainActivity.this,login.class);
+        if (auth.getCurrentUser() == null) {
+            Intent intent = new Intent(MainActivity.this, login.class);
             startActivity(intent);
         }
         loadFragment(new MainFragment());
@@ -118,6 +120,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
     private void loadFragment(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.main_frame, fragment);
