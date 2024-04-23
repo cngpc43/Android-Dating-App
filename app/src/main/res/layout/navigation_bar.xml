@@ -12,6 +12,7 @@
     app:layout_constraintRight_toRightOf="parent">
 
     <FrameLayout
+        android:id="@+id/home"
         android:layout_width="0dp"
         android:layout_height="@dimen/_50sdp"
         android:layout_weight="1"
@@ -25,7 +26,7 @@
 
         </LinearLayout>
         <ImageView
-            android:id="@+id/home"
+
             android:layout_width="@dimen/_70sdp"
             android:layout_height="@dimen/_60sdp"
             android:layout_gravity="center|center_vertical"

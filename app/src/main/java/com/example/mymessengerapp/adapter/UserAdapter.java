@@ -21,7 +21,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.viewholder> {
     Context mainActivity;
     ArrayList<Users> usersArrayList;
 
-    public UserAdapter(MainActivity mainActivity, ArrayList<Users> usersArrayList) {
+    public UserAdapter(Context mainActivity, ArrayList<Users> usersArrayList) {
         this.mainActivity = mainActivity;
         this.usersArrayList = usersArrayList;
     }

@@ -1,38 +1,19 @@
 package com.example.mymessengerapp;
 
-import android.annotation.SuppressLint;
-import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentTransaction;
 
-import com.example.mymessengerapp.adapter.ChatHomeAdapter;
-import com.google.android.material.search.SearchView;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 
 public class ChatHomePage extends AppCompatActivity {
     FirebaseDatabase database;
     FirebaseStorage storage;
-    ChatHomeAdapter chatHomeAdapter;
-    SearchView searchView;
-    ListView lv_list_chat;
+
     FrameLayout user, message, notification;
-    LinearLayout chat_selected;
 
 //    @SuppressLint("MissingInflatedId")
     @Override
@@ -40,71 +21,24 @@ public class ChatHomePage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 //        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_chat_home_page);
-        chat_selected = findViewById(R.id.chat_selected);
-        chat_selected.setBackground(ContextCompat.getDrawable(this, R.drawable.selected_nav_item));
+//        chat_selected.setBackground(ContextCompat.getDrawable(this, R.drawable.selected_nav_item));
         if(getSupportActionBar()!=null){
             getSupportActionBar().hide();
         }
-        searchView = findViewById(R.id.sv_search);
-        lv_list_chat = findViewById(R.id.lv_list_chat);
 
-        chatHomeAdapter = new ChatHomeAdapter(this, new ArrayList<>(Arrays.asList("Chat 1", "Chat 2", "Chat 3")));
-        lv_list_chat.setAdapter(chatHomeAdapter);
+        ChatFragment chatFragment = new ChatFragment();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.chat_frame, chatFragment);
+        transaction.commit();
 
         // Tìm kiếm tên chat, ở trên là data mẫu thôi, tự xem rồi fix lai
 //        TextInputEditText searchEditText = (TextInputEditText) searchView.getEditText();
-        EditText searchEditText = searchView.getEditText();
-        searchEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                // khong lam gi
-            }
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                chatHomeAdapter.filter(s.toString());
-            }
 
-            @Override
-            public void afterTextChanged(Editable s) {
-                // khong lam gi
-            }
-        });
 
-        ImageView home = findViewById(R.id.home);
-        home.setOnClickListener(v -> {
-            Intent intent = new Intent(ChatHomePage.this, MainActivity.class);
-            startActivity(intent);
-        });
-        message = findViewById(R.id.message);
-        home.setOnClickListener(v -> {
-            Intent intent = new Intent(ChatHomePage.this, MainActivity.class);
-            startActivity(intent);
-        });
-        message.setOnClickListener(v -> {
-            Intent intent = new Intent(ChatHomePage.this, ChatHomePage.class);
-            startActivity(intent);
-        });
-        user = findViewById(R.id.user);
-        user.setOnClickListener(v -> {
-            Intent intent = new Intent(ChatHomePage.this, setting.class);
-            startActivity(intent);
-        });
-        lv_list_chat.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(ChatHomePage.this, ChatActivity.class);
-                startActivity(intent);
-            }
-        });
-        notification = findViewById(R.id.notification);
-        notification.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(ChatHomePage.this, notification_page.class);
-                startActivity(intent);
-            }
-        });
+
+
     }
+
 
 }
