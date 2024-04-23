@@ -28,10 +28,8 @@ public class MainFragment extends Fragment {
     UserAdapter adapter;
     FirebaseDatabase database;
     ArrayList<Users> usersArrayList;
-//    Context mainActivity;
 
-    public MainFragment(Context context) {
-//        mainActivity = context;
+    public MainFragment() {
     }
 
     @Override

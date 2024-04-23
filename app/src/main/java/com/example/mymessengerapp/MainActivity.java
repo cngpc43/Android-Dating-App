@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(MainActivity.this,login.class);
             startActivity(intent);
         }
-        loadFragment(new MainFragment(this));
+        loadFragment(new MainFragment());
         user = findViewById(R.id.user);
         user.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
         home.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadFragment(new MainFragment(MainActivity.this));
+                loadFragment(new MainFragment());
                 noti_selected.setBackground(null);
                 chat_selected.setBackground(null);
                 user_selected.setBackground(null);
