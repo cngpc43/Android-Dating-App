@@ -1,7 +1,6 @@
 package com.example.mymessengerapp;
 
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -10,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class email_change extends AppCompatActivity {
     ImageView back_icon;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

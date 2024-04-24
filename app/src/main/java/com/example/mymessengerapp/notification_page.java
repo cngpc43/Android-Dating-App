@@ -1,26 +1,20 @@
 package com.example.mymessengerapp;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
+
 import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
+
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.RecyclerView;
+
 
 public class notification_page extends AppCompatActivity {
-
-    ImageView home;
-    FrameLayout user, message;
-    RecyclerView noti_list;
-    LinearLayout noti_selected, home_selected, user_selected, chat_selected;
+    LinearLayout home_selected;
 
 
     @Override

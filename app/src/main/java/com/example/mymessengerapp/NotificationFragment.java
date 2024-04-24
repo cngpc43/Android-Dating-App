@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mymessengerapp.adapter.UserAdapter;
 import com.example.mymessengerapp.model.Users;
@@ -18,7 +17,6 @@ import java.util.ArrayList;
 
 public class NotificationFragment extends Fragment {
     FirebaseAuth auth;
-    RecyclerView mainUserRecyclerView;
     UserAdapter adapter;
     FirebaseDatabase database;
     ArrayList<Users> usersArrayList;

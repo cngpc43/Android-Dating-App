@@ -1,6 +1,8 @@
 package com.example.mymessengerapp;
 
 import android.annotation.SuppressLint;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -12,18 +14,14 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mymessengerapp.adapter.ChatAdapter;
 import com.example.mymessengerapp.model.ChatMessage;
-import com.example.mymessengerapp.model.ChatRoom;
-import com.example.mymessengerapp.model.Users;
+
 import com.google.android.material.imageview.ShapeableImageView;
 
 import java.util.ArrayList;
@@ -41,7 +39,7 @@ public class ChatActivity extends AppCompatActivity {
 
     PopupWindow attachmentPopup;
 
-    @SuppressLint({"MissingInflatedId", "ClickableViewAccessibility"})
+    @SuppressLint({"MissingInflatedId", "ClickableViewAccessibility", "ResourceAsColor"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,7 +86,6 @@ public class ChatActivity extends AppCompatActivity {
             handleSendMessage(message);
         });
 
-
         // Init PopupWindow
         LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         View popupView = inflater.inflate(R.layout.attachment_popup, null);
@@ -109,7 +106,7 @@ public class ChatActivity extends AppCompatActivity {
 
                     // Neu k show thi hien no o tren chat_input view
                     attachmentPopup.setWidth(LinearLayout.LayoutParams.MATCH_PARENT); // Set width to match parent
-                    attachmentPopup.showAtLocation(messageInput, Gravity.NO_GRAVITY, 0, messageInput.getTop()); // Show at top of chat_input
+                    attachmentPopup.showAtLocation(messageInput, Gravity.NO_GRAVITY, 0, mainChat.getBottom() - 100); // Show at top of chat_input
                     return true;
                 }
             }
