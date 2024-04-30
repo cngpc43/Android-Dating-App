@@ -67,7 +67,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/name_preview"
+                android:id="@+id/phone_preview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="123456789"
@@ -110,6 +110,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:id="@+id/username_preview"
                     android:text="Duc"
                     android:textColor="#919492" />
             </LinearLayout>
@@ -145,6 +146,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:id="@+id/email_preview"
                     android:text="test@gm.com"
                     android:textColor="#919492" />
             </LinearLayout>
