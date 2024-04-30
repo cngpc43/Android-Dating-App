@@ -25,7 +25,8 @@ public class account_settings extends AppCompatActivity {
         back_icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
+                Intent intent = new Intent(account_settings.this, user_manage.class);
+                startActivity(intent);
             }
         });
 
@@ -42,7 +43,7 @@ public class account_settings extends AppCompatActivity {
         email.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(account_settings.this, email_confirm.class);
+                Intent intent = new Intent(account_settings.this, email_change.class);
                 startActivity(intent);
             }
         });

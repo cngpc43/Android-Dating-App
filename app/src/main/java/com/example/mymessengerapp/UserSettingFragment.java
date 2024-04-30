@@ -126,7 +126,6 @@ public class UserSettingFragment extends Fragment {
         age_range.addOnChangeListener(new RangeSlider.OnChangeListener() {
             @Override
             public void onValueChange(@NonNull RangeSlider rangeSlider, float v, boolean b) {
-                List<Float> age_range_list = age_range.getValues();
                 age_range_preview.setText(String.valueOf(age_range.getValues().get(0).intValue()) + "-" + String.valueOf(age_range.getValues().get(1).intValue()));
             }
         });

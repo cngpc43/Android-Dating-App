@@ -79,8 +79,8 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".email_code_confirm"
-            android:exported="false">
+            android:name=".email_change_success"
+            android:exported="true">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
