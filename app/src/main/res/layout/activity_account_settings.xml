@@ -184,7 +184,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingLeft="10dp"
-            android:text="Changing your password will log you out anywhere this account is logged in."
+            android:text="Changing your email or password will log you out."
             android:textColor="#919492" />
     </LinearLayout>
 

@@ -266,7 +266,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:valueFrom="13"
-                        android:valueTo="100"
+                        android:valueTo="55"
                         android:stepSize="1" />
                 </LinearLayout>
             </LinearLayout>

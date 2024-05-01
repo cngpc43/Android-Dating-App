@@ -257,9 +257,9 @@
                         android:id="@+id/age_range_slider"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:stepSize="1"
                         android:valueFrom="13"
-                        android:valueTo="100"
-                        android:stepSize="1" />
+                        android:valueTo="55" />
                 </LinearLayout>
             </LinearLayout>
 

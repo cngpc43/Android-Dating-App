@@ -42,11 +42,13 @@ public class account_settings extends AppCompatActivity {
         email_preview.setText(auth.getCurrentUser().getEmail());
         phone_preview.setText(auth.getCurrentUser().getPhoneNumber());
         username_preview.setText(reference.child("userName").toString());
+
         back_icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(account_settings.this, user_manage.class);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -55,6 +57,7 @@ public class account_settings extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(account_settings.this, password_change.class);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -64,15 +67,16 @@ public class account_settings extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(account_settings.this, email_change.class);
                 startActivity(intent);
+                finish();
             }
         });
-
 
         name.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(account_settings.this, username_change.class);
                 startActivity(intent);
+                finish();
             }
         });
     }

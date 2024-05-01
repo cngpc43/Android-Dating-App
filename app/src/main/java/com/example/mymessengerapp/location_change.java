@@ -12,12 +12,17 @@ import android.widget.ListView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.search.SearchBar;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class location_change extends AppCompatActivity {
     ImageButton back_icon;
     ListView cities_listview;
     SearchBar sb_search;
     String[] cities;
+    FirebaseAuth auth;
+    DatabaseReference reference;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,6 +30,8 @@ public class location_change extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
+        auth = FirebaseAuth.getInstance();
+        reference = FirebaseDatabase.getInstance().getReference().child("user").child(auth.getCurrentUser().getUid());
 
         cities = getResources().getStringArray(R.array.vn_cities_array);
         back_icon = findViewById(R.id.back_icon);
@@ -43,6 +50,7 @@ public class location_change extends AppCompatActivity {
         cities_listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
+                reference.child("location").setValue(cities[position]);
                 Intent returnIntent = new Intent();
                 returnIntent.putExtra("result", cities[position]);
                 setResult(Activity.RESULT_OK, returnIntent);

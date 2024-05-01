@@ -18,17 +18,17 @@
         app:layout_constraintRight_toRightOf="parent" />
 
     <TextView
+        android:id="@+id/email_changed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/email_changed"
-        android:text="Email Address Updated"
-        android:textStyle="bold"
-        android:textSize="11pt"
         android:layout_marginTop="20dp"
+        android:text="Email Address Updated"
         android:textAlignment="center"
-        app:layout_constraintTop_toBottomOf="@id/ic_email"
+        android:textSize="11pt"
+        android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ic_email" />
 
     <TextView
         android:layout_width="match_parent"

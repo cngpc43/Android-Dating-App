@@ -92,6 +92,7 @@ public class registration extends AppCompatActivity {
                 String location = "";
                 String sexual_orientation = "";
                 String height = "";
+                String age_range = "";
                 if (TextUtils.isEmpty(name) || TextUtils.isEmpty(email) ||
                         TextUtils.isEmpty(Password) || TextUtils.isEmpty(cPassword)) {
                     dialog.dismiss();
@@ -123,7 +124,7 @@ public class registration extends AppCompatActivity {
                                                     public void onSuccess(Uri uri) {
                                                         imageuri = uri.toString();
 
-                                                        Users users = new Users(id, name, email, Password, imageuri, status, gender, dob, phone, location, sexual_orientation, height);
+                                                        Users users = new Users(id, name, email, Password, imageuri, status, gender, dob, phone, location, sexual_orientation, height, age_range);
                                                         reference.setValue(users).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                             @Override
                                                             public void onComplete(@NonNull Task<Void> task) {
@@ -152,7 +153,7 @@ public class registration extends AppCompatActivity {
                                 } else {
                                     String status = "Hey I'm Using This Application";
                                     imageuri = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fdenverselfiemuseum.com%2Fhow-to-take-a-good-selfie%2F&psig=AOvVaw1771YMnNLySijabLLD56Mz&ust=1713783421055000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCOir6vOS04UDFQAAAAAdAAAAABAE";
-                                    Users users = new Users(id, name, email, Password, imageuri, status, gender, dob, phone, location, sexual_orientation, height);
+                                    Users users = new Users(id, name, email, Password, imageuri, status, gender, dob, phone, location, sexual_orientation, height, age_range);
                                     reference.setValue(users).addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {

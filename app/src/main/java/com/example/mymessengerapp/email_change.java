@@ -68,7 +68,7 @@ public class email_change extends AppCompatActivity {
                 if ((TextUtils.isEmpty(Pass))) {
                     Toast.makeText(email_change.this, "Please enter your password", Toast.LENGTH_SHORT).show();
                 } else if (Pass.length() < 6) {
-                    Toast.makeText(email_change.this, "Password needs to be longer than 6 characters", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(email_change.this, "Password must be longer than 6 characters", Toast.LENGTH_SHORT).show();
                 } else if (TextUtils.isEmpty(Email)) {
                     etEmail.setError("Please enter your new email address");
                 } else if (!Email.matches(emailPattern)) {
