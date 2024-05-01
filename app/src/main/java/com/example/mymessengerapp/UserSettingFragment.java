@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,9 +15,12 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -38,8 +43,9 @@ public class UserSettingFragment extends Fragment {
     LinearLayout account_settings, location;
 
     Spinner gender_spinner, sexual_spinner;
-    TextView age_range_preview, location_preview;
-
+    TextView age_range_preview, location_preview, profile_username, profile_status;
+    EditText et_username, et_status;
+    ImageButton edit_button, save_button;
     LinearLayout logout;
     DatabaseReference reference;
     int LAUNCH_SECOND_ACTIVITY = 1;
@@ -67,6 +73,12 @@ public class UserSettingFragment extends Fragment {
         location_preview = view.findViewById(R.id.location_preview);
         age_range_preview = view.findViewById(R.id.age_range_preview);
         age_range = view.findViewById(R.id.age_range_slider);
+        profile_username = view.findViewById(R.id.profile_username);
+        profile_status = view.findViewById(R.id.profile_status);
+        et_username = view.findViewById(R.id.et_username);
+        et_status = view.findViewById(R.id.et_status);
+        edit_button = view.findViewById(R.id.edit_button);
+        save_button = view.findViewById(R.id.save_button);
 
         ArrayAdapter adapter = ArrayAdapter.createFromResource(getContext(), R.array.gender_array, R.layout.gender_spinner_item);
         adapter.setDropDownViewResource(R.layout.gender_spinner_dropdown);
@@ -76,30 +88,68 @@ public class UserSettingFragment extends Fragment {
         adapter1.setDropDownViewResource(R.layout.gender_spinner_dropdown);
         sexual_spinner.setAdapter(adapter1);
 
+        // for text marquee
+        profile_username.setSelected(true);
+        profile_status.setSelected(true);
 
-        // set preview values (location, gender, sexual orientation, age range) from Firebase Database
+        // update values from database
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot dateSnapshot: snapshot.getChildren()) {
+                    // location
                     location_preview.setText(snapshot.child("location").getValue(String.class));
-
+                    // gender
                     int gender_position = adapter.getPosition(snapshot.child("gender").getValue(String.class));
                     gender_spinner.setSelection(gender_position);
-
+                    // sexual_orientation
                     int sexual_position = adapter1.getPosition(snapshot.child("sexual_orientation").getValue(String.class));
                     sexual_spinner.setSelection(sexual_position);
-
+                    // age_range
                     String age_range_string = snapshot.child("age_range").getValue(String.class);
                     float age_valueFrom = Float.valueOf(age_range_string.substring(0, age_range_string.indexOf('-')));
                     float age_valueTo = Float.valueOf(age_range_string.substring(age_range_string.indexOf('-') + 1, age_range_string.length()));
                     age_range.setValues(age_valueFrom, age_valueTo);
                     age_range_preview.setText(age_range.getValues().get(0).intValue() + "-" + age_range.getValues().get(1).intValue());
+                    // username
+                    profile_username.setText(snapshot.child("userName").getValue(String.class));
+                    // status
+                    profile_status.setText(snapshot.child("status").getValue(String.class));
                 }
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 throw error.toException();
+            }
+        });
+
+        edit_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                edit_button.setVisibility(View.GONE);
+                save_button.setVisibility(View.VISIBLE);
+                profile_username.setVisibility(View.GONE);
+                profile_status.setVisibility(View.GONE);
+                et_username.setVisibility(View.VISIBLE);
+                et_status.setVisibility(View.VISIBLE);
+                et_username.setText(profile_username.getText().toString());
+                et_status.setText(profile_status.getText().toString());
+            }
+        });
+
+        save_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                save_button.setVisibility(View.GONE);
+                edit_button.setVisibility(View.VISIBLE);
+                reference.child("userName").setValue(et_username.getText().toString());
+                reference.child("status").setValue(et_status.getText().toString());
+                profile_username.setText(et_username.getText().toString());
+                profile_status.setText(et_status.getText().toString());
+                profile_username.setVisibility(View.VISIBLE);
+                profile_status.setVisibility(View.VISIBLE);
+                et_username.setVisibility(View.GONE);
+                et_status.setVisibility(View.GONE);
             }
         });
 
@@ -168,8 +218,6 @@ public class UserSettingFragment extends Fragment {
             }
         });
 
-
-
         location.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -188,6 +236,7 @@ public class UserSettingFragment extends Fragment {
         });
         return view;
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
