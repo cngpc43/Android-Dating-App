@@ -7,13 +7,17 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.example.mymessengerapp.model.Users;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class account_settings extends AppCompatActivity {
     ImageButton back_icon;
@@ -40,9 +44,7 @@ public class account_settings extends AppCompatActivity {
         phone_preview = findViewById(R.id.phone_preview);
 
         email_preview.setText(auth.getCurrentUser().getEmail());
-        if (auth.getCurrentUser().getPhoneNumber() == null)
-            phone_preview.setVisibility(View.GONE);
-        else
+        if (!auth.getCurrentUser().getPhoneNumber().equals(""))
             phone_preview.setText(auth.getCurrentUser().getPhoneNumber());
 
         back_icon.setOnClickListener(new View.OnClickListener() {
@@ -76,7 +78,7 @@ public class account_settings extends AppCompatActivity {
         phone_number.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (auth.getCurrentUser().getPhoneNumber() == null) {
+                if (auth.getCurrentUser().getPhoneNumber().equals("")) {
                     Intent intent = new Intent(account_settings.this, phone_number_add.class);
                     startActivity(intent);
                     finish();
@@ -87,5 +89,6 @@ public class account_settings extends AppCompatActivity {
                 }
             }
         });
+
     }
 }
