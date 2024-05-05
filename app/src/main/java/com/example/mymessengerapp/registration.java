@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -92,7 +93,9 @@ public class registration extends AppCompatActivity {
                 String location = "";
                 String sexual_orientation = "";
                 String height = "";
-                String age_range = "";
+                String age_range = "13-55";
+                String gender_show = "Male and Female";
+                boolean show_me = true;
                 if (TextUtils.isEmpty(name) || TextUtils.isEmpty(email) ||
                         TextUtils.isEmpty(Password) || TextUtils.isEmpty(cPassword)) {
                     dialog.dismiss();
@@ -113,18 +116,26 @@ public class registration extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 String id = task.getResult().getUser().getUid();
                                 DatabaseReference reference = database.getReference().child("user").child(id);
-                                StorageReference storageReference = storage.getReference().child("Upload").child(id);
+                                StorageReference ref = FirebaseStorage.getInstance().getReference()
+                                        .child(
+                                                "images/"
+                                                        + id);
                                 if (imageURI != null) {
-                                    storageReference.putFile(imageURI).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                                    ProgressDialog progressDialog
+                                            = new ProgressDialog(registration.this);
+                                    progressDialog.setTitle("Uploading...");
+                                    progressDialog.show();
+
+                                    ref.putFile(imageURI).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                                         @Override
                                         public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
                                             if (task.isSuccessful()) {
-                                                storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                                ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                                     @Override
                                                     public void onSuccess(Uri uri) {
                                                         imageuri = uri.toString();
 
-                                                        Users users = new Users(id, name, email, Password, imageuri, status, gender, dob, phone, location, sexual_orientation, height, age_range);
+                                                        Users users = new Users(id, name, email, Password, imageuri, status, gender, dob, phone, location, sexual_orientation, height, age_range, gender_show, show_me);
                                                         reference.setValue(users).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                             @Override
                                                             public void onComplete(@NonNull Task<Void> task) {
@@ -139,12 +150,11 @@ public class registration extends AppCompatActivity {
                                                                 }
                                                             }
                                                         }).addOnFailureListener(new OnFailureListener() {
-                                                                                    @Override
-                                                                                    public void onFailure(@NonNull Exception e) {
-                                                                                        e.printStackTrace();
-                                                                                    }
-                                                                                }
-                                                        );
+                                                            @Override
+                                                            public void onFailure(@NonNull Exception e) {
+                                                                e.printStackTrace();
+                                                            }
+                                                        });
                                                     }
                                                 });
                                             }
@@ -153,7 +163,7 @@ public class registration extends AppCompatActivity {
                                 } else {
                                     String status = "Hey I'm Using This Application";
                                     imageuri = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fdenverselfiemuseum.com%2Fhow-to-take-a-good-selfie%2F&psig=AOvVaw1771YMnNLySijabLLD56Mz&ust=1713783421055000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCOir6vOS04UDFQAAAAAdAAAAABAE";
-                                    Users users = new Users(id, name, email, Password, imageuri, status, gender, dob, phone, location, sexual_orientation, height, age_range);
+                                    Users users = new Users(id, name, email, Password, imageuri, status, gender, dob, phone, location, sexual_orientation, height, age_range, gender_show, show_me);
                                     reference.setValue(users).addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {

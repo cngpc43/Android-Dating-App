@@ -40,7 +40,7 @@ public class MainFragment extends Fragment {
         database = FirebaseDatabase.getInstance();
         auth = FirebaseAuth.getInstance();
         usersArrayList = new ArrayList<>();
-        adapter = new UserAdapter((MainActivity) getContext(), usersArrayList);
+        adapter = new UserAdapter( getContext(), usersArrayList);
     }
 
     @Override
@@ -67,8 +67,10 @@ public class MainFragment extends Fragment {
                 String currentUserId = auth.getCurrentUser().getUid();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     Users users = dataSnapshot.getValue(Users.class);
-                    if (users != null && !users.getUserId().equals(currentUserId)) {
-                        usersArrayList.add(users);
+                    if (users != null) {
+                        if(!users.getUserId().equals(currentUserId)) {
+                            usersArrayList.add(users);
+                        }
                     }
                 }
                 adapter.notifyDataSetChanged();

@@ -63,7 +63,8 @@
             android:layout_height="match_parent"
             android:background="@drawable/rectangle_box"
             android:drawableStart="@drawable/baseline_person_outline_24"
-            android:drawablePadding="8dp" />
+            android:drawablePadding="8dp"
+            android:singleLine="true"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -86,7 +87,8 @@
             android:layout_height="match_parent"
             android:background="@drawable/rectangle_box"
             android:drawableStart="@drawable/baseline_local_phone_24"
-            android:drawablePadding="8dp" />
+            android:drawablePadding="8dp"
+            android:singleLine="true"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout

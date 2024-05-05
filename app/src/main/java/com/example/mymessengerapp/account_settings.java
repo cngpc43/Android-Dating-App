@@ -8,6 +8,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.example.mymessengerapp.model.Users;
 import com.google.firebase.auth.FirebaseAuth;
@@ -16,8 +17,8 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class account_settings extends AppCompatActivity {
     ImageButton back_icon;
-    LinearLayout password, email, name;
-    TextView email_preview, phone_preview, username_preview;
+    LinearLayout password, email, phone_number;
+    TextView email_preview, phone_preview;
     FirebaseAuth auth;
     DatabaseReference reference;
     @Override
@@ -34,14 +35,15 @@ public class account_settings extends AppCompatActivity {
         back_icon = findViewById(R.id.back_icon);
         password = findViewById(R.id.password);
         email = findViewById(R.id.email);
-        name = findViewById(R.id.name);
+        phone_number = findViewById(R.id.phone_number);
         email_preview = findViewById(R.id.email_preview);
         phone_preview = findViewById(R.id.phone_preview);
-        username_preview = findViewById(R.id.username_preview);
 
         email_preview.setText(auth.getCurrentUser().getEmail());
-        phone_preview.setText(auth.getCurrentUser().getPhoneNumber());
-        username_preview.setText(reference.child("userName").toString());
+        if (auth.getCurrentUser().getPhoneNumber() == null)
+            phone_preview.setVisibility(View.GONE);
+        else
+            phone_preview.setText(auth.getCurrentUser().getPhoneNumber());
 
         back_icon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,12 +73,18 @@ public class account_settings extends AppCompatActivity {
             }
         });
 
-        name.setOnClickListener(new View.OnClickListener() {
+        phone_number.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(account_settings.this, username_change.class);
-                startActivity(intent);
-                finish();
+                if (auth.getCurrentUser().getPhoneNumber() == null) {
+                    Intent intent = new Intent(account_settings.this, phone_number_add.class);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    Intent intent = new Intent(account_settings.this, phone_number_change.class);
+                    startActivity(intent);
+                    finish();
+                }
             }
         });
     }
