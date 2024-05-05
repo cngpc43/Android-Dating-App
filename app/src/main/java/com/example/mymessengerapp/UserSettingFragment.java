@@ -304,7 +304,10 @@ public class UserSettingFragment extends Fragment {
                                     auth.signInWithEmailAndPassword(auth.getCurrentUser().getEmail().toString(), Pass).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                                         @Override
                                         public void onSuccess(AuthResult authResult) {
+                                            // delete profile picture from Firebase Storage
                                             storage.getReference("images/" + auth.getCurrentUser().getUid()).delete();
+
+                                            // delete user from Firebase Realtime Database
                                             reference.removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
                                                 @Override
                                                 public void onSuccess(Void unused) {
@@ -316,6 +319,8 @@ public class UserSettingFragment extends Fragment {
                                                     Toast.makeText(getContext(), e.toString(), Toast.LENGTH_SHORT).show();
                                                 }
                                             });
+
+                                            // delete user from Firebase Auth
                                             auth.getCurrentUser().delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                                                 @Override
                                                 public void onSuccess(Void unused) {
