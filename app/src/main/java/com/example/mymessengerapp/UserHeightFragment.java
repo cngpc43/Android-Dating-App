@@ -55,11 +55,11 @@ public class UserHeightFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot dateSnapshot: snapshot.getChildren()) {
-                    if (snapshot.child("height").getValue(String.class) == null) {
-                        remove_height_button.setBackgroundTintList(ContextCompat.getColorStateList(getContext(), R.color.secondary1));
-                        remove_height_button.setEnabled(false);
+                    if (snapshot.child("height").getValue(String.class).equals("")) {
+                        remove_height_button.setVisibility(View.INVISIBLE);
                     } else {
                         editTextHeight.setText(snapshot.child("height").getValue(String.class));
+                        remove_height_button.setVisibility(View.VISIBLE);
                     }
                 }
             }
