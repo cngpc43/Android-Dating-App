@@ -48,7 +48,6 @@ public class ChatActivity extends AppCompatActivity {
 
         // lấy ID của users và chatroom
 
-
         // Get UI from xml
         userName = findViewById(R.id.user_name_chat);
         userStatus = findViewById(R.id.user_status_chat);
