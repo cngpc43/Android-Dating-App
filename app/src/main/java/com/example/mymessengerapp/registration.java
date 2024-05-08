@@ -119,7 +119,7 @@ public class registration extends AppCompatActivity {
                                 StorageReference ref = FirebaseStorage.getInstance().getReference()
                                         .child(
                                                 "images/"
-                                                        + id);
+                                                        + id + "/profile_pic");
                                 if (imageURI != null) {
                                     ProgressDialog progressDialog
                                             = new ProgressDialog(registration.this);

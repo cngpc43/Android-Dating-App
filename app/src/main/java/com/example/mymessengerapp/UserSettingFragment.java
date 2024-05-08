@@ -305,7 +305,7 @@ public class UserSettingFragment extends Fragment {
                                         @Override
                                         public void onSuccess(AuthResult authResult) {
                                             // delete profile picture from Firebase Storage
-                                            storage.getReference("images/" + auth.getCurrentUser().getUid()).delete();
+                                            storage.getReference("images/" + auth.getCurrentUser().getUid() + "/profile_pic").delete();
 
                                             // delete user from Firebase Realtime Database
                                             reference.removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -550,7 +550,7 @@ public class UserSettingFragment extends Fragment {
                     = storage.getReference()
                     .child(
                             "images/"
-                                    + auth.getCurrentUser().getUid());
+                                    + auth.getCurrentUser().getUid() + "/profile_pic");
 
             // adding listeners on upload
             // or failure of image
