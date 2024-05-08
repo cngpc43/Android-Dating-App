@@ -65,7 +65,7 @@ public class ListViewAdapter extends BaseAdapter {
         holder.cityName = (TextView) view.findViewById(R.id.text1);
 
         // Set the results into TextViews
-        // Remove accent and lowercase the city name for searching
+        // Remove accents and lowercase the city name for searching
         String modifiedCityName = VNCharacterUtils.removeAccent(citiesList.get(position).toString()).toLowerCase(Locale.getDefault());
         // if citiesList is filtered
         if (isFiltered) {

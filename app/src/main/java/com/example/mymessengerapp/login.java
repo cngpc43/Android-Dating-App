@@ -66,7 +66,7 @@ public class login extends AppCompatActivity {
                     return;
                 }
 
-                email.setCompoundDrawablesWithIntrinsicBounds(R.drawable.baseline_local_phone_24, 0, 0, 0);
+                email.setCompoundDrawablesWithIntrinsicBounds(R.drawable.baseline_mail_outline_32, 0, 0, 0);
             }
         });
 

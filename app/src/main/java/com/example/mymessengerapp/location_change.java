@@ -91,8 +91,7 @@ public class location_change extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                String str = editable.toString();
-                adapter.filter(str);
+                adapter.filter(editable.toString());
             }
         });
 
