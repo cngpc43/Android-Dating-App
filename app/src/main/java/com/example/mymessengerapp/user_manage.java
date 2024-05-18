@@ -53,13 +53,6 @@ public class user_manage extends AppCompatActivity {
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                password = snapshot.child("password").getValue().toString();
-//                String name = snapshot.child("userName").getValue().toString();
-//                String profile = snapshot.child("profilepic").getValue().toString();
-//                String status = snapshot.child("status").getValue().toString();
-//                setname.setText(name);
-//                setstatus.setText(status);
-//                Picasso.get().load(profile).into(setprofile);
             }
 
             @Override
@@ -84,8 +77,8 @@ public class user_manage extends AppCompatActivity {
                 location_preview.setText(result);
             }
             if (resultCode == Activity.RESULT_CANCELED) {
-                // No result handler
+
             }
         }
-    } //onActivityResult
+    }
 }

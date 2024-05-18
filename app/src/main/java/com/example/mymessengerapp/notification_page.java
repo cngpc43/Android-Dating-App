@@ -31,9 +31,5 @@ public class notification_page extends AppCompatActivity {
 
 
     }
-    private void loadFragment(Fragment fragment) {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.noti_frame, fragment);
-        transaction.commit();
-    }
+
 }

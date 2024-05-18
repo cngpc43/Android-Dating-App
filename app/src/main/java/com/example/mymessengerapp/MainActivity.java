@@ -119,6 +119,7 @@ public class MainActivity extends AppCompatActivity {
                 noti_selected.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.selected_nav_item));
             }
         });
+
     }
 
     private void loadFragment(Fragment fragment) {

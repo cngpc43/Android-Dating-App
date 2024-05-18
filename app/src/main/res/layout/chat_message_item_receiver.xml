@@ -36,36 +36,5 @@
         </FrameLayout>
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/send_layout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="80dp"
-        android:orientation="vertical"
-        android:padding="8dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:text="11:00 PM"
-            android:textColor="@color/secondary2"
-            android:textSize="10sp" />
-
-        <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/rounded_message_send"
-            android:backgroundTint="@color/message_sent"
-            android:padding="8dp">
-
-            <TextView
-                android:id="@+id/send_message"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Iam fine"
-                android:textColor="@color/secondary3" />
-        </FrameLayout>
-    </LinearLayout>
 </RelativeLayout>

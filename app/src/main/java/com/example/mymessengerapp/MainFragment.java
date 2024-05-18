@@ -21,6 +21,7 @@ import com.google.firebase.database.ValueEventListener;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 
 import java.util.ArrayList;
 
@@ -52,14 +53,16 @@ public class MainFragment extends Fragment {
         mainUserRecyclerView.addItemDecoration(new SpaceItemDecoration(spacingInPixels));
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        layoutManager.setReverseLayout(true);
-
-        layoutManager.setStackFromEnd(true);
+//        layoutManager.setReverseLayout(true);
+//        layoutManager.setStackFromEnd(true);
         mainUserRecyclerView.setLayoutManager(layoutManager);
         mainUserRecyclerView.setAdapter(adapter);
         PagerSnapHelper snapHelper = new PagerSnapHelper();
         snapHelper.attachToRecyclerView(mainUserRecyclerView);
         DatabaseReference reference = database.getReference().child("user");
+//        DatabaseReference matchRequest = database.getReference().child("MatchRequests").child(auth.getCurrentUser().getUid());
+
+
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -68,10 +71,25 @@ public class MainFragment extends Fragment {
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     Users users = dataSnapshot.getValue(Users.class);
                     if (users != null && !users.getUserId().equals(currentUserId)) {
-                        usersArrayList.add(users);
+                        // Check if the current user has sent a request to the user in the loop
+                        DatabaseReference matchRequestRef = database.getReference().child("MatchRequests").child(currentUserId).child(users.getUserId());
+                        matchRequestRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot matchRequestSnapshot) {
+                                if (!matchRequestSnapshot.exists()) {
+                                    // If the current user hasn't sent a request to the user in the loop, add the user to the usersArrayList
+                                    usersArrayList.add(users);
+                                    adapter.notifyDataSetChanged();
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+                                // Handle error here
+                            }
+                        });
                     }
                 }
-                adapter.notifyDataSetChanged();
             }
 
             @Override
@@ -79,6 +97,7 @@ public class MainFragment extends Fragment {
 
             }
         });
+
 
         return view;
     }
