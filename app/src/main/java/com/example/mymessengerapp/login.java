@@ -8,6 +8,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -36,9 +37,10 @@ public class login extends AppCompatActivity {
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Please Wait...");
         progressDialog.setCancelable(false);
-        if(getSupportActionBar()!=null){
+        if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
+
         auth = FirebaseAuth.getInstance();
         button = findViewById(R.id.logbutton);
         email = findViewById(R.id.editTexLogEmail);
@@ -48,9 +50,36 @@ public class login extends AppCompatActivity {
         logsignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(login.this,registration.class);
+                Intent intent = new Intent(login.this, registration.class);
                 startActivity(intent);
                 finish();
+            }
+        });
+
+        // Set the animation of the icon
+        email.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                // Go icon khi EditText dang focus va nguoc lai
+                if (hasFocus) {
+                    email.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+                    return;
+                }
+
+                email.setCompoundDrawablesWithIntrinsicBounds(R.drawable.baseline_mail_outline_32, 0, 0, 0);
+            }
+        });
+
+        password.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                // Go icon khi EditText dang focus va nguoc lai
+                if (hasFocus) {
+                    password.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+                    return;
+                }
+
+                password.setCompoundDrawablesWithIntrinsicBounds(R.drawable.baseline_password_24, 0, 0, 0);
             }
         });
 

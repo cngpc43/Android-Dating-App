@@ -13,7 +13,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyMessengerApp"
-        tools:targetApi="33">
+        tools:targetApi="33"
+        android:enableOnBackInvokedCallback="true">
         <activity
             android:name=".ChatActivity"
             android:exported="false" />
@@ -79,8 +80,8 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".email_code_confirm"
-            android:exported="false">
+            android:name=".email_change_success"
+            android:exported="true">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -108,6 +109,34 @@
         </activity>
         <activity
             android:name=".location_change"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".password_change_success"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".phone_number_change"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".phone_number_confirm"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".phone_number_add"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"

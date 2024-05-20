@@ -5,13 +5,26 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+
+import com.example.mymessengerapp.model.Users;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class account_settings extends AppCompatActivity {
     ImageButton back_icon;
-    LinearLayout password, email, name;
-
+    LinearLayout password, email, phone_number;
+    TextView email_preview, phone_preview;
+    FirebaseAuth auth;
+    DatabaseReference reference;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,40 +33,62 @@ public class account_settings extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
+        auth = FirebaseAuth.getInstance();
+        reference = FirebaseDatabase.getInstance().getReference().child("user").child(auth.getCurrentUser().getUid());
 
         back_icon = findViewById(R.id.back_icon);
+        password = findViewById(R.id.password);
+        email = findViewById(R.id.email);
+        phone_number = findViewById(R.id.phone_number);
+        email_preview = findViewById(R.id.email_preview);
+        phone_preview = findViewById(R.id.phone_preview);
+
+        email_preview.setText(auth.getCurrentUser().getEmail());
+        if (!auth.getCurrentUser().getPhoneNumber().equals(""))
+            phone_preview.setText(auth.getCurrentUser().getPhoneNumber());
+
         back_icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intent = new Intent(account_settings.this, user_manage.class);
+                startActivity(intent);
                 finish();
             }
         });
 
-        password = findViewById(R.id.password);
         password.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(account_settings.this, password_change.class);
                 startActivity(intent);
+                finish();
             }
         });
 
-        email = findViewById(R.id.email);
+
         email.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(account_settings.this, email_confirm.class);
+                Intent intent = new Intent(account_settings.this, email_change.class);
                 startActivity(intent);
+                finish();
             }
         });
 
-        name = findViewById(R.id.name);
-        name.setOnClickListener(new View.OnClickListener() {
+        phone_number.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(account_settings.this, username_change.class);
-                startActivity(intent);
+                if (auth.getCurrentUser().getPhoneNumber().equals("")) {
+                    Intent intent = new Intent(account_settings.this, phone_number_add.class);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    Intent intent = new Intent(account_settings.this, phone_number_change.class);
+                    startActivity(intent);
+                    finish();
+                }
             }
         });
+
     }
 }

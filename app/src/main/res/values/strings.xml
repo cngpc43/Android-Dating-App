@@ -10,17 +10,23 @@
     <string name="enter_pass">Enter your password</string>
     <string name="resend_code"><u>Resend verification code</u></string>
     <string-array name="gender_array">
+        <item>none</item>
         <item>Male</item>
         <item>Female</item>
     </string-array>
     <string-array name="sexual_array">
+        <item>none</item>
         <item>Straight</item>
         <item>Gay</item>
         <item>Lesbian</item>
         <item>Bisexual</item>
         <item>Asexual</item>
     </string-array>
-
+    <string-array name="gender_show_array">
+        <item>Male and Female</item>
+        <item>Only Male</item>
+        <item>Only Female</item>
+    </string-array>
     <string-array name="vn_cities_array">
         <item>Hà Nội</item>
         <item>Hồ Chí Minh</item>
