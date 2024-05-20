@@ -68,7 +68,7 @@ public class MainFragment extends Fragment {
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     Users users = dataSnapshot.getValue(Users.class);
                     if (users != null) {
-                        if(!users.getUserId().equals(currentUserId)) {
+                        if(!users.getUserId().equals(currentUserId) && users.isShow_me()) {
                             usersArrayList.add(users);
                         }
                     }
