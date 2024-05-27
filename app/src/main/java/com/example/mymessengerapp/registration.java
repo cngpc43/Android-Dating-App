@@ -163,7 +163,7 @@ public class registration extends AppCompatActivity {
                                     });
                                 } else {
                                     String status = "Hey I'm Using This Application";
-                                    imageuri = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fdenverselfiemuseum.com%2Fhow-to-take-a-good-selfie%2F&psig=AOvVaw1771YMnNLySijabLLD56Mz&ust=1713783421055000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCOir6vOS04UDFQAAAAAdAAAAABAE";
+                                    imageuri = "https://firebasestorage.googleapis.com/v0/b/messenger-app-b4fed.appspot.com/o/default.png?alt=media&token=0a199e05-7e3a-42cd-8a5a-bfb7d3f61755";
                                     Users users = new Users(id, name, email, Password, imageuri, status, gender, dob, phone, location, sexual_orientation, height, age_range, gender_show, show_me, num_of_photo);
                                     reference.setValue(users).addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
