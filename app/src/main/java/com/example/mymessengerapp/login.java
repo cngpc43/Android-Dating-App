@@ -111,15 +111,6 @@ public class login extends AppCompatActivity {
                                 progressDialog.show();
                                 try {
                                     Intent intent = new Intent(login.this, MainActivity.class);
-                                    Bundle bundle = new Bundle();
-                                    FirebaseUser current_user = auth.getCurrentUser();
-
-                                    bundle.putString("profilepic", current_user.getPhotoUrl() != null ? current_user.getPhotoUrl().toString() : "");
-                                    bundle.putString("mail", current_user.getEmail() != null ? current_user.getEmail() : "");
-                                    bundle.putString("userName", current_user.getDisplayName() != null ? current_user.getDisplayName() : "");
-                                    bundle.putString("userId", current_user.getUid() != null ? current_user.getUid() : "");
-
-
                                     startActivity(intent);
                                     finish();
                                 } catch (Exception e) {

@@ -1,12 +1,10 @@
 package com.example.mymessengerapp;
 
 import android.app.Activity;
-import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -20,10 +18,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -38,7 +34,8 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
-import com.google.android.material.imageview.ShapeableImageView;
+import com.google.android.material.datepicker.MaterialDatePicker;
+import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.materialswitch.MaterialSwitch;
 import com.google.android.material.slider.RangeSlider;
 import com.google.android.material.textfield.TextInputEditText;
@@ -50,15 +47,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
-import java.net.URL;
-import java.util.Calendar;
-import java.util.UUID;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -66,9 +59,8 @@ public class UserSettingFragment extends Fragment {
     private FirebaseAuth auth;
     private FirebaseDatabase database;
     private FirebaseStorage storage;
-    private LinearLayout accountSettings;
     RangeSlider age_range;
-    LinearLayout account_settings, location, height, dob;
+    LinearLayout account_settings, location, height, dob, add_photo;
     Spinner gender_spinner, sexual_spinner, gender_show_spinner;
     TextView age_range_preview, location_preview, profile_username, profile_status, height_preview, dob_preview;
     EditText et_username, et_status;
@@ -127,6 +119,7 @@ public class UserSettingFragment extends Fragment {
         dob = view.findViewById(R.id.dob);
         dob_preview = view.findViewById(R.id.dob_preview);
         delete_account = view.findViewById(R.id.delete_account);
+        add_photo = view.findViewById(R.id.add_photo);
 
         // for text marquee
         profile_username.setSelected(true);
@@ -151,55 +144,53 @@ public class UserSettingFragment extends Fragment {
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot dateSnapshot: snapshot.getChildren()) {
-                    // location
-                    if (!snapshot.child("location").getValue(String.class).equals(""))
-                        location_preview.setText(snapshot.child("location").getValue(String.class));
-                    // gender_show
-                    if (!snapshot.child("gender_show").getValue(String.class).equals("")) {
-                        int gender_show_position = adapter2.getPosition(snapshot.child("gender_show").getValue(String.class));
-                        gender_show_spinner.setSelection(gender_show_position);
-                    }
-                    // gender
-                    if (!snapshot.child("gender").getValue(String.class).equals("")) {
-                        int gender_position = adapter.getPosition(snapshot.child("gender").getValue(String.class));
-                        gender_spinner.setSelection(gender_position);
-                    }
-                    // sexual_orientation
-                    if (!snapshot.child("sexual_orientation").getValue(String.class).equals("")) {
-                        int sexual_position = adapter1.getPosition(snapshot.child("sexual_orientation").getValue(String.class));
-                        sexual_spinner.setSelection(sexual_position);
-                    }
-                    // age_range
-                    if (!snapshot.child("age_range").getValue(String.class).equals("")) {
-                        String age_range_string = snapshot.child("age_range").getValue(String.class);
-                        float age_valueFrom = Float.valueOf(age_range_string.substring(0, age_range_string.indexOf('-')));
-                        float age_valueTo = Float.valueOf(age_range_string.substring(age_range_string.indexOf('-') + 1, age_range_string.length()));
-                        age_range.setValues(age_valueFrom, age_valueTo);
-                        age_range_preview.setText(age_range.getValues().get(0).intValue() + "-" + age_range.getValues().get(1).intValue());
-                    }
-                    // username
-                    if (!snapshot.child("userName").getValue(String.class).equals(""))
-                        profile_username.setText(snapshot.child("userName").getValue(String.class));
-                    // status
-                    if (!snapshot.child("status").getValue(String.class).equals(""))
-                        profile_status.setText(snapshot.child("status").getValue(String.class));
-                    // show me
-                    if (snapshot.child("show_me").getValue(boolean.class) != null)
-                        show_me_switch.setChecked(snapshot.child("show_me").getValue(boolean.class));
-                    // height
-                    if (!snapshot.child("height").getValue(String.class).equals("")) {
-                        height_preview.setText(snapshot.child("height").getValue(String.class) + "cm");
-                    }
-                    // dob
-                    if (!snapshot.child("dob").getValue(String.class).equals("")) {
-                        dob_preview.setText(snapshot.child("dob").getValue(String.class));
-                    }
-                    // profile_picture
-                    if (!snapshot.child("profilepic").getValue(String.class).equals("")) {
-                        Picasso.get().load(snapshot.child("profilepic").getValue(String.class)).into(profile_pic);
-                        Picasso.get().load(snapshot.child("profilepic").getValue(String.class)).into(profile_pic_button);
-                    }
+                // location
+                if (!snapshot.child("location").getValue(String.class).equals(""))
+                    location_preview.setText(snapshot.child("location").getValue(String.class));
+                // gender_show
+                if (!snapshot.child("gender_show").getValue(String.class).equals("")) {
+                    int gender_show_position = adapter2.getPosition(snapshot.child("gender_show").getValue(String.class));
+                    gender_show_spinner.setSelection(gender_show_position);
+                }
+                // gender
+                if (!snapshot.child("gender").getValue(String.class).equals("")) {
+                    int gender_position = adapter.getPosition(snapshot.child("gender").getValue(String.class));
+                    gender_spinner.setSelection(gender_position);
+                }
+                // sexual_orientation
+                if (!snapshot.child("sexual_orientation").getValue(String.class).equals("")) {
+                    int sexual_position = adapter1.getPosition(snapshot.child("sexual_orientation").getValue(String.class));
+                    sexual_spinner.setSelection(sexual_position);
+                }
+                // age_range
+                if (!snapshot.child("age_range").getValue(String.class).equals("")) {
+                    String age_range_string = snapshot.child("age_range").getValue(String.class);
+                    float age_valueFrom = Float.valueOf(age_range_string.substring(0, age_range_string.indexOf('-')));
+                    float age_valueTo = Float.valueOf(age_range_string.substring(age_range_string.indexOf('-') + 1, age_range_string.length()));
+                    age_range.setValues(age_valueFrom, age_valueTo);
+                    age_range_preview.setText(age_range.getValues().get(0).intValue() + "-" + age_range.getValues().get(1).intValue());
+                }
+                // username
+                if (!snapshot.child("userName").getValue(String.class).equals(""))
+                    profile_username.setText(snapshot.child("userName").getValue(String.class));
+                // status
+                if (!snapshot.child("status").getValue(String.class).equals(""))
+                    profile_status.setText(snapshot.child("status").getValue(String.class));
+                // show me
+                if (snapshot.child("show_me").getValue(boolean.class) != null)
+                    show_me_switch.setChecked(snapshot.child("show_me").getValue(boolean.class));
+                // height
+                if (!snapshot.child("height").getValue(String.class).equals("")) {
+                    height_preview.setText(snapshot.child("height").getValue(String.class) + "cm");
+                }
+                // dob
+                if (!snapshot.child("dob").getValue(String.class).equals("")) {
+                    dob_preview.setText(snapshot.child("dob").getValue(String.class));
+                }
+                // profile_picture
+                if (!snapshot.child("profilepic").getValue(String.class).equals("")) {
+                    Picasso.get().load(snapshot.child("profilepic").getValue(String.class)).into(profile_pic);
+                    Picasso.get().load(snapshot.child("profilepic").getValue(String.class)).into(profile_pic_button);
                 }
             }
             @Override
@@ -429,45 +420,38 @@ public class UserSettingFragment extends Fragment {
             }
         });
 
+        MaterialDatePicker.Builder materialDateBuilder = MaterialDatePicker.Builder.datePicker();
+        materialDateBuilder.setTitleText("SELECT A DATE");
+        final MaterialDatePicker materialDatePicker = materialDateBuilder.build();
+
         dob.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // on below line we are getting
-                // the instance of our calendar.
-                final Calendar c = Calendar.getInstance();
-
-                // on below line we are getting
-                // our day, month and year.
-                int year = c.get(Calendar.YEAR);
-                int month = c.get(Calendar.MONTH);
-                int day = c.get(Calendar.DAY_OF_MONTH);
-
-                // on below line we are creating a variable for date picker dialog.
-                DatePickerDialog datePickerDialog = new DatePickerDialog(
-                        // on below line we are passing context.
-                        getContext(),
-                        new DatePickerDialog.OnDateSetListener() {
-                            @Override
-                            public void onDateSet(DatePicker view, int year,
-                                                  int monthOfYear, int dayOfMonth) {
-                                // on below line we are setting date to our text view.
-                                dob_preview.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
-                                reference.child("dob").setValue(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
-                            }
-                        },
-                        // on below line we are passing year,
-                        // month and day for selected date in our date picker.
-                        year, month, day);
-                // at last we are calling show to
-                // display our date picker dialog.
-                datePickerDialog.show();
+                materialDatePicker.show(getActivity().getSupportFragmentManager(), "MATERIAL_DATE_PICKER");
             }
         });
+
+        materialDatePicker.addOnPositiveButtonClickListener(
+                new MaterialPickerOnPositiveButtonClickListener() {
+                    @Override
+                    public void onPositiveButtonClick(Object selection) {
+                        dob_preview.setText(materialDatePicker.getHeaderText());
+                        reference.child("dob").setValue(materialDatePicker.getHeaderText());
+                    }
+                });
 
         profile_pic_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 SelectImage();
+            }
+        });
+
+        add_photo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), add_photo.class);
+                startActivity(intent);
             }
         });
 
