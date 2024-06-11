@@ -1,6 +1,7 @@
 package com.example.mymessengerapp.adapter;
 
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,6 +65,10 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.viewholder> {
                         // Handle error here
                     }
                 });
+        String profilepic = users.getProfilepic();
+        if (profilepic != null) {
+
+        }
         holder.likeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -120,6 +125,26 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.viewholder> {
 
             }
         });
+        holder.dislikeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                String dislikedUserId = usersArrayList.get(holder.getAdapterPosition()).getUserId();
+                FirebaseDatabase.getInstance().getReference("MatchRequests")
+                        .child(currentUserId)
+                        .child(dislikedUserId)
+                        .setValue("declined");
+                Toast.makeText(mainActivity, "Request Declined", Toast.LENGTH_SHORT).show();
+                holder.dislikeButton.setEnabled(false);
+                holder.dislikeButton.setImageResource(R.drawable.wait);
+                holder.dislikeButton.setBackgroundColor(mainActivity.getResources().getColor(R.color.grey));
+                // Remove from the list
+                usersArrayList.remove(holder.getAdapterPosition());
+                notifyItemRemoved(holder.getAdapterPosition());
+                notifyItemRangeChanged(holder.getAdapterPosition(), usersArrayList.size());
+
+            }
+        });
 //        Picasso.get().load(users.profilepic).into(holder.userimg);
     }
 
@@ -133,13 +158,14 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.viewholder> {
         TextView username;
         TextView userstatus;
         ImageButton likeButton;
-
+        ImageButton dislikeButton;
         public viewholder(@NonNull View itemView) {
             super(itemView);
             userimg = itemView.findViewById(R.id.userimg);
             username = itemView.findViewById(R.id.username);
             userstatus = itemView.findViewById(R.id.userstatus);
             likeButton = itemView.findViewById(R.id.like);
+            dislikeButton = itemView.findViewById(R.id.dislike);
         }
     }
 }

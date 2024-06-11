@@ -52,7 +52,6 @@ public class MainActivity extends AppCompatActivity {
         chat_selected = findViewById(R.id.chat_selected);
         user_selected = findViewById(R.id.user_selected);
         title = findViewById(R.id.title);
-
         title.setText("Tindeo");
         home_selected.setBackground(ContextCompat.getDrawable(this, R.drawable.selected_nav_item));
         usersArrayList = new ArrayList<>();
