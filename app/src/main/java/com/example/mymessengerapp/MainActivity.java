@@ -89,6 +89,9 @@ public class MainActivity extends AppCompatActivity {
                     if (reference != null && valueEventListener != null) {
                         reference.removeEventListener(valueEventListener);
                     }
+                    Intent intent = new Intent(MainActivity.this, login.class);
+                    startActivity(intent);
+                    finish();
                 }
             }
         });
