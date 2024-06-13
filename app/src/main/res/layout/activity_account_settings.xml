@@ -96,7 +96,7 @@
             android:id="@+id/phone_number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/rounded_corners"
+            android:background="@drawable/rounded_top_corners"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:padding="10dp"

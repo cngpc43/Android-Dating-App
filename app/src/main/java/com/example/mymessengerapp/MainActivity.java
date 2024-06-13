@@ -1,5 +1,6 @@
 package com.example.mymessengerapp;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,10 +11,13 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.example.mymessengerapp.adapter.UserAdapter;
 import com.example.mymessengerapp.model.Users;
@@ -39,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     MaterialTextView title;
     ValueEventListener valueEventListener;
     DatabaseReference reference;
+    Boolean doubleBackToExitPressedOnce = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,6 +153,26 @@ public class MainActivity extends AppCompatActivity {
                 selectNotification();
             }
         });
+
+        // back press two times within 2 seconds to exit app
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (doubleBackToExitPressedOnce) {
+                    finishAffinity();
+                }
+
+                doubleBackToExitPressedOnce = true;
+                Toast.makeText(MainActivity.this, "Please swipe BACK again to exit", Toast.LENGTH_SHORT).show();
+
+                new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        doubleBackToExitPressedOnce=false;
+                    }
+                }, 2000);
+            }
+        });
     }
 
     private void loadFragment(Fragment fragment) {
@@ -187,5 +212,12 @@ public class MainActivity extends AppCompatActivity {
         noti_selected.setBackground(null);
         chat_selected.setBackground(null);
         user_selected.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.selected_nav_item));
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (reference != null && valueEventListener != null)
+            reference.removeEventListener(valueEventListener);
     }
 }

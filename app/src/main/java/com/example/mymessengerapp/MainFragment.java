@@ -31,6 +31,8 @@ public class MainFragment extends Fragment {
     FirebaseDatabase database;
     ArrayList<Users> usersArrayList;
     ValueEventListener valueEventListener;
+    FirebaseAuth.AuthStateListener authStateListener;
+    DatabaseReference reference;
 
     public MainFragment() {
     }
@@ -60,9 +62,9 @@ public class MainFragment extends Fragment {
         mainUserRecyclerView.setAdapter(adapter);
         PagerSnapHelper snapHelper = new PagerSnapHelper();
         snapHelper.attachToRecyclerView(mainUserRecyclerView);
-        DatabaseReference reference = database.getReference().child("user");
+        reference = database.getReference().child("user");
 
-        auth.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
+        auth.addAuthStateListener(authStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 if (firebaseAuth.getCurrentUser() == null) {
@@ -95,5 +97,14 @@ public class MainFragment extends Fragment {
         });
 
         return view;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (auth != null && authStateListener != null)
+            auth.removeAuthStateListener(authStateListener);
+        if (reference != null && valueEventListener != null)
+            reference.removeEventListener(valueEventListener);
     }
 }

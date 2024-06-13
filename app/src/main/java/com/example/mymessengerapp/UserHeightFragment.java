@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -55,7 +56,7 @@ public class UserHeightFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot dateSnapshot: snapshot.getChildren()) {
-                    if (snapshot.child("height").getValue(String.class).equals("")) {
+                    if (snapshot.child("height").getValue(String.class) != null && !snapshot.child("height").getValue(String.class).equals("")) {
                         remove_height_button.setVisibility(View.INVISIBLE);
                     } else {
                         editTextHeight.setText(snapshot.child("height").getValue(String.class));
@@ -101,6 +102,13 @@ public class UserHeightFragment extends Fragment {
                 editTextHeight.getText().clear();
                 reference.child("height").setValue("");
                 loadFragment(new UserSettingFragment());
+            }
+        });
+
+        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                ((MainActivity)getContext()).getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, new UserSettingFragment()).commit();
             }
         });
 

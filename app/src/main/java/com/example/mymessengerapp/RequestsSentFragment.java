@@ -2,6 +2,7 @@ package com.example.mymessengerapp;
 
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -80,6 +81,14 @@ public class RequestsSentFragment extends Fragment {
 
             }
         });
+
+        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                ((MainActivity)getContext()).getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, new NotificationFragment((MainActivity)getContext())).commit();
+            }
+        });
+
         return view;
     }
 }

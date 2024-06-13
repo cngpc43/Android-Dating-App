@@ -42,8 +42,12 @@ public class account_settings extends AppCompatActivity {
         phone_preview = findViewById(R.id.phone_preview);
 
         email_preview.setText(auth.getCurrentUser().getEmail());
-        if (!auth.getCurrentUser().getPhoneNumber().equals(""))
+        if (auth.getCurrentUser().getPhoneNumber() != null && !auth.getCurrentUser().getPhoneNumber().equals("")) {
+            phone_preview.setVisibility(View.VISIBLE);
             phone_preview.setText(auth.getCurrentUser().getPhoneNumber());
+        } else {
+            phone_preview.setVisibility(View.GONE);
+        }
 
         back_icon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,11 +76,11 @@ public class account_settings extends AppCompatActivity {
         phone_number.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (auth.getCurrentUser().getPhoneNumber().equals("")) {
-                    Intent intent = new Intent(account_settings.this, phone_number_add.class);
+                if (auth.getCurrentUser().getPhoneNumber() != null && !auth.getCurrentUser().getPhoneNumber().equals("")) {
+                    Intent intent = new Intent(account_settings.this, phone_number_change.class);
                     startActivity(intent);
                 } else {
-                    Intent intent = new Intent(account_settings.this, phone_number_change.class);
+                    Intent intent = new Intent(account_settings.this, phone_number_add.class);
                     startActivity(intent);
                 }
             }

@@ -93,7 +93,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.viewholder> {
                                         FirebaseDatabase.getInstance().getReference("MatchRequests")
                                                 .child(likedUserId)
                                                 .child(currentUserId)
-                                                .setValue(true);
+                                                .setValue("true");
                                         String chatRoomId = FirebaseDatabase.getInstance().getReference("ChatRooms").push().getKey();
                                         FirebaseDatabase.getInstance().getReference("ChatRooms")
                                                 .child(chatRoomId)
