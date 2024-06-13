@@ -84,7 +84,6 @@ public class phone_number_confirm extends AppCompatActivity {
             public void onCodeSent(@NonNull String verificationId,
                                    @NonNull PhoneAuthProvider.ForceResendingToken
                                            token) {
-
                 mVerificationId = verificationId;
             }
         };
@@ -104,8 +103,7 @@ public class phone_number_confirm extends AppCompatActivity {
         back_icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(phone_number_confirm.this, account_settings.class);
-                startActivity(intent);
+                finish();
             }
         });
 
@@ -144,10 +142,16 @@ public class phone_number_confirm extends AppCompatActivity {
                     auth.getCurrentUser().linkWithCredential(credential).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                         @Override
                         public void onSuccess(AuthResult authResult) {
-                            reference.child("phone").setValue(phone_number);
-                            Intent intent = new Intent(phone_number_confirm.this, account_settings.class);
-                            startActivity(intent);
-                            finish();
+                            reference.child("phone").setValue(phone_number).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void unused) {
+                                    Intent intent = new Intent(phone_number_confirm.this, account_settings.class);
+                                    // clear all previous activities
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    startActivity(intent);
+                                    finish();
+                                }
+                            });
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
@@ -159,11 +163,17 @@ public class phone_number_confirm extends AppCompatActivity {
                     auth.getCurrentUser().updatePhoneNumber(credential).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void unused) {
-                            reference.child("phone").setValue(phone_number);
-                            Toast.makeText(phone_number_confirm.this, "Phone number updated", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(phone_number_confirm.this, account_settings.class);
-                            startActivity(intent);
-                            finish();
+                            reference.child("phone").setValue(phone_number).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void unused) {
+                                    Toast.makeText(phone_number_confirm.this, "Phone number updated", Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(phone_number_confirm.this, account_settings.class);
+                                    // clear all previous activities
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    startActivity(intent);
+                                    finish();
+                                }
+                            });
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override

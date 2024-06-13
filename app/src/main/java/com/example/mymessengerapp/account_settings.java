@@ -24,7 +24,6 @@ public class account_settings extends AppCompatActivity {
     LinearLayout password, email, phone_number;
     TextView email_preview, phone_preview;
     FirebaseAuth auth;
-    DatabaseReference reference;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,7 +33,6 @@ public class account_settings extends AppCompatActivity {
             getSupportActionBar().hide();
         }
         auth = FirebaseAuth.getInstance();
-        reference = FirebaseDatabase.getInstance().getReference().child("user").child(auth.getCurrentUser().getUid());
 
         back_icon = findViewById(R.id.back_icon);
         password = findViewById(R.id.password);
@@ -50,8 +48,6 @@ public class account_settings extends AppCompatActivity {
         back_icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(account_settings.this, user_manage.class);
-                startActivity(intent);
                 finish();
             }
         });
@@ -61,7 +57,6 @@ public class account_settings extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(account_settings.this, password_change.class);
                 startActivity(intent);
-                finish();
             }
         });
 
@@ -71,7 +66,6 @@ public class account_settings extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(account_settings.this, email_change.class);
                 startActivity(intent);
-                finish();
             }
         });
 
@@ -81,11 +75,9 @@ public class account_settings extends AppCompatActivity {
                 if (auth.getCurrentUser().getPhoneNumber().equals("")) {
                     Intent intent = new Intent(account_settings.this, phone_number_add.class);
                     startActivity(intent);
-                    finish();
                 } else {
                     Intent intent = new Intent(account_settings.this, phone_number_change.class);
                     startActivity(intent);
-                    finish();
                 }
             }
         });

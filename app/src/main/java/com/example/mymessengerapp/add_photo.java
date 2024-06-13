@@ -105,8 +105,6 @@ public class add_photo extends AppCompatActivity {
         back_icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(add_photo.this, user_manage.class);
-                startActivity(intent);
                 finish();
             }
         });

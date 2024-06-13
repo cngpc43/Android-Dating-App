@@ -37,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
     FrameLayout home, user, message, notification;
     LinearLayout home_selected, user_selected, chat_selected, noti_selected;
     MaterialTextView title;
+    ValueEventListener valueEventListener;
+    DatabaseReference reference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,17 +49,51 @@ public class MainActivity extends AppCompatActivity {
         }
         database = FirebaseDatabase.getInstance();
         auth = FirebaseAuth.getInstance();
+        reference = database.getReference().child("user");
+
+        user = findViewById(R.id.user);
+        message = findViewById(R.id.message);
+        home = findViewById(R.id.home);
+        notification = findViewById(R.id.notification);
         home_selected = findViewById(R.id.home_selected);
         noti_selected = findViewById(R.id.noti_selected);
         chat_selected = findViewById(R.id.chat_selected);
         user_selected = findViewById(R.id.user_selected);
         title = findViewById(R.id.title);
 
-        title.setText("Tindeo");
-        home_selected.setBackground(ContextCompat.getDrawable(this, R.drawable.selected_nav_item));
         usersArrayList = new ArrayList<>();
-        DatabaseReference reference = database.getReference().child("user");
-        reference.addValueEventListener(new ValueEventListener() {
+
+        if (auth.getCurrentUser() == null) {
+            Intent intent = new Intent(MainActivity.this, login.class);
+            startActivity(intent);
+            finish();
+        }
+
+        if (getIntent() == null || getIntent().getStringExtra("fragment") == null) {
+            selectHome();
+        } else {
+            if (getIntent().getStringExtra("fragment").equals("user"))
+                selectUser();
+            else if (getIntent().getStringExtra("fragment").equals("message"))
+                selectMessage();
+            else if (getIntent().getStringExtra("fragment").equals("notification"))
+                selectNotification();
+            else
+                selectHome();
+        }
+
+        auth.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                if (firebaseAuth.getCurrentUser() == null) {
+                    if (reference != null && valueEventListener != null) {
+                        reference.removeEventListener(valueEventListener);
+                    }
+                }
+            }
+        });
+
+        reference.addValueEventListener(valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 usersArrayList.clear();
@@ -80,57 +116,33 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        if (auth.getCurrentUser() == null) {
-            Intent intent = new Intent(MainActivity.this, login.class);
-            startActivity(intent);
-        }
-        loadFragment(new MainFragment());
-        user = findViewById(R.id.user);
+
+
         user.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadFragment(new UserSettingFragment());
-                title.setText("User");
-                home_selected.setBackground(null);
-                noti_selected.setBackground(null);
-                chat_selected.setBackground(null);
-                user_selected.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.selected_nav_item));
+                selectUser();
             }
         });
-        message = findViewById(R.id.message);
+
         message.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadFragment(new ChatFragment());
-                title.setText("Chat");
-                home_selected.setBackground(null);
-                noti_selected.setBackground(null);
-                user_selected.setBackground(null);
-                chat_selected.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.selected_nav_item));
+                selectMessage();
             }
         });
-        home = findViewById(R.id.home);
+
         home.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadFragment(new MainFragment());
-                title.setText("Tindeo");
-                noti_selected.setBackground(null);
-                chat_selected.setBackground(null);
-                user_selected.setBackground(null);
-                home_selected.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.selected_nav_item));
+                selectHome();
             }
         });
-        notification = findViewById(R.id.notification);
+
         notification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                loadFragment(new NotificationFragment(MainActivity.this));
-                title.setText("Notifications");
-                home_selected.setBackground(null);
-                chat_selected.setBackground(null);
-                user_selected.setBackground(null);
-                noti_selected.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.selected_nav_item));
+                selectNotification();
             }
         });
     }
@@ -139,5 +151,38 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.main_frame, fragment);
         transaction.commit();
+    }
+
+    private void selectHome() {
+        loadFragment(new MainFragment());
+        title.setText("Tindeo");
+        noti_selected.setBackground(null);
+        chat_selected.setBackground(null);
+        user_selected.setBackground(null);
+        home_selected.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.selected_nav_item));
+    }
+    private void selectMessage() {
+        loadFragment(new ChatFragment());
+        title.setText("Chat");
+        home_selected.setBackground(null);
+        noti_selected.setBackground(null);
+        user_selected.setBackground(null);
+        chat_selected.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.selected_nav_item));
+    }
+    private void selectNotification() {
+        loadFragment(new NotificationFragment(MainActivity.this));
+        title.setText("Notifications");
+        home_selected.setBackground(null);
+        chat_selected.setBackground(null);
+        user_selected.setBackground(null);
+        noti_selected.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.selected_nav_item));
+    }
+    private void selectUser() {
+        loadFragment(new UserSettingFragment());
+        title.setText("User");
+        home_selected.setBackground(null);
+        noti_selected.setBackground(null);
+        chat_selected.setBackground(null);
+        user_selected.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.selected_nav_item));
     }
 }

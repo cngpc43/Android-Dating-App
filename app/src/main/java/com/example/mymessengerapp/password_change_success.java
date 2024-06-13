@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -31,6 +32,16 @@ public class password_change_success extends AppCompatActivity {
         log_in_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intent = new Intent(password_change_success.this, login.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+        // handle on back pressed
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
                 Intent intent = new Intent(password_change_success.this, login.class);
                 startActivity(intent);
                 finish();

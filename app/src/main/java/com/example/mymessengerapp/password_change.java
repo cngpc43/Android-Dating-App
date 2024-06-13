@@ -16,11 +16,14 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import okhttp3.internal.Util;
 
@@ -31,6 +34,7 @@ public class password_change extends AppCompatActivity {
     LinearLayout password_hint_wrong, re_newpass_hint_true, re_newpass_hint_false;
     TextView password_hint;
     FirebaseAuth auth;
+    DatabaseReference reference;
     boolean newPassConfirm = false;
     int attempts = 0;
     @Override
@@ -43,6 +47,7 @@ public class password_change extends AppCompatActivity {
         }
 
         auth = FirebaseAuth.getInstance();
+        reference = FirebaseDatabase.getInstance().getReference().child("user/" + auth.getCurrentUser().getUid() + "/password");
 
         back_icon = findViewById(R.id.back_icon);
         etPassword = findViewById(R.id.etPassword);
@@ -57,33 +62,7 @@ public class password_change extends AppCompatActivity {
         back_icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(password_change.this, account_settings.class);
-                startActivity(intent);
-            }
-        });
-
-        etNewPassword.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                // do nothing
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                // do nothing
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                if (editable.toString().equals(reEtNewPassword.getText().toString())) {
-                    re_newpass_hint_true.setVisibility(View.VISIBLE);
-                    re_newpass_hint_false.setVisibility(View.GONE);
-                    newPassConfirm = true;
-                } else {
-                    re_newpass_hint_true.setVisibility(View.GONE);
-                    re_newpass_hint_false.setVisibility(View.VISIBLE);
-                    newPassConfirm = false;
-                }
+                finish();
             }
         });
 
@@ -95,12 +74,7 @@ public class password_change extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                // do nothing
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                if (editable.toString().equals(etNewPassword.getText().toString())) {
+                if (reEtNewPassword.getText().toString().equals(etNewPassword.getText().toString())) {
                     re_newpass_hint_true.setVisibility(View.VISIBLE);
                     re_newpass_hint_false.setVisibility(View.GONE);
                     newPassConfirm = true;
@@ -110,6 +84,11 @@ public class password_change extends AppCompatActivity {
                     newPassConfirm = false;
                 }
             }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                // do nothing
+            }
         });
 
         change_button.setOnClickListener(new View.OnClickListener() {
@@ -117,7 +96,9 @@ public class password_change extends AppCompatActivity {
             public void onClick(View view) {
                 if (attempts > 3) {
                     Toast.makeText(password_change.this, "Too many attempts, please log out and try again later.", Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(password_change.this, account_settings.class);
+                    Intent intent = new Intent(password_change.this, login.class);
+                    // clear all previous activities
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     finish();
                 }
                 if (!newPassConfirm) {
@@ -140,11 +121,21 @@ public class password_change extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
-                                    auth.getCurrentUser().updatePassword(new_pass);
-                                    auth.signOut();
-                                    Intent intent = new Intent(password_change.this, password_change_success.class);
-                                    startActivity(intent);
-                                    finish();
+                                    auth.getCurrentUser().updatePassword(new_pass).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void unused) {
+                                            // update new password to Firebase Realtime Database
+                                            reference.setValue(new_pass);
+                                            auth.signOut();
+
+                                            Intent intent = new Intent(password_change.this, password_change_success.class);
+                                            // clear all previous activities
+                                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                            startActivity(intent);
+                                            finish();
+                                        }
+                                    });
+
                                 } else {
                                     password_hint_wrong.setVisibility(View.VISIBLE);
                                     attempts++;

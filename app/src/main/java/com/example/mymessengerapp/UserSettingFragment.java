@@ -59,6 +59,7 @@ public class UserSettingFragment extends Fragment {
     private FirebaseAuth auth;
     private FirebaseDatabase database;
     private FirebaseStorage storage;
+    private ValueEventListener listener;
     RangeSlider age_range;
     LinearLayout account_settings, location, height, dob, add_photo;
     Spinner gender_spinner, sexual_spinner, gender_show_spinner;
@@ -133,15 +134,22 @@ public class UserSettingFragment extends Fragment {
         adapter1.setDropDownViewResource(R.layout.gender_spinner_dropdown);
         sexual_spinner.setAdapter(adapter1);
 
-
         ArrayAdapter adapter2 = ArrayAdapter.createFromResource(getContext(), R.array.gender_show_array, R.layout.gender_spinner_item);
         adapter2.setDropDownViewResource(R.layout.gender_spinner_dropdown);
         gender_show_spinner.setAdapter(adapter2);
 
-
+        auth.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                if (firebaseAuth.getCurrentUser() == null) {
+                    if (reference != null && listener != null)
+                        reference.removeEventListener(listener);
+                }
+            }
+        });
 
         // update values from database
-        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+        reference.addValueEventListener(listener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 // location
@@ -263,7 +271,7 @@ public class UserSettingFragment extends Fragment {
                         FirebaseAuth.getInstance().signOut();
                         Intent intent = new Intent(getContext(), login.class);
                         startActivity(intent);
-//                        finish();
+                        getActivity().finish();
                     }
                 });
                 no.setOnClickListener(new View.OnClickListener() {
@@ -304,7 +312,7 @@ public class UserSettingFragment extends Fragment {
                                 } else if (Pass.length() < 6) {
                                     Toast.makeText(getContext(), "Password must be longer than 6 characters", Toast.LENGTH_SHORT).show();
                                 } else {
-                                    // reauthenticate current user
+                                    // re-authenticate current user
                                     auth.signInWithEmailAndPassword(auth.getCurrentUser().getEmail().toString(), Pass).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                                         @Override
                                         public void onSuccess(AuthResult authResult) {
@@ -331,6 +339,7 @@ public class UserSettingFragment extends Fragment {
                                                     Toast.makeText(getContext(), "Delete user from Firebase successfully!", Toast.LENGTH_SHORT).show();
                                                     Intent intent = new Intent(getContext(), login.class);
                                                     startActivity(intent);
+                                                    getActivity().finish();
                                                 }
                                             }).addOnFailureListener(new OnFailureListener() {
                                                 @Override
@@ -367,7 +376,6 @@ public class UserSettingFragment extends Fragment {
                 Intent intent = new Intent(getContext(), account_settings.class);
                 startActivity(intent);
             }
-
         });
 
         gender_show_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -474,7 +482,6 @@ public class UserSettingFragment extends Fragment {
     // Select Image method
     private void SelectImage()
     {
-
         // Defining Implicit Intent to mobile gallery
         Intent intent = new Intent();
         intent.setType("image/*");

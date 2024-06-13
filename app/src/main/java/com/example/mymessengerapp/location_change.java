@@ -61,8 +61,7 @@ public class location_change extends AppCompatActivity {
         back_icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(location_change.this, user_manage.class);
-                startActivity(intent);
+                finish();
             }
         });
 
@@ -86,12 +85,12 @@ public class location_change extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                // do nothing
+                adapter.filter(etLocation.getText().toString());
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
-                adapter.filter(editable.toString());
+                // do nothing
             }
         });
 
