@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="70dp"
@@ -28,59 +27,37 @@
             tools:ignore="UseAppTint" />
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:id="@+id/title"
             android:fontFamily="@font/poppins_bold"
             android:paddingTop="5dp"
             android:paddingLeft="5dp"
-            android:text="Change location"
+            android:text="Add more photos"
             android:textColor="#2a364e"
-            android:textSize="@dimen/_20sdp" />
+            android:textSize="@dimen/_20sdp"
+            android:layout_weight="1"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/add_button"
+            android:text="ADD"
+            android:layout_marginRight="10dp"
+            android:layout_gravity="center_vertical"/>
     </LinearLayout>
 
-    <RelativeLayout
-        android:layout_width="360dp"
-        android:layout_height="55dp"
-        android:id="@+id/searchBar"
-        android:background="@drawable/rounded_search_box"
-        android:layout_margin="15dp"
-        app:layout_constraintTop_toBottomOf="@id/toolBar"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent">
-
-        <EditText
-            android:id="@+id/etLocation"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:hint="Search here"
-            android:textColor="@color/black"
-            android:paddingLeft="50dp"
-            android:paddingRight="10dp"
-            android:singleLine="true"
-            android:background="@android:color/transparent" />
-
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:scaleType = "centerCrop"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_gravity="left"
-            android:layout_marginLeft="20dp"
-            android:src="@drawable/ic_pink_search"/>
-
-    </RelativeLayout>
-
-    <ListView
+    <GridView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/cities_listview"
-        android:layout_marginTop="20dp"
-        app:layout_constraintTop_toBottomOf="@id/searchBar"
+        android:id="@+id/photo_gridview"
+        android:horizontalSpacing="3dp"
+        android:verticalSpacing="3dp"
+        android:numColumns="3"
+        app:layout_constraintTop_toBottomOf="@id/toolBar"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintRight_toRightOf="parent"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

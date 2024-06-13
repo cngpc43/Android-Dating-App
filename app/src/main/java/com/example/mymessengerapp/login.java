@@ -90,42 +90,33 @@ public class login extends AppCompatActivity {
                 String Email = email.getText().toString();
                 String pass = password.getText().toString();
 
-                if ((TextUtils.isEmpty(Email))){
+                if ((TextUtils.isEmpty(Email))) {
                     progressDialog.dismiss();
                     Toast.makeText(login.this, "Enter The Email", Toast.LENGTH_SHORT).show();
-                }else if (TextUtils.isEmpty(pass)){
+                } else if (TextUtils.isEmpty(pass)) {
                     progressDialog.dismiss();
                     Toast.makeText(login.this, "Enter The Password", Toast.LENGTH_SHORT).show();
-                }else if (!Email.matches(emailPattern)){
+                } else if (!Email.matches(emailPattern)) {
                     progressDialog.dismiss();
                     email.setError("Give Proper Email Address");
-                }else if (password.length()<6){
+                } else if (password.length() < 6) {
                     progressDialog.dismiss();
                     password.setError("More Then Six Characters");
                     Toast.makeText(login.this, "Password Needs To Be Longer Then Six Characters", Toast.LENGTH_SHORT).show();
-                }else {
-                    auth.signInWithEmailAndPassword(Email,pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                } else {
+                    auth.signInWithEmailAndPassword(Email, pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()){
+                            if (task.isSuccessful()) {
                                 progressDialog.show();
                                 try {
-                                    Intent intent = new Intent(login.this , MainActivity.class);
-                                    Bundle bundle = new Bundle();
-                                    FirebaseUser current_user = auth.getCurrentUser();
-
-                                    bundle.putString("profilepic", current_user.getPhotoUrl() != null ? current_user.getPhotoUrl().toString() : "");
-                                    bundle.putString("mail", current_user.getEmail() != null ? current_user.getEmail() : "");
-                                    bundle.putString("userName", current_user.getDisplayName() != null ? current_user.getDisplayName() : "");
-                                    bundle.putString("userId", current_user.getUid() != null ? current_user.getUid() : "");
-
-
+                                    Intent intent = new Intent(login.this, MainActivity.class);
                                     startActivity(intent);
                                     finish();
-                                }catch (Exception e){
+                                } catch (Exception e) {
                                     Toast.makeText(login.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                                 }
-                            }else {
+                            } else {
                                 Toast.makeText(login.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         }
