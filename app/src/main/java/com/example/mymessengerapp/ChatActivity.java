@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -22,7 +23,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.mymessengerapp.adapter.ChatAdapter;
 import com.example.mymessengerapp.model.ChatMessage;
 
+import com.example.mymessengerapp.model.Users;
 import com.google.android.material.imageview.ShapeableImageView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,9 +41,13 @@ public class ChatActivity extends AppCompatActivity {
     TextView userName, userStatus;
     ShapeableImageView userAvatar;
     RecyclerView mainChat;
+    ArrayList<Users> usersArrayList;
     ChatAdapter chatAdapter;
     List<ChatMessage> chatMessages;
     LinearLayout llSendChat;
+    FirebaseDatabase database;
+
+    FirebaseAuth auth;
 
     PopupWindow attachmentPopup;
 
@@ -47,7 +59,28 @@ public class ChatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat);
 
         // lấy ID của users và chatroom
+        usersArrayList = new ArrayList<>();
+        auth = FirebaseAuth.getInstance();
+        database = FirebaseDatabase.getInstance();
+        DatabaseReference reference = database.getReference().child("user");
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                usersArrayList.clear();
+                String currentUserId = auth.getCurrentUser().getUid();
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    Users users = dataSnapshot.getValue(Users.class);
+                    if (users != null && !users.getUserId().equals(currentUserId)) {
+                        usersArrayList.add(users);
+                    }
+                }
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
         // Get UI from xml
         userName = findViewById(R.id.user_name_chat);
         userStatus = findViewById(R.id.user_status_chat);
@@ -60,8 +93,8 @@ public class ChatActivity extends AppCompatActivity {
 
         // Khoi tao chat message - day la hard data, thay bang firebase sau
         chatMessages = new ArrayList<ChatMessage>();
-        chatMessages.add(new ChatMessage("Hello, how are you ?", false));
-        chatMessages.add(new ChatMessage("I am fine", true));
+        chatMessages.add(new ChatMessage("Hello, how are you ?", 0, "1"));
+        chatMessages.add(new ChatMessage("I am fine", 0, "2"));
 
         // Gui chat message vo recyclerView
         chatAdapter = new ChatAdapter(chatMessages);

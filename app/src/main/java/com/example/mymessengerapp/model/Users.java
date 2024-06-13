@@ -1,5 +1,15 @@
 package com.example.mymessengerapp.model;
 
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.TaskCompletionSource;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 public class Users {
     String profilepic,mail,userName,password,userId,lastMessage,status, gender, dob, phone, location, sexual_orientation, height, age_range, gender_show;
     boolean show_me;
@@ -47,7 +57,34 @@ public class Users {
     public String getUserName() {
         return userName;
     }
+    public Task<String> getUserNameById(String userId) {
+        // Create a TaskCompletionSource
+        TaskCompletionSource<String> taskCompletionSource = new TaskCompletionSource<>();
 
+        // Fetch the user's data from the database
+        FirebaseDatabase.getInstance().getReference("Users").child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Users user = snapshot.getValue(Users.class);
+                if (user != null) {
+                    // If the user is found, set the result of the Task
+                    taskCompletionSource.setResult(user.getUserName());
+                } else {
+                    // If the user is not found, set the result to null
+                    taskCompletionSource.setResult(null);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // If an error occurred, set the exception of the Task
+                taskCompletionSource.setException(error.toException());
+            }
+        });
+
+        // Return the Task
+        return taskCompletionSource.getTask();
+    }
     public void setUserName(String userName) {
         this.userName = userName;
     }

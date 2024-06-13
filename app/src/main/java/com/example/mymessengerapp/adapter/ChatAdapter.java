@@ -14,6 +14,8 @@ import com.example.mymessengerapp.model.ChatMessage;
 import java.util.List;
 
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder> {
+    int ITEM_SEND = 1;
+    int ITEM_RECEIVER = 2;
     private List<ChatMessage> chatMessages;
 
     public ChatAdapter(List<ChatMessage> chatMessages) {
@@ -23,7 +25,12 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
     @NonNull
     @Override
     public ChatViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_message_item, parent, false);
+        View view;
+        if(viewType == ITEM_SEND){
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_message_item_sender, parent, false);
+        } else {
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_message_item_receiver, parent, false);
+        }
         return new ChatViewHolder(view);
     }
 
@@ -34,12 +41,12 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
 
         // Neu gui thi de hien thi ben layout send, khong thi nguoc lai
         if (chatMessage.isSent()) {
-            holder.sendLayout.setVisibility(View.VISIBLE);
-            holder.receiveLayout.setVisibility(View.GONE);
+//            holder.sendLayout.setVisibility(View.VISIBLE);
+//            holder.receiveLayout.setVisibility(View.GONE);
             holder.sendMessage.setText(chatMessage.getMessage());
         } else {
-            holder.receiveLayout.setVisibility(View.VISIBLE);
-            holder.sendLayout.setVisibility(View.GONE);
+//            holder.receiveLayout.setVisibility(View.VISIBLE);
+//            holder.sendLayout.setVisibility(View.GONE);
             holder.receiveMessage.setText(chatMessage.getMessage());
         }
     }

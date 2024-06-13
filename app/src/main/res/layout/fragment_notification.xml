@@ -10,12 +10,84 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <LinearLayout
+
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
             >
-            <include
-                layout="@layout/notification_item" />
+
+
+            <RelativeLayout
+                android:id="@+id/matching_requests"
+                android:layout_gravity="center_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:paddingStart="14dp"
+                >
+
+                <TextView
+                    android:id="@+id/matching_requests_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="Matching requests"
+                    android:textSize="@dimen/_16sdp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/badge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/holo_red_dark"
+                    android:layout_toEndOf="@id/matching_requests_text"
+                    android:text="(0)"
+                    android:textSize="@dimen/_16sdp"
+                    android:layout_centerVertical="true"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    />
+
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/requests_sent"
+                android:layout_gravity="center_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:paddingStart="14dp"
+                >
+
+                <TextView
+                    android:id="@+id/request_sent_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="Requests sent"
+                    android:textSize="@dimen/_16sdp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/sent_badge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/holo_red_dark"
+                    android:layout_toEndOf="@+id/request_sent_text"
+                    android:text="(0)"
+                    android:textSize="@dimen/_16sdp"
+                    android:layout_centerVertical="true"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    />
+
+            </RelativeLayout>
+<!--            <include-->
+<!--                layout="@layout/notification_item" />-->
         </LinearLayout>
+
+
+
+
+            <!--            <include-->
+            <!--                layout="@layout/notification_item" />-->
+
     </ScrollView>
 </FrameLayout>
