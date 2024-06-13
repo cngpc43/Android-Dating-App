@@ -63,7 +63,8 @@
             android:layout_height="match_parent"
             android:background="@drawable/rectangle_box"
             android:drawableStart="@drawable/baseline_person_outline_24"
-            android:drawablePadding="8dp" />
+            android:drawablePadding="8dp"
+            android:singleLine="true"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -71,7 +72,7 @@
         android:layout_width="360dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
-        android:hint="@string/enter_phone"
+        android:hint="@string/enter_email"
         android:inputType="textEmailAddress"
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
@@ -85,8 +86,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/rectangle_box"
-            android:drawableStart="@drawable/baseline_local_phone_24"
-            android:drawablePadding="8dp" />
+            android:drawableStart="@drawable/baseline_mail_outline_32"
+            android:drawablePadding="8dp"
+            android:singleLine="true"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout

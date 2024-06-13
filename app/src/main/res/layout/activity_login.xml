@@ -87,7 +87,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:ems="10"
-        android:hint="@string/enter_phone"
+        android:hint="@string/enter_email"
         android:inputType="textEmailAddress"
         app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
         app:layout_constraintHorizontal_bias="0.5"
@@ -99,8 +99,9 @@
             android:id="@+id/editTexLogEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:singleLine="true"
             android:background="@drawable/rectangle_box"
-            android:drawableStart="@drawable/baseline_local_phone_24"
+            android:drawableStart="@drawable/baseline_mail_outline_32"
             android:drawablePadding="8dp" />
     </com.google.android.material.textfield.TextInputLayout>
 

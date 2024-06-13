@@ -1,16 +1,21 @@
 package com.example.mymessengerapp.model;
 
+import com.google.android.gms.tasks.Task;
+
 public class ChatMessage {
-    private String message, imgUrl, imgType;
+    private String senderId, message, imgUrl, imgType;
     private boolean isSent;
+    ChatRoom chatRoom;
+    long timeStamp;
 
     public ChatMessage() {
 
     }
 
-    public ChatMessage(String message, boolean isSent) {
+    public ChatMessage(String message, long timeStamp, String senderId) {
         this.message = message;
-        this.isSent = isSent;
+        this.senderId = senderId;
+        this.timeStamp = timeStamp;
     }
 
     public String getMessage() {
@@ -19,6 +24,16 @@ public class ChatMessage {
 
     public boolean isSent() {
         return isSent;
+    }
+    public Task<String> getUserName() {
+        Users user = new Users();
+        return user.getUserNameById(senderId);
+    }
+    public String getLastMessage() {
+        return message;
+    }
+    public long getTimeStamp() {
+        return timeStamp;
     }
 
     public String getImgUrl() {

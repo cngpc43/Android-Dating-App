@@ -6,6 +6,8 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
+
+import com.example.mymessengerapp.model.ChatMessage;
 import com.google.android.material.search.SearchView;
 
 import androidx.fragment.app.Fragment;
@@ -46,7 +48,11 @@ public class ChatFragment extends Fragment {
         super.onCreate(savedInstanceState);
         database = FirebaseDatabase.getInstance();
         auth = FirebaseAuth.getInstance();
-        chatHomeAdapter = new ChatHomeAdapter(getContext(), new ArrayList<>(Arrays.asList("Chat 1", "Chat 2", "Chat 3")));
+        chatHomeAdapter = new ChatHomeAdapter(getContext(), new ArrayList<>(Arrays.asList(
+                new ChatMessage("Mas m",  100000, "1"),
+                new ChatMessage("Mas m",  100000, "2"),
+                new ChatMessage("Mas m",  100000, "3")
+        )));
     }
 
     @Override
@@ -72,7 +78,7 @@ public class ChatFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                chatHomeAdapter.filter(s.toString());
+//                chatHomeAdapter.filter(s.toString());
             }
 
             @Override

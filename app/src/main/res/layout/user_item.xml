@@ -91,7 +91,7 @@
                 android:orientation="horizontal">
 
                 <ImageButton
-                    android:id="@+id/not_like"
+                    android:id="@+id/dislike"
                     android:layout_width="70dp"
                     android:layout_height="70dp"
                     android:layout_marginEnd="70dp"
