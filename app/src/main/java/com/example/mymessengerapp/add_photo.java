@@ -62,6 +62,7 @@ public class add_photo extends AppCompatActivity {
     FirebaseAuth auth;
     DatabaseReference database_ref;
     StorageReference storage_ref;
+    ValueEventListener eventListener;
     int position = -1;
 
     @Override
@@ -84,7 +85,7 @@ public class add_photo extends AppCompatActivity {
         UserPhotoAdapter userPhotoAdapter = new UserPhotoAdapter(add_photo.this, photos);
         photo_gridview.setAdapter(userPhotoAdapter);
 
-        database_ref.addValueEventListener(new ValueEventListener() {
+        database_ref.addValueEventListener(eventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 photos.clear();
@@ -242,4 +243,12 @@ public class add_photo extends AppCompatActivity {
         addPhoto(position);
 
     } //onActivityResult
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (database_ref != null && eventListener != null) {
+            database_ref.removeEventListener(eventListener);
+        }
+    }
 }
