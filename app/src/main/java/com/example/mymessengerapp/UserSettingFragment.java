@@ -63,7 +63,7 @@ public class UserSettingFragment extends Fragment {
     RangeSlider age_range;
     LinearLayout account_settings, location, height, dob, add_photo;
     Spinner gender_spinner, sexual_spinner, gender_show_spinner;
-    TextView age_range_preview, location_preview, profile_username, profile_status, height_preview, dob_preview;
+    TextView age_range_preview, location_preview, profile_username, profile_status, height_preview, dob_preview, photo_count;
     EditText et_username, et_status;
     CircleImageView profile_pic, profile_pic_button;
     ImageButton edit_button, save_button;
@@ -108,6 +108,7 @@ public class UserSettingFragment extends Fragment {
         age_range = view.findViewById(R.id.age_range_slider);
         profile_username = view.findViewById(R.id.profile_username);
         profile_status = view.findViewById(R.id.profile_status);
+        photo_count = view.findViewById(R.id.photo_count);
         et_username = view.findViewById(R.id.et_username);
         et_status = view.findViewById(R.id.et_status);
         edit_button = view.findViewById(R.id.edit_button);
@@ -197,6 +198,9 @@ public class UserSettingFragment extends Fragment {
                 // dob
                 if (snapshot.child("dob").getValue(String.class) != null) {
                     dob_preview.setText(snapshot.child("dob").getValue(String.class));
+                }
+                if (snapshot.child("photos").hasChildren()) {
+                    photo_count.setText(String.valueOf((int)snapshot.child("photos").getChildrenCount()));
                 }
                 // profile_picture
                 if (snapshot.child("profilepic").getValue(String.class) != null) {

@@ -68,11 +68,6 @@ public class MainActivity extends AppCompatActivity {
 
         usersArrayList = new ArrayList<>();
 
-        if (auth.getCurrentUser() == null) {
-            Intent intent = new Intent(MainActivity.this, login.class);
-            startActivity(intent);
-            finish();
-        }
 
         if (getIntent() == null || getIntent().getStringExtra("fragment") == null) {
             selectHome();
@@ -91,9 +86,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 if (firebaseAuth.getCurrentUser() == null) {
-                    if (reference != null && valueEventListener != null) {
+                    /*if (reference != null && valueEventListener != null) {
                         reference.removeEventListener(valueEventListener);
-                    }
+                    }*/
                     Intent intent = new Intent(MainActivity.this, login.class);
                     startActivity(intent);
                     finish();
@@ -160,17 +155,17 @@ public class MainActivity extends AppCompatActivity {
             public void handleOnBackPressed() {
                 if (doubleBackToExitPressedOnce) {
                     finishAffinity();
+                } else {
+                    doubleBackToExitPressedOnce = true;
+                    Toast.makeText(MainActivity.this, "Please swipe BACK again to exit", Toast.LENGTH_SHORT).show();
+
+                    new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            doubleBackToExitPressedOnce=false;
+                        }
+                    }, 2000);
                 }
-
-                doubleBackToExitPressedOnce = true;
-                Toast.makeText(MainActivity.this, "Please swipe BACK again to exit", Toast.LENGTH_SHORT).show();
-
-                new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        doubleBackToExitPressedOnce=false;
-                    }
-                }, 2000);
             }
         });
     }

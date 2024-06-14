@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.mymessengerapp.adapter.UserAdapter;
 import com.example.mymessengerapp.model.Users;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -33,6 +34,7 @@ public class MainFragment extends Fragment {
     ValueEventListener valueEventListener;
     FirebaseAuth.AuthStateListener authStateListener;
     DatabaseReference reference;
+    ArrayList<String> declineList;
 
     public MainFragment() {
     }
@@ -43,6 +45,7 @@ public class MainFragment extends Fragment {
         database = FirebaseDatabase.getInstance();
         auth = FirebaseAuth.getInstance();
         usersArrayList = new ArrayList<>();
+        declineList = new ArrayList<>();
         adapter = new UserAdapter( getContext(), usersArrayList);
     }
 
@@ -79,15 +82,23 @@ public class MainFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 usersArrayList.clear();
                 String currentUserId = auth.getCurrentUser().getUid();
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    Users users = dataSnapshot.getValue(Users.class);
-                    if (users != null) {
-                        if(!users.getUserId().equals(currentUserId) && users.isShow_me()) {
-                            usersArrayList.add(users);
+                FirebaseDatabase.getInstance().getReference().child("DeclineList/" + auth.getCurrentUser().getUid()).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+                    @Override
+                    public void onSuccess(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()) {
+                            declineList.add(dataSnapshot1.getKey());
                         }
+                        for (DataSnapshot dataSnapshot2 : snapshot.getChildren()) {
+                            Users users = dataSnapshot2.getValue(Users.class);
+                            if (users != null) {
+                                if(!users.getUserId().equals(currentUserId) && users.isShow_me() && !declineList.contains(users.getUserId())) {
+                                    usersArrayList.add(users);
+                                }
+                            }
+                        }
+                        adapter.notifyDataSetChanged();
                     }
-                }
-                adapter.notifyDataSetChanged();
+                });
             }
 
             @Override

@@ -23,13 +23,18 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class NotificationFragment extends Fragment {
     FirebaseAuth auth;
     UserAdapter adapter;
+    RelativeLayout matchingRequests, requestsSent;
+    TextView badge, sent_badge;
     FirebaseDatabase database;
     ArrayList<Users> usersArrayList;
     Context context;
+    String currentUserId;
+    int matching_request_count = 0, request_sent_count = 0;
 
     public NotificationFragment(Context context) {
         this.context = context;
@@ -47,29 +52,35 @@ public class NotificationFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_notification, container, false);
-        TextView badge = view.findViewById(R.id.badge);
-        RelativeLayout matchingRequests = view.findViewById(R.id.matching_requests);
-        RelativeLayout requestsSent = view.findViewById(R.id.requests_sent);
-        String currentUserId = auth.getCurrentUser().getUid();
+
+        badge = view.findViewById(R.id.badge);
+        sent_badge = view.findViewById(R.id.sent_badge);
+        matchingRequests = view.findViewById(R.id.matching_requests);
+        requestsSent = view.findViewById(R.id.requests_sent);
+
+        currentUserId = auth.getCurrentUser().getUid();
         DatabaseReference matchRequestsRef = database.getReference("MatchRequests").child(currentUserId);
+
 
         database.getReference("MatchRequests").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                int counter = 0;
-                String currentUserId = auth.getCurrentUser().getUid();
+                matching_request_count = 0;
+                request_sent_count = 0;
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    if (!dataSnapshot.getKey().equals(currentUserId)) {
-                        DataSnapshot currentUserSnapshot = dataSnapshot.child(currentUserId);
-                        if (currentUserSnapshot.exists()) {
-//                            String status = currentUserSnapshot.getValue(String.class);
-//                            if (status.equals("pending")) {
-//                                counter++;
-//                            }
+                    if (dataSnapshot.child("recipientId").getValue(String.class) != null
+                            && dataSnapshot.child("requesterId").getValue(String.class) != null
+                            && dataSnapshot.child("status").getValue(String.class) != null) {
+                        if (dataSnapshot.child("recipientId").getValue(String.class).equals(currentUserId) && dataSnapshot.child("status").getValue(String.class).equals("pending")) {
+                            matching_request_count++;
+                        }
+                        if (dataSnapshot.child("requesterId").getValue(String.class).equals(currentUserId) && dataSnapshot.child("status").getValue(String.class).equals("pending")) {
+                            request_sent_count++;
                         }
                     }
                 }
-                badge.setText("(" + counter + ")");
+                badge.setText("(" + matching_request_count + ")");
+                sent_badge.setText("(" + request_sent_count + ")");
             }
 
             @Override

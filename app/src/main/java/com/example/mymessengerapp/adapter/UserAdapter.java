@@ -12,13 +12,19 @@ import com.example.mymessengerapp.MainActivity;
 import com.example.mymessengerapp.R;
 import com.example.mymessengerapp.model.ChatRoom;
 import com.example.mymessengerapp.model.Users;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -28,6 +34,7 @@ import androidx.recyclerview.widget.RecyclerView;
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.viewholder> {
     Context mainActivity;
     ArrayList<Users> usersArrayList;
+    DatabaseReference reference;
 
     public UserAdapter(Context mainActivity, ArrayList<Users> usersArrayList) {
         this.mainActivity = mainActivity;
@@ -38,6 +45,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.viewholder> {
     @Override
     public UserAdapter.viewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(mainActivity).inflate(R.layout.user_item, parent, false);
+        reference = FirebaseDatabase.getInstance().getReference().child("MatchRequests");
         return new viewholder(view);
     }
 
@@ -74,53 +82,21 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.viewholder> {
             public void onClick(View v) {
                 String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
                 String likedUserId = usersArrayList.get(holder.getAdapterPosition()).getUserId();
-                FirebaseDatabase.getInstance().getReference("MatchRequests")
-                        .child(currentUserId)
-                        .child(likedUserId)
-                        .setValue("pending");
-                Toast.makeText(mainActivity, "Matching request sent", Toast.LENGTH_SHORT).show();
-                holder.likeButton.setEnabled(false);
-                holder.likeButton.setImageResource(R.drawable.wait);
-                holder.likeButton.setBackgroundColor(mainActivity.getResources().getColor(R.color.grey));
-                FirebaseDatabase.getInstance().getReference("MatchRequests")
-                        .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                        .addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-
-                                    if (dataSnapshot.getValue().equals("accepted")) {
-                                        FirebaseDatabase.getInstance().getReference("MatchRequests")
-                                                .child(likedUserId)
-                                                .child(currentUserId)
-                                                .setValue("true");
-                                        String chatRoomId = FirebaseDatabase.getInstance().getReference("ChatRooms").push().getKey();
-                                        FirebaseDatabase.getInstance().getReference("ChatRooms")
-                                                .child(chatRoomId)
-                                                .setValue(new ChatRoom(currentUserId, likedUserId));
-
-                                        FirebaseDatabase.getInstance().getReference("ChatRooms")
-                                                .child(chatRoomId)
-                                                .addValueEventListener(new ValueEventListener() {
-                                                    @Override
-                                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                                        // Update chat UI
-                                                    }
-
-                                                    @Override
-                                                    public void onCancelled(@NonNull DatabaseError error) {
-
-                                                    }
-                                                });
-                                    }
-                                }
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
-
-                            }
-                        });
+                String matchRequestId = reference.push().getKey();
+                Map<String, Object> matchRequestData = new HashMap<>();
+                matchRequestData.put("requesterId", currentUserId);
+                matchRequestData.put("recipientId", likedUserId);
+                matchRequestData.put("timestamp", ServerValue.TIMESTAMP); // Use server timestamp
+                matchRequestData.put("status", "pending");
+                reference.child(matchRequestId).setValue(matchRequestData).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Toast.makeText(mainActivity, "Matching request sent", Toast.LENGTH_SHORT).show();
+                        holder.likeButton.setEnabled(false);
+                        holder.likeButton.setImageResource(R.drawable.wait);
+                        holder.likeButton.setBackgroundColor(mainActivity.getResources().getColor(R.color.grey));
+                    }
+                });
 
 
             }
@@ -130,9 +106,13 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.viewholder> {
             public void onClick(View v) {
                 String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
                 String dislikedUserId = usersArrayList.get(holder.getAdapterPosition()).getUserId();
-                FirebaseDatabase.getInstance().getReference("MatchRequests")
+                FirebaseDatabase.getInstance().getReference("DeclineList")
                         .child(currentUserId)
                         .child(dislikedUserId)
+                        .setValue("declined");
+                FirebaseDatabase.getInstance().getReference("DeclineList")
+                        .child(dislikedUserId)
+                        .child(currentUserId)
                         .setValue("declined");
                 Toast.makeText(mainActivity, "Request Declined", Toast.LENGTH_SHORT).show();
                 holder.dislikeButton.setEnabled(false);
