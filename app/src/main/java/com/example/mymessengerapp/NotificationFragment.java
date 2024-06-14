@@ -62,10 +62,10 @@ public class NotificationFragment extends Fragment {
                     if (!dataSnapshot.getKey().equals(currentUserId)) {
                         DataSnapshot currentUserSnapshot = dataSnapshot.child(currentUserId);
                         if (currentUserSnapshot.exists()) {
-//                            String status = currentUserSnapshot.getValue(String.class);
-//                            if (status.equals("pending")) {
-//                                counter++;
-//                            }
+                            String status = currentUserSnapshot.getValue(String.class);
+                            if (status.equals("pending")) {
+                                counter++;
+                            }
                         }
                     }
                 }

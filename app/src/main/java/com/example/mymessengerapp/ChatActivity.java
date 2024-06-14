@@ -93,8 +93,6 @@ public class ChatActivity extends AppCompatActivity {
 
         // Khoi tao chat message - day la hard data, thay bang firebase sau
         chatMessages = new ArrayList<ChatMessage>();
-        chatMessages.add(new ChatMessage("Hello, how are you ?", 0, "1"));
-        chatMessages.add(new ChatMessage("I am fine", 0, "2"));
 
         // Gui chat message vo recyclerView
         chatAdapter = new ChatAdapter(chatMessages);

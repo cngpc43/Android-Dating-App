@@ -7,15 +7,16 @@ public class ChatMessage {
     private boolean isSent;
     ChatRoom chatRoom;
     long timeStamp;
-
+    boolean isLastMessage;
     public ChatMessage() {
 
     }
 
-    public ChatMessage(String message, long timeStamp, String senderId) {
+    public ChatMessage(String message, long timeStamp, String senderId, boolean isLastMessage) {
         this.message = message;
         this.senderId = senderId;
         this.timeStamp = timeStamp;
+        this.isLastMessage = true;
     }
 
     public String getMessage() {

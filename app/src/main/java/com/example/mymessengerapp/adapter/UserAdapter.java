@@ -82,47 +82,47 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.viewholder> {
                 holder.likeButton.setEnabled(false);
                 holder.likeButton.setImageResource(R.drawable.wait);
                 holder.likeButton.setBackgroundColor(mainActivity.getResources().getColor(R.color.grey));
-                FirebaseDatabase.getInstance().getReference("MatchRequests")
-                        .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                        .addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-
-                                    if (dataSnapshot.getValue().equals("accepted")) {
-                                        FirebaseDatabase.getInstance().getReference("MatchRequests")
-                                                .child(likedUserId)
-                                                .child(currentUserId)
-                                                .setValue(true);
-                                        String chatRoomId = FirebaseDatabase.getInstance().getReference("ChatRooms").push().getKey();
-                                        FirebaseDatabase.getInstance().getReference("ChatRooms")
-                                                .child(chatRoomId)
-                                                .setValue(new ChatRoom(currentUserId, likedUserId));
-
-                                        FirebaseDatabase.getInstance().getReference("ChatRooms")
-                                                .child(chatRoomId)
-                                                .addValueEventListener(new ValueEventListener() {
-                                                    @Override
-                                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                                        // Update chat UI
-                                                    }
-
-                                                    @Override
-                                                    public void onCancelled(@NonNull DatabaseError error) {
-
-                                                    }
-                                                });
-                                    }
-                                }
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
-
-                            }
-                        });
-
-
+//                FirebaseDatabase.getInstance().getReference("MatchRequests")
+//                        .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+//                        .addValueEventListener(new ValueEventListener() {
+//                            @Override
+//                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+//
+//                                    if (dataSnapshot.getValue().equals("accepted")) {
+//                                        FirebaseDatabase.getInstance().getReference("MatchRequests")
+//                                                .child(likedUserId)
+//                                                .child(currentUserId)
+//                                                .setValue(true);
+//                                        String chatRoomId = FirebaseDatabase.getInstance().getReference("ChatRooms").push().getKey();
+//                                        FirebaseDatabase.getInstance().getReference("ChatRooms")
+//                                                .child(chatRoomId)
+//                                                .setValue(new ChatRoom(currentUserId, likedUserId));
+//
+//                                        FirebaseDatabase.getInstance().getReference("ChatRooms")
+//                                                .child(chatRoomId)
+//                                                .addValueEventListener(new ValueEventListener() {
+//                                                    @Override
+//                                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                                                        // Update chat UI
+//                                                    }
+//
+//                                                    @Override
+//                                                    public void onCancelled(@NonNull DatabaseError error) {
+//
+//                                                    }
+//                                                });
+//                                    }
+//                                }
+//                            }
+//
+//                            @Override
+//                            public void onCancelled(@NonNull DatabaseError error) {
+//
+//                            }
+//                        });
+//
+//
             }
         });
         holder.dislikeButton.setOnClickListener(new View.OnClickListener() {
