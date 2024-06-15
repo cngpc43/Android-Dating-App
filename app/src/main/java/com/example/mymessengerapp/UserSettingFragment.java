@@ -8,9 +8,11 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +28,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -52,6 +55,10 @@ import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.Year;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -172,15 +179,15 @@ public class UserSettingFragment extends Fragment {
                     sexual_spinner.setSelection(sexual_position);
                 }
                 // age_range
-                if (snapshot.child("age_range").getValue(String.class) != null) {
+                if (snapshot.child("age_range").getValue(String.class) == null) {
+                    age_range.setValues(18f, 24f);
+                    age_range_preview.setText("18 - 24");
+                } else {
                     String age_range_string = snapshot.child("age_range").getValue(String.class);
                     float age_valueFrom = Float.valueOf(age_range_string.substring(0, age_range_string.indexOf('-')));
                     float age_valueTo = Float.valueOf(age_range_string.substring(age_range_string.indexOf('-') + 1, age_range_string.length()));
                     age_range.setValues(age_valueFrom, age_valueTo);
                     age_range_preview.setText(age_range.getValues().get(0).intValue() + "-" + age_range.getValues().get(1).intValue());
-                } else {
-                    age_range.setValues(18f, 24f);
-                    age_range_preview.setText("18 - 24");
                 }
                 // username
                 if (snapshot.child("userName").getValue(String.class) != null)
@@ -203,10 +210,7 @@ public class UserSettingFragment extends Fragment {
                     photo_count.setText(String.valueOf((int)snapshot.child("photos").getChildrenCount()));
                 }
                 // profile_picture
-                if (snapshot.child("profilepic").getValue(String.class) != null) {
-                    Picasso.get().load(snapshot.child("profilepic").getValue(String.class)).into(profile_pic);
-                    Picasso.get().load(snapshot.child("profilepic").getValue(String.class)).into(profile_pic_button);
-                } else {
+                if (snapshot.child("profilepic").getValue(String.class) == null) {
                     FirebaseStorage.getInstance().getReference().child("default.png").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
                         public void onSuccess(Uri uri) {
@@ -215,6 +219,9 @@ public class UserSettingFragment extends Fragment {
                             reference.child("profilepic").setValue(uri.toString());
                         }
                     });
+                } else {
+                    Picasso.get().load(snapshot.child("profilepic").getValue(String.class)).into(profile_pic);
+                    Picasso.get().load(snapshot.child("profilepic").getValue(String.class)).into(profile_pic_button);
                 }
             }
             @Override
@@ -581,6 +588,14 @@ public class UserSettingFragment extends Fragment {
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.main_frame, fragment);
         transaction.commit();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (reference != null && listener != null) {
+            reference.removeEventListener(listener);
+        }
     }
 
 }

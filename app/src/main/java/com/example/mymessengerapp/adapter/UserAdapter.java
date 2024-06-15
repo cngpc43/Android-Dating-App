@@ -35,6 +35,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.viewholder> {
     Context mainActivity;
     ArrayList<Users> usersArrayList;
     DatabaseReference reference;
+    Boolean hasSentRequest = false;
+    String matchRequestId;
 
     public UserAdapter(Context mainActivity, ArrayList<Users> usersArrayList) {
         this.mainActivity = mainActivity;
@@ -55,19 +57,24 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.viewholder> {
         Users users = usersArrayList.get(position);
         holder.username.setText(users.getUserName());
         holder.userstatus.setText(users.getStatus());
-        FirebaseDatabase.getInstance().getReference("MatchRequests")
-                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                .child(users.getUserId())
-                .addListenerForSingleValueEvent(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference("MatchRequests").addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if (snapshot.exists() && snapshot.getValue(String.class).equals("pending")) {
-                            holder.likeButton.setEnabled(false);
-                            holder.likeButton.setImageResource(R.drawable.wait);
-                            holder.likeButton.setBackgroundColor(mainActivity.getResources().getColor(R.color.grey));
+                        hasSentRequest = false;
+                        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                            if (dataSnapshot.child("status").getValue(String.class) != null && dataSnapshot.child("requesterId").getValue(String.class) != null
+                                    && dataSnapshot.child("recipientId").getValue(String.class) != null) {
+                                // if current user has received request from the user on RecyclerView already
+                                if (dataSnapshot.child("recipientId").getValue(String.class).equals(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                        && dataSnapshot.child("requesterId").getValue(String.class).equals(usersArrayList.get(holder.getAdapterPosition()).getUserId())
+                                        && dataSnapshot.child("status").getValue(String.class).equals("pending")) {
+                                    hasSentRequest = true;
+                                    matchRequestId = dataSnapshot.getKey();
+                                    break;
+                                }
+                            }
                         }
                     }
-
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
                         // Handle error here
@@ -80,48 +87,65 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.viewholder> {
         holder.likeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                String likedUserId = usersArrayList.get(holder.getAdapterPosition()).getUserId();
-                String matchRequestId = reference.push().getKey();
+                String currentUserId;
+                String likedUserId;
+                String likedUserName = usersArrayList.get(holder.getAdapterPosition()).getUserName();
+                Boolean temp_hasSentRequest = hasSentRequest;
                 Map<String, Object> matchRequestData = new HashMap<>();
+                if (temp_hasSentRequest) {
+                    matchRequestData.put("status", "accepted");
+                    currentUserId = usersArrayList.get(holder.getAdapterPosition()).getUserId();
+                    likedUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                }
+                else {
+                    matchRequestData.put("status", "pending");
+                    matchRequestId = reference.push().getKey();
+                    currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                    likedUserId = usersArrayList.get(holder.getAdapterPosition()).getUserId();
+                }
                 matchRequestData.put("requesterId", currentUserId);
                 matchRequestData.put("recipientId", likedUserId);
                 matchRequestData.put("timestamp", ServerValue.TIMESTAMP); // Use server timestamp
-                matchRequestData.put("status", "pending");
                 reference.child(matchRequestId).setValue(matchRequestData).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
-                        Toast.makeText(mainActivity, "Matching request sent", Toast.LENGTH_SHORT).show();
-                        holder.likeButton.setEnabled(false);
-                        holder.likeButton.setImageResource(R.drawable.wait);
-                        holder.likeButton.setBackgroundColor(mainActivity.getResources().getColor(R.color.grey));
+                        if (temp_hasSentRequest) {
+                            Toast.makeText(mainActivity, "You and " + likedUserName + " are now matched", Toast.LENGTH_SHORT).show();
+                            // insert code for creating chat room here
+                        }
+                        else
+                            Toast.makeText(mainActivity, "Matching request sent to " + likedUserName, Toast.LENGTH_SHORT).show();
                     }
                 });
-
 
             }
         });
         holder.dislikeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                String dislikedUserId = usersArrayList.get(holder.getAdapterPosition()).getUserId();
-                FirebaseDatabase.getInstance().getReference("DeclineList")
-                        .child(currentUserId)
-                        .child(dislikedUserId)
-                        .setValue("declined");
-                FirebaseDatabase.getInstance().getReference("DeclineList")
-                        .child(dislikedUserId)
-                        .child(currentUserId)
-                        .setValue("declined");
-                Toast.makeText(mainActivity, "Request Declined", Toast.LENGTH_SHORT).show();
-                holder.dislikeButton.setEnabled(false);
-                holder.dislikeButton.setImageResource(R.drawable.wait);
-                holder.dislikeButton.setBackgroundColor(mainActivity.getResources().getColor(R.color.grey));
-                // Remove from the list
-                usersArrayList.remove(holder.getAdapterPosition());
-                notifyItemRemoved(holder.getAdapterPosition());
-                notifyItemRangeChanged(holder.getAdapterPosition(), usersArrayList.size());
+                String currentUserId;
+                String dislikedUserId;
+                Boolean temp_hasSentRequest = hasSentRequest;
+                Map<String, Object> matchRequestData = new HashMap<>();
+                if (temp_hasSentRequest) {
+                    currentUserId = usersArrayList.get(holder.getAdapterPosition()).getUserId();
+                    dislikedUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                }
+                else {
+                    matchRequestId = reference.push().getKey();
+                    currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                    dislikedUserId = usersArrayList.get(holder.getAdapterPosition()).getUserId();
+                }
+                matchRequestData.put("requesterId", currentUserId);
+                matchRequestData.put("recipientId", dislikedUserId);
+                matchRequestData.put("timestamp", ServerValue.TIMESTAMP); // Use server timestamp
+                matchRequestData.put("status", "declined");
+                reference.child(matchRequestId).setValue(matchRequestData).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Toast.makeText(mainActivity, "Suggested user removed", Toast.LENGTH_SHORT).show();
+                    }
+                });
 
             }
         });

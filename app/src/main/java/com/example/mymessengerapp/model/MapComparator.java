@@ -20,7 +20,7 @@ public class MapComparator implements Comparator<Map<String, Object>> {
             if (first.get(key) != null && second.get(key) != null) {
                 Long firstValue = (Long) first.get(key);
                 Long secondValue = (Long) second.get(key);
-                return firstValue.compareTo(secondValue);
+                return secondValue.compareTo(firstValue);
             }
         }
         return 0;
