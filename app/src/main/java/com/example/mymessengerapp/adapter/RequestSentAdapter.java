@@ -59,7 +59,7 @@ public class RequestSentAdapter extends RecyclerView.Adapter<RequestSentAdapter.
             holder.time_sent.setText(TimeUnit.MILLISECONDS.toMinutes(difference) + "m");
         else if (TimeUnit.MILLISECONDS.toHours(difference) >= 1 && TimeUnit.MILLISECONDS.toHours(difference) < 24)
             holder.time_sent.setText(TimeUnit.MILLISECONDS.toHours(difference) + "h");
-        else if (TimeUnit.MILLISECONDS.toDays(difference) >= 1)
+        else
             holder.time_sent.setText(TimeUnit.MILLISECONDS.toDays(difference) + "d");
 
         Log.d("RequestSentAdapter", "Date: " + sdf.format(date));
