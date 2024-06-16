@@ -104,10 +104,16 @@ public class MainFragment extends Fragment {
                                 dataSnapshot.child("phone").getValue(String.class), dataSnapshot.child("location").getValue(String.class),
                                 dataSnapshot.child("sexual_orientation").getValue(String.class), dataSnapshot.child("height").getValue(String.class),
                                 dataSnapshot.child("age_range").getValue(String.class), dataSnapshot.child("gender_show").getValue(String.class),
-                                dataSnapshot.child("show_me").getValue(Boolean.class), 0);
+                                dataSnapshot.child("show_me").getValue(Boolean.class), new ArrayList<String>());
 
-                        if (dataSnapshot.hasChild("photos"))
-                            currentUser.setNum_of_photo((int) dataSnapshot.child("photos").getChildrenCount());
+                        if (dataSnapshot.child("photos").hasChildren()) {
+                            ArrayList<String> arrayList = new ArrayList<String>();
+                            for (DataSnapshot photoSnapshot : dataSnapshot.child("photos").getChildren()) {
+                                if (photoSnapshot.getValue(String.class) != null)
+                                    arrayList.add(photoSnapshot.getValue(String.class));
+                            }
+                            currentUser.setPhotos(arrayList);
+                        }
 
                         if (!checkForAccountSetup(currentUser)) {
                             FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
@@ -144,9 +150,15 @@ public class MainFragment extends Fragment {
                                                 dataSnapshot2.child("phone").getValue(String.class), dataSnapshot2.child("location").getValue(String.class),
                                                 dataSnapshot2.child("sexual_orientation").getValue(String.class), dataSnapshot2.child("height").getValue(String.class),
                                                 dataSnapshot2.child("age_range").getValue(String.class), dataSnapshot2.child("gender_show").getValue(String.class),
-                                                dataSnapshot2.child("show_me").getValue(Boolean.class), 0);
-                                        if (dataSnapshot2.hasChild("photos"))
-                                            users.setNum_of_photo((int) dataSnapshot.child("photos").getChildrenCount());
+                                                dataSnapshot2.child("show_me").getValue(Boolean.class), new ArrayList<String>());
+                                        if (dataSnapshot2.child("photos").hasChildren()) {
+                                            ArrayList<String> arrayList = new ArrayList<String>();
+                                            for (DataSnapshot photoSnapshot : dataSnapshot2.child("photos").getChildren()) {
+                                                if (photoSnapshot.getValue(String.class) != null)
+                                                    arrayList.add(photoSnapshot.getValue(String.class));
+                                            }
+                                            users.setPhotos(arrayList);
+                                        }
                                         if (users != null) {
                                             if (!users.getUserId().equals(currentUserId) && users.isShow_me() && !requestList.contains(users.getUserId()) && checkForAccountSetup(users)) {
                                                 // current user age range
@@ -189,7 +201,7 @@ public class MainFragment extends Fragment {
             return false;
         if (user.getGender() == null || user.getGender().equals("") || user.getGender().equals("none"))
             return false;
-        if (user.getNum_of_photo() <= 0)
+        if (user.getPhotos().size() <= 0)
             return false;
         return true;
     }

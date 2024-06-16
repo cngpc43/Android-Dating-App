@@ -1,18 +1,24 @@
 package com.example.mymessengerapp.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageSwitcher;
 import android.widget.TextView;
 
 import com.example.mymessengerapp.MainActivity;
 import com.example.mymessengerapp.R;
 import com.example.mymessengerapp.model.ChatRoom;
+import com.example.mymessengerapp.model.MyImageSwitcher;
 import com.example.mymessengerapp.model.Users;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -20,6 +26,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -30,9 +37,12 @@ import java.util.Map;
 
 import android.widget.ImageView;
 import android.widget.Toast;
+import android.widget.ViewSwitcher;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.viewholder> {
     Context mainActivity;
@@ -51,15 +61,24 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.viewholder> {
     public UserAdapter.viewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(mainActivity).inflate(R.layout.user_item, parent, false);
         reference = FirebaseDatabase.getInstance().getReference().child("MatchRequests");
+
         return new viewholder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull UserAdapter.viewholder holder, int position) {
-
+    public void onBindViewHolder(@NonNull UserAdapter.viewholder holder, @SuppressLint("RecyclerView") int position) {
+        final int[] currentIndex = {0};
+        ArrayList<String> imageList = usersArrayList.get(position).getPhotos();
         Users users = usersArrayList.get(position);
         holder.username.setText(users.getUserName());
         holder.userstatus.setText(users.getStatus());
+        String profilepic = users.getProfilepic();
+        if (profilepic != null) {
+            Picasso.get().load(profilepic).into(holder.profile_pic);
+        }
+
+        holder.userimg.setImageUrl(imageList.get(currentIndex[0]));
+
         FirebaseDatabase.getInstance().getReference("MatchRequests").addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -83,10 +102,34 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.viewholder> {
                         // Handle error here
                     }
                 });
-        String profilepic = users.getProfilepic();
-        if (profilepic != null) {
+        holder.left_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (currentIndex[0] > 0) {
+                    // setting animation to swipe image from right to left
+                    holder.userimg.setInAnimation(mainActivity.getApplicationContext(),R.anim.from_left);
+                    holder.userimg.setOutAnimation(mainActivity.getApplicationContext(),R.anim.to_right);
+                    currentIndex[0]--;
 
-        }
+                    holder.userimg.setImageUrl(imageList.get(currentIndex[0]));
+                }
+            }
+        });
+
+        holder.right_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (currentIndex[0] < imageList.size() - 1) {
+                    // setting animation to swipe image from left to right
+                    holder.userimg.setInAnimation(mainActivity.getApplicationContext(), R.anim.from_right);
+                    holder.userimg.setOutAnimation(mainActivity.getApplicationContext(),R.anim.to_left);
+                    currentIndex[0]++;
+
+                    holder.userimg.setImageUrl(imageList.get(currentIndex[0]));
+                }
+            }
+        });
+
         holder.likeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -153,7 +196,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.viewholder> {
 
             }
         });
-//        Picasso.get().load(users.profilepic).into(holder.userimg);
+
     }
 
     @Override
@@ -162,18 +205,29 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.viewholder> {
     }
 
     public class viewholder extends RecyclerView.ViewHolder {
-        ImageView userimg;
-        TextView username;
-        TextView userstatus;
-        ImageButton likeButton;
-        ImageButton dislikeButton;
+        MyImageSwitcher userimg;
+        CircleImageView profile_pic;
+        TextView username, userstatus;
+        ImageButton likeButton, dislikeButton, left_button, right_button;
+
         public viewholder(@NonNull View itemView) {
             super(itemView);
             userimg = itemView.findViewById(R.id.userimg);
+            profile_pic = itemView.findViewById(R.id.profile_pic);
             username = itemView.findViewById(R.id.username);
             userstatus = itemView.findViewById(R.id.userstatus);
             likeButton = itemView.findViewById(R.id.like);
             dislikeButton = itemView.findViewById(R.id.dislike);
+            left_button = itemView.findViewById(R.id.left_button);
+            right_button = itemView.findViewById(R.id.right_button);
+            userimg.setFactory(new ViewSwitcher.ViewFactory() {
+                public View makeView() {
+                    ImageView myView = new ImageView(mainActivity.getApplicationContext());
+                    myView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                    myView.setLayoutParams(new ImageSwitcher.LayoutParams(userimg.getLayoutParams()));
+                    return myView;
+                }
+            });
         }
     }
 }

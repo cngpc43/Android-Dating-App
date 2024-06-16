@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         }
         database = FirebaseDatabase.getInstance();
         auth = FirebaseAuth.getInstance();
-        reference = database.getReference().child("user");
+
 
         user = findViewById(R.id.user);
         message = findViewById(R.id.message);
@@ -66,7 +66,6 @@ public class MainActivity extends AppCompatActivity {
         user_selected = findViewById(R.id.user_selected);
         title = findViewById(R.id.title);
 
-        usersArrayList = new ArrayList<>();
 
 
         if (getIntent() == null || getIntent().getStringExtra("fragment") == null) {
@@ -93,38 +92,6 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 }
-            }
-        });
-
-        reference.addValueEventListener(valueEventListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                usersArrayList.clear();
-                String currentUserId = auth.getCurrentUser().getUid();
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    Users users = new Users(dataSnapshot.child("userId").getValue(String.class), dataSnapshot.child("userName").getValue(String.class),
-                            dataSnapshot.child("mail").getValue(String.class), dataSnapshot.child("password").getValue(String.class),
-                            dataSnapshot.child("profilepic").getValue(String.class), dataSnapshot.child("status").getValue(String.class),
-                            dataSnapshot.child("gender").getValue(String.class), dataSnapshot.child("dob").getValue(String.class),
-                            dataSnapshot.child("phone").getValue(String.class), dataSnapshot.child("location").getValue(String.class),
-                            dataSnapshot.child("sexual_orientation").getValue(String.class), dataSnapshot.child("height").getValue(String.class),
-                            dataSnapshot.child("age_range").getValue(String.class), dataSnapshot.child("gender_show").getValue(String.class),
-                            dataSnapshot.child("show_me").getValue(Boolean.class), 0);
-                    if (dataSnapshot.hasChild("photos"))
-                        users.setNum_of_photo((int) dataSnapshot.child("photos").getChildrenCount());
-                    if (users != null) {
-                        if (!users.getUserId().equals(currentUserId)) {
-                            usersArrayList.add(users);
-                        }
-                    }
-                }
-                adapter = new UserAdapter(MainActivity.this, usersArrayList);
-                adapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
 
