@@ -27,9 +27,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
+import java.sql.Time;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 
 
 public class MatchingRequestsFragment extends Fragment {
@@ -76,6 +80,7 @@ public class MatchingRequestsFragment extends Fragment {
                             GenericTypeIndicator<HashMap<String, Object>> to = new GenericTypeIndicator<HashMap<String, Object>>() {};
                             HashMap<String, Object> hashMap = dataSnapshot.getValue(to);
                             hashMap.put("requestId", dataSnapshot.getKey());
+
                             if (hashMap != null)
                                 matchingItems.add(hashMap);
                         }

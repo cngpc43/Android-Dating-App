@@ -23,8 +23,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
 import com.squareup.picasso.Picasso;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -45,6 +48,21 @@ public class RequestSentAdapter extends RecyclerView.Adapter<RequestSentAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull RequestSentAdapter.viewholder holder, @SuppressLint("RecyclerView") int position) {
+        Long timestamp = (Long) requestSent.get(position).get("timestamp");
+        Date date = new Date(timestamp);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy HH:mm:ss");
+        Date currentDate = new Date();
+        Long difference = currentDate.getTime() - date.getTime();
+        if (TimeUnit.MILLISECONDS.toSeconds(difference) < 60)
+            holder.time_sent.setText("Just now");
+        else if (TimeUnit.MILLISECONDS.toMinutes(difference) >= 1 && TimeUnit.MILLISECONDS.toMinutes(difference) < 60)
+            holder.time_sent.setText(TimeUnit.MILLISECONDS.toMinutes(difference) + "m");
+        else if (TimeUnit.MILLISECONDS.toHours(difference) >= 1 && TimeUnit.MILLISECONDS.toHours(difference) < 24)
+            holder.time_sent.setText(TimeUnit.MILLISECONDS.toHours(difference) + "h");
+        else if (TimeUnit.MILLISECONDS.toDays(difference) >= 1)
+            holder.time_sent.setText(TimeUnit.MILLISECONDS.toDays(difference) + "d");
+
+        Log.d("RequestSentAdapter", "Date: " + sdf.format(date));
         String userId = requestSent.get(position).get("recipientId").toString();
         Log.d("RequestSentAdapter", "Binding user ID: " + userId);
         FirebaseDatabase.getInstance().getReference().child("user/" + userId).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {

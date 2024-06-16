@@ -21,7 +21,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -106,6 +109,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.viewholder> {
                 matchRequestData.put("requesterId", currentUserId);
                 matchRequestData.put("recipientId", likedUserId);
                 matchRequestData.put("timestamp", ServerValue.TIMESTAMP); // Use server timestamp
+
                 reference.child(matchRequestId).setValue(matchRequestData).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
