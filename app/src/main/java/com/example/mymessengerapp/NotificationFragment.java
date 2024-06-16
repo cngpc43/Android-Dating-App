@@ -29,7 +29,7 @@ public class NotificationFragment extends Fragment {
     FirebaseAuth auth;
     UserAdapter adapter;
     RelativeLayout matchingRequests, requestsSent;
-    TextView badge, sent_badge;
+    TextView badge, sent_badge, title;
     FirebaseDatabase database;
     ArrayList<Users> usersArrayList;
     Context context;
@@ -57,6 +57,9 @@ public class NotificationFragment extends Fragment {
         sent_badge = view.findViewById(R.id.sent_badge);
         matchingRequests = view.findViewById(R.id.matching_requests);
         requestsSent = view.findViewById(R.id.requests_sent);
+        title = getActivity().findViewById(R.id.title);
+
+        title.setText("Notifications");
 
         currentUserId = auth.getCurrentUser().getUid();
         DatabaseReference matchRequestsRef = database.getReference("MatchRequests").child(currentUserId);

@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.mymessengerapp.adapter.MatchingRequestAdapter;
 import com.example.mymessengerapp.adapter.RequestSentAdapter;
@@ -33,7 +34,7 @@ import java.util.Map;
 
 public class RequestsSentFragment extends Fragment {
 
-
+    TextView title;
     FirebaseAuth auth;
     RecyclerView matchingRequestsRecyclerView;
     FirebaseDatabase database;
@@ -58,6 +59,8 @@ public class RequestsSentFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_requests_sent, container, false);
         matchingRequestsRecyclerView = view.findViewById(R.id.requests_sent_recycler_view);
+        title = getActivity().findViewById(R.id.title);
+        title.setText("Requests Sent");
         matchingRequestsRecyclerView.setHasFixedSize(true);
         matchingRequestsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 

@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mymessengerapp.adapter.MatchingRequestAdapter;
@@ -39,6 +40,7 @@ import java.util.concurrent.TimeUnit;
 public class MatchingRequestsFragment extends Fragment {
 
     FirebaseAuth auth;
+    TextView title;
     RecyclerView matchingRequestsRecyclerView;
     FirebaseDatabase database;
     ArrayList<HashMap<String, Object>> matchingItems;
@@ -62,6 +64,8 @@ public class MatchingRequestsFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_matching_request, container, false);
         matchingRequestsRecyclerView = view.findViewById(R.id.matching_requests_recycler_view);
+        title = getActivity().findViewById(R.id.title);
+        title.setText("Matching Requests");
         matchingRequestsRecyclerView.setHasFixedSize(true);
         matchingRequestsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
