@@ -59,8 +59,7 @@ public class phone_number_change extends AppCompatActivity {
         back_icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(phone_number_change.this, account_settings.class);
-                startActivity(intent);
+                finish();
             }
         });
 
@@ -89,7 +88,6 @@ public class phone_number_change extends AppCompatActivity {
                             intent.putExtra("new_phone_number", Phone);
                             intent.putExtra("type", "change");
                             startActivity(intent);
-                            finish();
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override

@@ -10,16 +10,17 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+
 public class Users {
     String profilepic,mail,userName,password,userId,lastMessage,status, gender, dob, phone, location, sexual_orientation, height, age_range, gender_show;
     boolean show_me;
-    int num_of_photo;
+    ArrayList<String> photos;
     public  Users(){}
 
 
-
     public Users(String userId, String userName, String mail, String password, String profilepic, String status, String gender, String dob, String phone, String location, String sexual_orientation, String height, String age_range,
-                 String gender_show, boolean show_me, int num_of_photo) {
+                 String gender_show, boolean show_me, ArrayList<String> photos) {
         this.userId = userId;
         this.userName = userName;
         this.mail = mail;
@@ -35,7 +36,7 @@ public class Users {
         this.age_range = age_range;
         this.gender_show = gender_show;
         this.show_me = show_me;
-        this.num_of_photo = num_of_photo;
+        this.photos = photos;
     }
 
     public String getProfilepic() {
@@ -145,13 +146,6 @@ public class Users {
         this.dob = dob;
     }
 
-    public int getNum_of_photo() {
-        return num_of_photo;
-    }
-
-    public void setNum_of_photo(int num_of_photo) {
-        this.num_of_photo = num_of_photo;
-    }
 
     public String getPhone() {
         return phone;
@@ -200,4 +194,11 @@ public class Users {
         this.show_me = show_me;
     }
 
+    public ArrayList<String> getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(ArrayList<String> photos) {
+        this.photos = photos;
+    }
 }

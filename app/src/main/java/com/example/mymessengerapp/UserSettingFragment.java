@@ -1,5 +1,8 @@
 package com.example.mymessengerapp;
 
+import static android.content.Context.INPUT_METHOD_SERVICE;
+import static androidx.core.content.ContextCompat.getSystemService;
+
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -8,12 +11,15 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -26,6 +32,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -52,6 +59,10 @@ import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.Year;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -59,10 +70,11 @@ public class UserSettingFragment extends Fragment {
     private FirebaseAuth auth;
     private FirebaseDatabase database;
     private FirebaseStorage storage;
+    private ValueEventListener listener;
     RangeSlider age_range;
     LinearLayout account_settings, location, height, dob, add_photo;
     Spinner gender_spinner, sexual_spinner, gender_show_spinner;
-    TextView age_range_preview, location_preview, profile_username, profile_status, height_preview, dob_preview;
+    TextView age_range_preview, location_preview, profile_username, profile_status, height_preview, dob_preview, photo_count;
     EditText et_username, et_status;
     CircleImageView profile_pic, profile_pic_button;
     ImageButton edit_button, save_button;
@@ -107,6 +119,7 @@ public class UserSettingFragment extends Fragment {
         age_range = view.findViewById(R.id.age_range_slider);
         profile_username = view.findViewById(R.id.profile_username);
         profile_status = view.findViewById(R.id.profile_status);
+        photo_count = view.findViewById(R.id.photo_count);
         et_username = view.findViewById(R.id.et_username);
         et_status = view.findViewById(R.id.et_status);
         edit_button = view.findViewById(R.id.edit_button);
@@ -133,15 +146,22 @@ public class UserSettingFragment extends Fragment {
         adapter1.setDropDownViewResource(R.layout.gender_spinner_dropdown);
         sexual_spinner.setAdapter(adapter1);
 
-
         ArrayAdapter adapter2 = ArrayAdapter.createFromResource(getContext(), R.array.gender_show_array, R.layout.gender_spinner_item);
         adapter2.setDropDownViewResource(R.layout.gender_spinner_dropdown);
         gender_show_spinner.setAdapter(adapter2);
 
-
+        auth.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                if (firebaseAuth.getCurrentUser() == null) {
+                    if (reference != null && listener != null)
+                        reference.removeEventListener(listener);
+                }
+            }
+        });
 
         // update values from database
-        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+        reference.addValueEventListener(listener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 // location
@@ -163,15 +183,15 @@ public class UserSettingFragment extends Fragment {
                     sexual_spinner.setSelection(sexual_position);
                 }
                 // age_range
-                if (snapshot.child("age_range").getValue(String.class) != null) {
+                if (snapshot.child("age_range").getValue(String.class) == null) {
+                    age_range.setValues(18f, 24f);
+                    age_range_preview.setText("18 - 24");
+                } else {
                     String age_range_string = snapshot.child("age_range").getValue(String.class);
                     float age_valueFrom = Float.valueOf(age_range_string.substring(0, age_range_string.indexOf('-')));
                     float age_valueTo = Float.valueOf(age_range_string.substring(age_range_string.indexOf('-') + 1, age_range_string.length()));
                     age_range.setValues(age_valueFrom, age_valueTo);
                     age_range_preview.setText(age_range.getValues().get(0).intValue() + "-" + age_range.getValues().get(1).intValue());
-                } else {
-                    age_range.setValues(18f, 24f);
-                    age_range_preview.setText("18 - 24");
                 }
                 // username
                 if (snapshot.child("userName").getValue(String.class) != null)
@@ -190,11 +210,11 @@ public class UserSettingFragment extends Fragment {
                 if (snapshot.child("dob").getValue(String.class) != null) {
                     dob_preview.setText(snapshot.child("dob").getValue(String.class));
                 }
+                if (snapshot.child("photos").hasChildren()) {
+                    photo_count.setText(String.valueOf((int)snapshot.child("photos").getChildrenCount()));
+                }
                 // profile_picture
-                if (snapshot.child("profilepic").getValue(String.class) != null) {
-                    Picasso.get().load(snapshot.child("profilepic").getValue(String.class)).into(profile_pic);
-                    Picasso.get().load(snapshot.child("profilepic").getValue(String.class)).into(profile_pic_button);
-                } else {
+                if (snapshot.child("profilepic").getValue(String.class) == null) {
                     FirebaseStorage.getInstance().getReference().child("default.png").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
                         public void onSuccess(Uri uri) {
@@ -203,6 +223,9 @@ public class UserSettingFragment extends Fragment {
                             reference.child("profilepic").setValue(uri.toString());
                         }
                     });
+                } else {
+                    Picasso.get().load(snapshot.child("profilepic").getValue(String.class)).into(profile_pic);
+                    Picasso.get().load(snapshot.child("profilepic").getValue(String.class)).into(profile_pic_button);
                 }
             }
             @Override
@@ -244,6 +267,9 @@ public class UserSettingFragment extends Fragment {
                 et_status.setVisibility(View.GONE);
                 profile_pic_button.setVisibility(View.GONE);
                 uploadImage();
+                // hide the keyboard
+                InputMethodManager inputMethodManager =(InputMethodManager)getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
+                inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
             }
         });
 
@@ -263,7 +289,7 @@ public class UserSettingFragment extends Fragment {
                         FirebaseAuth.getInstance().signOut();
                         Intent intent = new Intent(getContext(), login.class);
                         startActivity(intent);
-//                        finish();
+                        getActivity().finish();
                     }
                 });
                 no.setOnClickListener(new View.OnClickListener() {
@@ -304,7 +330,7 @@ public class UserSettingFragment extends Fragment {
                                 } else if (Pass.length() < 6) {
                                     Toast.makeText(getContext(), "Password must be longer than 6 characters", Toast.LENGTH_SHORT).show();
                                 } else {
-                                    // reauthenticate current user
+                                    // re-authenticate current user
                                     auth.signInWithEmailAndPassword(auth.getCurrentUser().getEmail().toString(), Pass).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                                         @Override
                                         public void onSuccess(AuthResult authResult) {
@@ -331,6 +357,7 @@ public class UserSettingFragment extends Fragment {
                                                     Toast.makeText(getContext(), "Delete user from Firebase successfully!", Toast.LENGTH_SHORT).show();
                                                     Intent intent = new Intent(getContext(), login.class);
                                                     startActivity(intent);
+                                                    getActivity().finish();
                                                 }
                                             }).addOnFailureListener(new OnFailureListener() {
                                                 @Override
@@ -367,7 +394,6 @@ public class UserSettingFragment extends Fragment {
                 Intent intent = new Intent(getContext(), account_settings.class);
                 startActivity(intent);
             }
-
         });
 
         gender_show_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -474,7 +500,6 @@ public class UserSettingFragment extends Fragment {
     // Select Image method
     private void SelectImage()
     {
-
         // Defining Implicit Intent to mobile gallery
         Intent intent = new Intent();
         intent.setType("image/*");
@@ -570,6 +595,14 @@ public class UserSettingFragment extends Fragment {
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.main_frame, fragment);
         transaction.commit();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (reference != null && listener != null) {
+            reference.removeEventListener(listener);
+        }
     }
 
 }

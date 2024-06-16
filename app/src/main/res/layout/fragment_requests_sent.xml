@@ -7,7 +7,8 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/requests_sent_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:scrollbars="none">
 
     </androidx.recyclerview.widget.RecyclerView>
 

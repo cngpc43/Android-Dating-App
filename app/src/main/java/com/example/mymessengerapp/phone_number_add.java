@@ -59,8 +59,7 @@ public class phone_number_add extends AppCompatActivity {
         back_icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(phone_number_add.this, account_settings.class);
-                startActivity(intent);
+                finish();
             }
         });
 
@@ -69,6 +68,14 @@ public class phone_number_add extends AppCompatActivity {
             public void onClick(View view) {
                 String Phone = etEmail.getText().toString();
                 String Pass = etPassword.getText().toString();
+
+                if (attempts > 3) {
+                    Toast.makeText(phone_number_add.this, "Too many attempts, please log out and try again later.", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(phone_number_add.this, login.class);
+                    // clear all previous activities
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    finish();
+                }
 
                 if ((TextUtils.isEmpty(Pass))) {
                     Toast.makeText(phone_number_add.this, "Please enter your password", Toast.LENGTH_SHORT).show();
@@ -87,7 +94,6 @@ public class phone_number_add extends AppCompatActivity {
                             intent.putExtra("new_phone_number", Phone);
                             intent.putExtra("type", "add");
                             startActivity(intent);
-                            finish();
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override

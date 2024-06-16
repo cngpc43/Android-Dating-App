@@ -1,5 +1,6 @@
 package com.example.mymessengerapp;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,6 +8,8 @@ import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -28,6 +31,7 @@ public class login extends AppCompatActivity {
     FirebaseAuth auth;
     String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
     android.app.ProgressDialog progressDialog;
+    Boolean doubleBackToExitPressedOnce = false;
 
 
     @Override
@@ -104,11 +108,12 @@ public class login extends AppCompatActivity {
                     password.setError("More Then Six Characters");
                     Toast.makeText(login.this, "Password Needs To Be Longer Then Six Characters", Toast.LENGTH_SHORT).show();
                 } else {
+                    progressDialog.show();
                     auth.signInWithEmailAndPassword(Email, pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
+                            progressDialog.dismiss();
                             if (task.isSuccessful()) {
-                                progressDialog.show();
                                 try {
                                     Intent intent = new Intent(login.this, MainActivity.class);
                                     startActivity(intent);
@@ -124,6 +129,26 @@ public class login extends AppCompatActivity {
                 }
 
 
+            }
+        });
+
+        // back press two times within 2 seconds to exit app
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (doubleBackToExitPressedOnce) {
+                    finishAffinity();
+                } else {
+                    doubleBackToExitPressedOnce = true;
+                    Toast.makeText(login.this, "Please swipe BACK again to exit", Toast.LENGTH_SHORT).show();
+
+                    new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            doubleBackToExitPressedOnce=false;
+                        }
+                    }, 2000);
+                }
             }
         });
 

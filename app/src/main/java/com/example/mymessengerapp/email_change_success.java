@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.mymessengerapp.R;
@@ -33,6 +34,16 @@ public class email_change_success extends AppCompatActivity {
         log_in_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intent = new Intent(email_change_success.this, login.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+        // handle on back pressed
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
                 Intent intent = new Intent(email_change_success.this, login.class);
                 startActivity(intent);
                 finish();

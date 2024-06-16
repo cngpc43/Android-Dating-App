@@ -21,6 +21,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.ActionCodeSettings;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.internal.IdTokenListener;
@@ -39,8 +40,7 @@ public class email_confirm extends AppCompatActivity {
     MaterialButton resend_email_button, continue_button;
     TextView description;
     FirebaseAuth auth;
-    DatabaseReference mDatabase;
-    Timer timer;
+    DatabaseReference reference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +51,8 @@ public class email_confirm extends AppCompatActivity {
         }
 
         auth = FirebaseAuth.getInstance();
+        reference = FirebaseDatabase.getInstance().getReference().child("user/" + auth.getCurrentUser().getUid() + "/mail");
+
         back_icon = (ImageButton)findViewById(R.id.back_icon);
         resend_email_button = (MaterialButton)findViewById(R.id.resend_email_button);
         continue_button = (MaterialButton)findViewById(R.id.continue_button);
@@ -58,11 +60,12 @@ public class email_confirm extends AppCompatActivity {
 
         String string = "We have sent a verification link to <b>" + getIntent().getStringExtra("new_email") + "</b>.";
         description.setText(Html.fromHtml(string));
+
+
         back_icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(email_confirm.this, account_settings.class);
-                startActivity(intent);
+                finish();
             }
         });
 
@@ -93,17 +96,32 @@ public class email_confirm extends AppCompatActivity {
         continue_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                auth.getCurrentUser().reload();
-                auth.addIdTokenListener(new IdTokenListener() {
-                    @Override
-                    public void onIdTokenChanged(@NonNull InternalTokenResult internalTokenResult) {
-                        Intent intent = new Intent(email_confirm.this, email_change_success.class);
-                        startActivity(intent);
-                        finish();
-                    }
-                });
-                Toast.makeText(email_confirm.this, "Email has not been verified yet.", Toast.LENGTH_SHORT).show();
+                if (auth.getCurrentUser() != null) {
+                    Toast.makeText(email_confirm.this, "Email has not been verified yet.", Toast.LENGTH_SHORT).show();
+                    auth.getCurrentUser().reload();
+                }
+                else {
+                    auth.signInWithEmailAndPassword(getIntent().getStringExtra("new_email"), getIntent().getStringExtra("pass")).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                        @Override
+                        public void onSuccess(AuthResult authResult) {
+                            reference.setValue(getIntent().getStringExtra("new_email")).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void unused) {
+                                    Toast.makeText(email_confirm.this, "Email changed successfully.", Toast.LENGTH_SHORT).show();
+                                    auth.signOut();
+
+                                    Intent intent = new Intent(email_confirm.this, email_change_success.class);
+                                    // clear all previous activities
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    startActivity(intent);
+                                    finish();
+                                }
+                            });
+                        }
+                    });
+                }
             }
         });
     }
+
 }

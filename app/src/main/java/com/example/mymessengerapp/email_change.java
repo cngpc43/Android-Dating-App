@@ -54,8 +54,7 @@ public class email_change extends AppCompatActivity {
         back_icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(email_change.this, account_settings.class);
-                startActivity(intent);
+                finish();
             }
         });
 
@@ -87,7 +86,9 @@ public class email_change extends AppCompatActivity {
                                 // incorrect password confirmation over 3 times
                                 if (attempts > 3) {
                                     Toast.makeText(email_change.this, "Too many attempts, please log out and try again later.", Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(email_change.this, account_settings.class);
+                                    Intent intent = new Intent(email_change.this, login.class);
+                                    // clear all previous activities
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                     finish();
                                 }
                                 // reauthenticate current user for email change
@@ -96,11 +97,10 @@ public class email_change extends AppCompatActivity {
                                     public void onSuccess(AuthResult authResult) {
                                         Intent intent = new Intent(email_change.this, email_confirm.class);
                                         intent.putExtra("new_email", Email);
+                                        intent.putExtra("pass", Pass);
                                         startActivity(intent);
-                                        finish();
                                     }
-                                });
-                                auth.signInWithEmailAndPassword(auth.getCurrentUser().getEmail().toString(), Pass).addOnFailureListener(new OnFailureListener() {
+                                }).addOnFailureListener(new OnFailureListener() {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
                                         password_hint_wrong.setVisibility(View.VISIBLE);

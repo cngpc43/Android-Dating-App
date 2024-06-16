@@ -5,111 +5,118 @@
     android:layout_height="match_parent"
     app:cardCornerRadius="12dp">
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/bordermain">
-        <!--    <LinearLayout-->
-        <!--        android:layout_width="match_parent"-->
-        <!--        android:layout_height="match_parent"-->
-        <!--        android:orientation="horizontal">-->
-        <!--        <de.hdodenhof.circleimageview.CircleImageView-->
-        <!--            android:id="@+id/userimg"-->
-        <!--            android:layout_width="@dimen/_40sdp"-->
-        <!--            android:layout_height="@dimen/_40sdp"-->
-        <!--            android:layout_marginStart="@dimen/_10sdp"-->
-        <!--            android:layout_marginTop="@dimen/_10sdp"-->
-        <!--            android:layout_marginEnd="@dimen/_10sdp"-->
-        <!--            android:layout_marginBottom="@dimen/_10sdp"-->
-        <!--            android:src="@drawable/photocamera"/>-->
-        <!--        <LinearLayout-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:orientation="vertical"-->
-        <!--            android:gravity="center">-->
-        <!--            <TextView-->
-        <!--                android:id="@+id/username"-->
-        <!--                android:layout_width="match_parent"-->
-        <!--                android:layout_height="wrap_content"-->
-        <!--                android:fontFamily="@font/poppins_bold"-->
-        <!--                android:text="Name"-->
-        <!--                android:textColor="@color/black"-->
-        <!--                android:textSize="23.40dp"/>-->
 
-        <!--            <TextView-->
-        <!--                android:id="@+id/userstatus"-->
-        <!--                android:layout_width="match_parent"-->
-        <!--                android:layout_height="wrap_content"-->
-        <!--                android:textColor="@color/black"-->
-        <!--                android:fontFamily="@font/poppins_regular"-->
-        <!--                android:textSize="10.40dp"-->
-        <!--                android:text="Status"/>-->
-        <!--        </LinearLayout>-->
-        <!--    </LinearLayout>-->
-        <ImageView
+        <com.example.mymessengerapp.model.MyImageSwitcher
             android:id="@+id/userimg"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/bordermain"
-            android:scaleType="centerCrop"
-            android:src="@drawable/selfie" />
+            android:layout_height="match_parent" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="240dp"
-            android:layout_alignParentBottom="true"
-            android:background="@drawable/gradient_black_transparent"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/username"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="50dp"
-                android:fontFamily="@font/poppins_bold"
-                android:text="DMDMWDMW"
-                android:textColor="@color/white"
-                android:textSize="23.40dp" />
-
-            <TextView
-                android:id="@+id/userstatus"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="5dp"
-                android:fontFamily="@font/poppins_regular"
-                android:text="Status: I'm very happy"
-                android:textColor="@color/white"
-                android:textSize="15dp" />
-
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:gravity="center"
-                android:orientation="horizontal">
-
+                android:layout_height="0dp"
+                android:orientation="horizontal"
+                android:layout_weight="1" >
                 <ImageButton
-                    android:id="@+id/dislike"
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    android:layout_marginEnd="70dp"
-                    android:background="@drawable/circle_red_shape"
-                    android:padding="12dp"
-                    android:scaleType="centerInside"
-                    android:src="@drawable/cross_16px" />
-
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:id="@+id/left_button"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent" />
                 <ImageButton
-                    android:id="@+id/like"
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    android:background="@drawable/circle_green_shape"
-                    android:padding="5dp"
-                    android:scaleType="centerInside"
-                    android:src="@drawable/heart" />
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:id="@+id/right_button"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="210dp"
+                android:id="@+id/info_panel"
+                android:background="@drawable/gradient_black_transparent"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="100dp"
+                    android:layout_marginBottom="10dp"
+                    android:orientation="horizontal" >
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:id="@+id/profile_pic"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="10dp"
+                        android:src="@drawable/selfie"/>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_gravity="center_vertical">
+                        <TextView
+                            android:id="@+id/username"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+
+                            android:fontFamily="@font/poppins_bold"
+                            android:text="DMDMWDMW"
+                            android:textColor="@color/white"
+                            android:textSize="23.40dp" />
+
+                        <TextView
+                            android:id="@+id/userstatus"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:fontFamily="@font/poppins_regular"
+                            android:text="Status: I'm very happy"
+                            android:textColor="@color/white"
+                            android:textSize="15dp" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <ImageButton
+                        android:id="@+id/dislike"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:layout_marginEnd="70dp"
+                        android:background="@drawable/circle_red_shape"
+                        android:padding="12dp"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/cross_16px" />
+
+                    <ImageButton
+                        android:id="@+id/like"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:background="@drawable/circle_green_shape"
+                        android:padding="5dp"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/heart" />
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
+
+
+
+
 
 
     </RelativeLayout>

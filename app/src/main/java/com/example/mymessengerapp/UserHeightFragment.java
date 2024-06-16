@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -29,6 +30,7 @@ public class UserHeightFragment extends Fragment {
     TextInputEditText editTextHeight;
     MaterialButton remove_height_button;
     View transparent_top_view;
+    ValueEventListener valueEventListener;
     public UserHeightFragment() {
     }
 
@@ -51,15 +53,15 @@ public class UserHeightFragment extends Fragment {
         remove_height_button = view.findViewById(R.id.remove_height_button);
 
         // load height value from Database
-        reference.addValueEventListener(new ValueEventListener() {
+        reference.addValueEventListener(valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot dateSnapshot: snapshot.getChildren()) {
-                    if (snapshot.child("height").getValue(String.class).equals("")) {
-                        remove_height_button.setVisibility(View.INVISIBLE);
-                    } else {
+                    if (snapshot.child("height").getValue(String.class) != null && !snapshot.child("height").getValue(String.class).equals("")) {
                         editTextHeight.setText(snapshot.child("height").getValue(String.class));
                         remove_height_button.setVisibility(View.VISIBLE);
+                    } else {
+                        remove_height_button.setVisibility(View.INVISIBLE);
                     }
                 }
             }
@@ -104,6 +106,13 @@ public class UserHeightFragment extends Fragment {
             }
         });
 
+        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                ((MainActivity)getContext()).getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, new UserSettingFragment()).commit();
+            }
+        });
+
         return view;
     }
 
@@ -111,5 +120,13 @@ public class UserHeightFragment extends Fragment {
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.main_frame, fragment);
         transaction.commit();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (reference != null && valueEventListener != null) {
+            reference.removeEventListener(valueEventListener);
+        }
     }
 }
