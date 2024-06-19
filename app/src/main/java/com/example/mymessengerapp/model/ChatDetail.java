@@ -1,12 +1,14 @@
 package com.example.mymessengerapp.model;
 
 public class ChatDetail {
+    private  String userId;
     private String userName;
     private String userImage;
     private String lastMessage;
     private long timestamp;
 
-    public ChatDetail(String userName, String userImage, String lastMessage, long timestamp) {
+    public ChatDetail(String userId, String userName, String userImage, String lastMessage, long timestamp) {
+        this.userId = userId;
         this.userName = userName;
         this.userImage = userImage;
         this.lastMessage = lastMessage;
@@ -22,6 +24,11 @@ public class ChatDetail {
                 ", timestamp=" + timestamp +
                 '}';
     }
+
+    public String getUserId() {
+        return userId;
+    }
+
     public String getUserName() {
         return userName;
     }

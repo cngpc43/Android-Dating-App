@@ -1,9 +1,12 @@
 package com.example.mymessengerapp;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -13,6 +16,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,6 +28,7 @@ import com.example.mymessengerapp.adapter.ChatAdapter;
 import com.example.mymessengerapp.model.ChatMessage;
 
 import com.example.mymessengerapp.model.Users;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -31,13 +36,27 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.squareup.picasso.Picasso;
+import com.zegocloud.uikit.plugin.invitation.ZegoInvitationType;
+import com.zegocloud.uikit.prebuilt.call.ZegoUIKitPrebuiltCallConfig;
+import com.zegocloud.uikit.prebuilt.call.ZegoUIKitPrebuiltCallFragment;
+import com.zegocloud.uikit.prebuilt.call.ZegoUIKitPrebuiltCallService;
+import com.zegocloud.uikit.prebuilt.call.config.ZegoNotificationConfig;
+import com.zegocloud.uikit.prebuilt.call.invite.ZegoUIKitPrebuiltCallInvitationConfig;
+import com.zegocloud.uikit.prebuilt.call.invite.ZegoUIKitPrebuiltCallInvitationService;
+import com.zegocloud.uikit.prebuilt.call.invite.internal.ZegoCallInvitationData;
+import com.zegocloud.uikit.prebuilt.call.invite.internal.ZegoUIKitPrebuiltCallConfigProvider;
+import com.zegocloud.uikit.prebuilt.call.invite.widget.ZegoSendCallInvitationButton;
+import com.zegocloud.uikit.service.defines.ZegoUIKitUser;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ChatActivity extends AppCompatActivity {
     EditText messageInput;
-    ImageButton sendMessBtn, backBtn;
+    ImageButton sendMessBtn, backBtn, audioCall;
     TextView userName, userStatus;
     ShapeableImageView userAvatar;
     RecyclerView mainChat;
@@ -82,6 +101,7 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
         // Get UI from xml
+        audioCall = findViewById(R.id.option_call);
         userName = findViewById(R.id.user_name_chat);
         userStatus = findViewById(R.id.user_status_chat);
         userAvatar = findViewById(R.id.user_icon_chat);
@@ -100,9 +120,18 @@ public class ChatActivity extends AppCompatActivity {
         mainChat.setLayoutManager(new LinearLayoutManager(this));
 
         // Set content for UI
-//        userName.setText();
-//        userStatus.setText();
-//        userAvatar.set
+        userName.setText(getIntent().getStringExtra("userName"));
+        String profileUri = getIntent().getStringExtra("userImage");
+        if (profileUri == null) {
+            FirebaseStorage.getInstance().getReference().child("default.png").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                @Override
+                public void onSuccess(Uri uri) {
+                    Picasso.get().load(uri).into(userAvatar);
+                }
+            });
+        } else {
+            Picasso.get().load(profileUri).into(userAvatar);
+        }
 
         // Xu ly khi nhan back ve
         backBtn.setOnClickListener(v -> onBackPressed());
@@ -142,10 +171,38 @@ public class ChatActivity extends AppCompatActivity {
             }
             return false;
         });
+
+        // Zego call listener
+        ZegoSendCallInvitationButton newVideoCall = findViewById(R.id.new_video_call);
+        newVideoCall.setIsVideoCall(true);
+        newVideoCall.setResourceID("zego_uikit_call"); // Please fill in the resource ID name that has been configured in the ZEGOCLOUD's console here.
+        newVideoCall.setInvitees(Collections.singletonList(new ZegoUIKitUser(getIntent().getStringExtra("userId"), getIntent().getStringExtra("userName"))));
+
+        // Audio call handler
+        audioCall.setOnClickListener(v -> {
+            String userId = getIntent().getStringExtra("userId");
+            Log.d("Audio Call", userId);
+
+            // @TODO: Gọi request call
+
+            // hien thi giao dien goi dien
+//            Intent intent = new Intent(ChatActivity.this, CallActivity.class);
+//            intent.putExtra("callType", "audio");
+//            intent.putExtra("userId", userId);
+//            intent.putExtra("userName", userName.getText().toString());
+//            intent.putExtra("userAvatar", profileUri);
+//            startActivity(intent);
+
+
+        });
     }
 
     // Xu ly chuc nang gui tin nhan
     void handleSendMessage(String message) {
 
     }
+
 }
+
+
+

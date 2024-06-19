@@ -90,15 +90,23 @@
                 android:tint="@color/secondary3"
                 tools:ignore="UseAppTint" />
 
-            <ImageButton
-                android:id="@+id/option_call_video"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:background="@android:color/transparent"
-                android:src="@drawable/baseline_videocam"
-                android:tint="@color/secondary3"
-                tools:ignore="UseAppTint" />
+            <!--            <ImageButton-->
+            <!--                android:id="@+id/option_call_video"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_marginHorizontal="16dp"-->
+            <!--                android:background="@android:color/transparent"-->
+            <!--                android:src="@drawable/baseline_videocam"-->
+            <!--                android:tint="@color/secondary3"-->
+            <!--                tools:ignore="UseAppTint" />-->
+            <com.zegocloud.uikit.prebuilt.call.invite.widget.ZegoSendCallInvitationButton
+                android:id="@+id/new_video_call"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="8dp"
+                android:textColor="@android:color/white"
+
+                />
 
             <ImageButton
                 android:id="@+id/option_more"

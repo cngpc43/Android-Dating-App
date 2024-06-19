@@ -111,9 +111,10 @@ public class ChatFragment extends Fragment {
                                                             userRef.addListenerForSingleValueEvent(new ValueEventListener() {
                                                                 @Override
                                                                 public void onDataChange(DataSnapshot dataSnapshot) {
-                                                                    String userName = dataSnapshot.child("username").getValue(String.class);
-                                                                    String userImage = dataSnapshot.child("profileImage").getValue(String.class);
-                                                                    ChatDetail chatDetail = new ChatDetail(userName, userImage, lastMessage, timestamp);
+                                                                    String userId = dataSnapshot.child("userId").getValue(String.class);
+                                                                    String userName = dataSnapshot.child("userName").getValue(String.class);
+                                                                    String userImage = dataSnapshot.child("profilepic").getValue(String.class);
+                                                                    ChatDetail chatDetail = new ChatDetail(userId, userName, userImage, lastMessage, timestamp);
                                                                     chatDetails.add(chatDetail);
                                                                     ChatHomeAdapter adapter = new ChatHomeAdapter(getContext(), chatDetails);
                                                                     lv_list_chat.setAdapter(adapter);
@@ -134,11 +135,12 @@ public class ChatFragment extends Fragment {
                                                             @Override
                                                             public void onDataChange(DataSnapshot dataSnapshot) {
 //                                                              Log data snapshot
-
+                                                                String userId = dataSnapshot.child("userId").getValue(String.class);
                                                                 String userName = dataSnapshot.child("userName").getValue(String.class);
                                                                 String userImage = dataSnapshot.child("profilepic").getValue(String.class);
 
-                                                                ChatDetail chatDetail = new ChatDetail(userName, userImage, "Send your first message", 0);
+
+                                                                ChatDetail chatDetail = new ChatDetail(userId, userName, userImage, "Send your first message", 0);
                                                                 chatDetails.add(chatDetail);
                                                                 ChatHomeAdapter adapter = new ChatHomeAdapter(getContext(), chatDetails);
                                                                 lv_list_chat.setAdapter(adapter);
@@ -191,6 +193,9 @@ public class ChatFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getContext(), ChatActivity.class);
+                intent.putExtra("userId", chatDetails.get(position).getUserId());
+                intent.putExtra("userName", chatDetails.get(position).getUserName());
+                intent.putExtra("userImage", chatDetails.get(position).getUserImage());
                 startActivity(intent);
             }
         });

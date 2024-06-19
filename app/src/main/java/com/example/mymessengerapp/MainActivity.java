@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Application;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -28,6 +29,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.zegocloud.uikit.prebuilt.call.ZegoUIKitPrebuiltCallService;
+import com.zegocloud.uikit.prebuilt.call.invite.ZegoUIKitPrebuiltCallInvitationConfig;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -66,6 +69,15 @@ public class MainActivity extends AppCompatActivity {
         user_selected = findViewById(R.id.user_selected);
         title = findViewById(R.id.title);
 
+        Application app = getApplication();
+        long appId = Long.parseLong(getString(R.string.app_id));
+        String appSign = getString(R.string.app_sign);
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference databaseReference = database.getReference();
+        String userName = databaseReference.child("users").child(auth.getCurrentUser().getUid()).child("userName").toString();
+        String userId = auth.getCurrentUser().getUid();
+        ZegoUIKitPrebuiltCallInvitationConfig callInvitationConfig = new ZegoUIKitPrebuiltCallInvitationConfig();
+        ZegoUIKitPrebuiltCallService.init(getApplication(), appId, appSign, userId, userName, callInvitationConfig);
 
 
         if (getIntent() == null || getIntent().getStringExtra("fragment") == null) {
