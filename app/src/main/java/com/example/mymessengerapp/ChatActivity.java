@@ -186,12 +186,12 @@ public class ChatActivity extends AppCompatActivity {
             // @TODO: Gọi request call
 
             // hien thi giao dien goi dien
-//            Intent intent = new Intent(ChatActivity.this, CallActivity.class);
-//            intent.putExtra("callType", "audio");
-//            intent.putExtra("userId", userId);
-//            intent.putExtra("userName", userName.getText().toString());
-//            intent.putExtra("userAvatar", profileUri);
-//            startActivity(intent);
+            Intent intent = new Intent(ChatActivity.this, CallActivity.class);
+            intent.putExtra("callType", "audio");
+            intent.putExtra("userId", userId);
+            intent.putExtra("userName", userName.getText().toString());
+            intent.putExtra("userAvatar", profileUri);
+            startActivity(intent);
 
 
         });

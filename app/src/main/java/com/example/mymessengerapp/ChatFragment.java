@@ -142,9 +142,13 @@ public class ChatFragment extends Fragment {
 
                                                                 ChatDetail chatDetail = new ChatDetail(userId, userName, userImage, "Send your first message", 0);
                                                                 chatDetails.add(chatDetail);
-                                                                ChatHomeAdapter adapter = new ChatHomeAdapter(getContext(), chatDetails);
-                                                                lv_list_chat.setAdapter(adapter);
-                                                                adapter.notifyDataSetChanged();
+                                                                if (isAdded()) {
+                                                                    ChatHomeAdapter adapter = new ChatHomeAdapter(getContext(), chatDetails);
+                                                                    lv_list_chat.setAdapter(adapter);
+                                                                    adapter.notifyDataSetChanged();
+                                                                } else {
+                                                                    Log.e("ChatFragment", "Fragment not attached to a context.");
+                                                                }
                                                             }
 
                                                             @Override
