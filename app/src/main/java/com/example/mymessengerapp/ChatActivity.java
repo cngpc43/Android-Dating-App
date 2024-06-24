@@ -30,6 +30,7 @@ import com.example.mymessengerapp.model.ChatMessage;
 import com.example.mymessengerapp.model.Users;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.imageview.ShapeableImageView;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -101,7 +102,6 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
         // Get UI from xml
-        audioCall = findViewById(R.id.option_call);
         userName = findViewById(R.id.user_name_chat);
         userStatus = findViewById(R.id.user_status_chat);
         userAvatar = findViewById(R.id.user_icon_chat);
@@ -175,25 +175,40 @@ public class ChatActivity extends AppCompatActivity {
         // Zego call listener
         ZegoSendCallInvitationButton newVideoCall = findViewById(R.id.new_video_call);
         newVideoCall.setIsVideoCall(true);
-        newVideoCall.setResourceID("zego_uikit_call"); // Please fill in the resource ID name that has been configured in the ZEGOCLOUD's console here.
+        newVideoCall.setResourceID("zego_uikit_call");
+        newVideoCall.setBackgroundResource(R.drawable.icons8_video_call_36);
         newVideoCall.setInvitees(Collections.singletonList(new ZegoUIKitUser(getIntent().getStringExtra("userId"), getIntent().getStringExtra("userName"))));
 
         // Audio call handler
-        audioCall.setOnClickListener(v -> {
-            String userId = getIntent().getStringExtra("userId");
-            Log.d("Audio Call", userId);
-
-            // @TODO: Gọi request call
-
-            // hien thi giao dien goi dien
-            Intent intent = new Intent(ChatActivity.this, CallActivity.class);
-            intent.putExtra("callType", "audio");
-            intent.putExtra("userId", userId);
-            intent.putExtra("userName", userName.getText().toString());
-            intent.putExtra("userAvatar", profileUri);
-            startActivity(intent);
-
-
+//        audioCall.setOnClickListener(v -> {
+//            String userId = getIntent().getStringExtra("userId");
+//            Log.d("Audio Call", userId);
+//
+//            // @TODO: Gọi request call
+//
+//            // hien thi giao dien goi dien
+//            Intent intent = new Intent(ChatActivity.this, CallActivity.class);
+//            intent.putExtra("callType", "audio");
+//            intent.putExtra("userId", userId);
+//            intent.putExtra("userName", userName.getText().toString());
+//            intent.putExtra("userAvatar", profileUri);
+//            startActivity(intent);
+//
+//
+//        });
+        ZegoSendCallInvitationButton newVoiceCall = findViewById(R.id.new_voice_call);
+        newVoiceCall.setIsVideoCall(false);
+        newVoiceCall.setResourceID("zegouikit_call");
+        newVoiceCall.setBackgroundResource(R.drawable.icons8_call_36);
+        newVoiceCall.setOnClickListener(v -> {
+            String targetUserID = getIntent().getStringExtra("userName");
+            String[] split = targetUserID.split(",");
+            List<ZegoUIKitUser> users = new ArrayList<>();
+            for (String userID : split) {
+                String userName = userID + "_name";
+                users.add(new ZegoUIKitUser(userID, userName));
+            }
+            newVoiceCall.setInvitees(users);
         });
     }
 

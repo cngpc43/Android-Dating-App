@@ -138,8 +138,6 @@ public class ChatFragment extends Fragment {
                                                                 String userId = dataSnapshot.child("userId").getValue(String.class);
                                                                 String userName = dataSnapshot.child("userName").getValue(String.class);
                                                                 String userImage = dataSnapshot.child("profilepic").getValue(String.class);
-
-
                                                                 ChatDetail chatDetail = new ChatDetail(userId, userName, userImage, "Send your first message", 0);
                                                                 chatDetails.add(chatDetail);
                                                                 if (isAdded()) {

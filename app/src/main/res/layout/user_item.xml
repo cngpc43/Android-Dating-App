@@ -68,7 +68,8 @@
                             android:layout_marginStart="10dp"
 
                             android:fontFamily="@font/poppins_bold"
-                            android:text="DMDMWDMW"
+                            android:text="hmm"
+                            android:textStyle="bold"
                             android:textColor="@color/white"
                             android:textSize="23.40dp" />
 
