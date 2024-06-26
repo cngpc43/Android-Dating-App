@@ -2,6 +2,10 @@ package com.example.mymessengerapp.model;
 
 import com.google.android.gms.tasks.Task;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 public class ChatMessage {
     private String senderId, message, imgUrl, imgType;
     private boolean isSent;
@@ -33,6 +37,12 @@ public class ChatMessage {
     public String getLastMessage() {
         return message;
     }
+    public String getTime() {
+        return convertTimestampToTime(timeStamp);
+    }
+    public String getSenderId() {
+        return senderId;
+    }
     public long getTimeStamp() {
         return timeStamp;
     }
@@ -51,5 +61,9 @@ public class ChatMessage {
 
     public void setImgType(String imgType) {
         this.imgType = imgType;
+    }
+    private String convertTimestampToTime(long timestamp) {
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.getDefault());
+        return sdf.format(new Date(timestamp));
     }
 }
