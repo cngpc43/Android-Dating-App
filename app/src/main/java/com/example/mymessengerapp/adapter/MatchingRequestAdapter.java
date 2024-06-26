@@ -90,11 +90,34 @@ public class MatchingRequestAdapter extends RecyclerView.Adapter<MatchingRequest
             @Override
             public void onClick(View v) {
                 // Accept the request
+                String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                String matchedUserId = matchingRequests.get(position).get("requesterId").toString();
+
+                FirebaseDatabase.getInstance().getReference("MatchRequests")
+                        .child(currentUserId)
+                        .child(matchedUserId)
+                        .setValue("accepted");
+                String chatRoomId = currentUserId + "_" + matchedUserId;
+                FirebaseDatabase.getInstance().getReference("ChatRooms")
+                        .child(currentUserId)
+                        .child(chatRoomId)
+                        .setValue(true);
+                FirebaseDatabase.getInstance().getReference("ChatRooms")
+                        .child(matchedUserId)
+                        .child(chatRoomId)
+                        .setValue(true);
+                // Add chatroomId into Chats
+                FirebaseDatabase.getInstance().getReference("Chats")
+                        .child(chatRoomId)
+                        .setValue("Chat started");
+
                 FirebaseDatabase.getInstance().getReference().child("MatchRequests/" +
                         matchingRequests.get(position).get("requestId") + "/status").setValue("accepted");
                 FirebaseDatabase.getInstance().getReference().child("MatchRequests/" +
                         matchingRequests.get(position).get("requestId") + "/timestamp").setValue(ServerValue.TIMESTAMP);
                 Toast.makeText(context, "Request Accepted", Toast.LENGTH_SHORT).show();
+                // Remove the request from the list
+                matchingRequests.remove(position);
             }
         });
         holder.decline_button.setOnClickListener(new View.OnClickListener() {
