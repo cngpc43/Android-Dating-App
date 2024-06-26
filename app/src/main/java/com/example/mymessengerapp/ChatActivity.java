@@ -110,6 +110,9 @@ public class ChatActivity extends AppCompatActivity {
 
                 // Notify the adapter that the data set has changed
                 chatAdapter.notifyDataSetChanged();
+
+                // Scroll the RecyclerView to the last item
+                mainChat.smoothScrollToPosition(chatMessages.size() - 1);
             }
 
             @Override
@@ -195,7 +198,7 @@ public class ChatActivity extends AppCompatActivity {
             chatAdapter.notifyDataSetChanged();
 
             // Scroll the RecyclerView to the last item
-            mainChat.scrollToPosition(chatMessages.size() - 1);
+            mainChat.smoothScrollToPosition(chatMessages.size() - 1);
         });
 
         // Init PopupWindow

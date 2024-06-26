@@ -267,6 +267,7 @@ public class UserSettingFragment extends Fragment {
                 et_status.setVisibility(View.GONE);
                 profile_pic_button.setVisibility(View.GONE);
                 uploadImage();
+
                 // hide the keyboard
                 InputMethodManager inputMethodManager =(InputMethodManager)getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
                 inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
