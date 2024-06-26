@@ -70,7 +70,6 @@ public class ChatFragment extends Fragment {
         String currentUserId = auth.getCurrentUser().getUid();
         DatabaseReference userChatRoomsRef = database.getReference("ChatRooms").child(currentUserId);
         chatDetails = new ArrayList<ChatDetail>();
-
         userChatRoomsRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -79,8 +78,7 @@ public class ChatFragment extends Fragment {
                         Boolean isMember = chatRoomSnapshot.getValue(Boolean.class);
                         if (isMember != null && isMember) {
                             String chatRoomId = chatRoomSnapshot.getKey();
-                            Log.d("ChatFragment", "chatRoomId: " + chatRoomId);
-                            DatabaseReference chatRoomRef = database.getReference("ChatRooms").child(chatRoomId);
+//                            DatabaseReference chatRoomRef = database.getReference("ChatRooms").child(chatRoomId);
                             // Get all users in the chat room
                             DatabaseReference chatRoomUsersRef = database.getReference("ChatRooms");
                             chatRoomUsersRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -88,7 +86,6 @@ public class ChatFragment extends Fragment {
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
                                         String userId = userSnapshot.getKey();
-
                                         DataSnapshot userChatRoomSnapshot = userSnapshot.child(chatRoomId);
                                         Boolean isMember = userChatRoomSnapshot.getValue(Boolean.class);
                                         // Check if the user is not the current user and is a member of the chat room
@@ -116,9 +113,13 @@ public class ChatFragment extends Fragment {
                                                                     String userImage = dataSnapshot.child("profilepic").getValue(String.class);
                                                                     ChatDetail chatDetail = new ChatDetail(userId, userName, userImage, lastMessage, timestamp);
                                                                     chatDetails.add(chatDetail);
-                                                                    ChatHomeAdapter adapter = new ChatHomeAdapter(getContext(), chatDetails);
-                                                                    lv_list_chat.setAdapter(adapter);
-                                                                    adapter.notifyDataSetChanged();
+                                                                    if (isAdded()) {
+                                                                        ChatHomeAdapter adapter = new ChatHomeAdapter(getContext(), chatDetails);
+                                                                        lv_list_chat.setAdapter(adapter);
+                                                                        adapter.notifyDataSetChanged();
+                                                                    } else {
+                                                                        Log.e("ChatFragment", "Fragment not attached to a context.");
+                                                                    }
                                                                 }
 
                                                                 @Override

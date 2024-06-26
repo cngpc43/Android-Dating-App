@@ -14,6 +14,7 @@
         android:padding="8dp">
 
         <TextView
+            android:id="@+id/receive_message_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="11:00 PM"

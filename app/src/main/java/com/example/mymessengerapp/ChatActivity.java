@@ -53,6 +53,7 @@ import com.zegocloud.uikit.service.defines.ZegoUIKitUser;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 public class ChatActivity extends AppCompatActivity {
@@ -77,7 +78,46 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 //        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_chat);
+        String senderId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        String receiverId = getIntent().getStringExtra("userId");
+        String chatRoomId = senderId + "_" + receiverId;
+        if (senderId.compareTo(receiverId) < 0) {
+            chatRoomId = senderId + "_" + receiverId;
+        } else {
+            chatRoomId = receiverId + "_" + senderId;
+        }
+        DatabaseReference chatRoomRef = FirebaseDatabase.getInstance().getReference("Chats").child(chatRoomId);
+        chatRoomRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                // Clear the chatMessages list
+                chatMessages.clear();
 
+                // Loop through the messages in the chat room
+                for (DataSnapshot messageSnapshot : snapshot.getChildren()) {
+                    // Get the message data
+                    String message = messageSnapshot.child("text").getValue(String.class);
+                    long timestamp = messageSnapshot.child("timestamp").getValue(Long.class);
+                    String senderId = messageSnapshot.child("senderId").getValue(String.class);
+
+                    // Create a new ChatMessage object
+                    ChatMessage chatMessage = new ChatMessage(message, timestamp, senderId, true);
+                    Log.d("ChatActivity", "Message: " + message + ", Timestamp: " + timestamp + ", Sender ID: " + senderId);
+
+                    // Add the chat message to the chatMessages list
+                    chatMessages.add(chatMessage);
+                }
+
+                // Notify the adapter that the data set has changed
+                chatAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Log the error
+                Log.w("ChatActivity", "Failed to read messages.", error.toException());
+            }
+        });
         // lấy ID của users và chatroom
         usersArrayList = new ArrayList<>();
         auth = FirebaseAuth.getInstance();
@@ -136,13 +176,26 @@ public class ChatActivity extends AppCompatActivity {
         // Xu ly khi nhan back ve
         backBtn.setOnClickListener(v -> onBackPressed());
         sendMessBtn.setOnClickListener(v -> {
-            String message = messageInput.toString().trim();
+            String message = messageInput.getText().toString().trim();
 
-            // Khong thuc hienn khi khong co tin nhan
+            // Don't proceed if the message is empty
             if (message.isEmpty())
                 return;
 
-            handleSendMessage(message);
+            handleSendMessage(message, receiverId);
+
+            // Clear the input field
+            messageInput.setText("");
+
+            // Add the new message to the chatMessages list
+            long timestamp = System.currentTimeMillis();
+            chatMessages.add(new ChatMessage(message, timestamp, senderId, true));
+
+            // Notify the adapter that the data set has changed
+            chatAdapter.notifyDataSetChanged();
+
+            // Scroll the RecyclerView to the last item
+            mainChat.scrollToPosition(chatMessages.size() - 1);
         });
 
         // Init PopupWindow
@@ -180,22 +233,6 @@ public class ChatActivity extends AppCompatActivity {
         newVideoCall.setInvitees(Collections.singletonList(new ZegoUIKitUser(getIntent().getStringExtra("userId"), getIntent().getStringExtra("userName"))));
 
         // Audio call handler
-//        audioCall.setOnClickListener(v -> {
-//            String userId = getIntent().getStringExtra("userId");
-//            Log.d("Audio Call", userId);
-//
-//            // @TODO: Gọi request call
-//
-//            // hien thi giao dien goi dien
-//            Intent intent = new Intent(ChatActivity.this, CallActivity.class);
-//            intent.putExtra("callType", "audio");
-//            intent.putExtra("userId", userId);
-//            intent.putExtra("userName", userName.getText().toString());
-//            intent.putExtra("userAvatar", profileUri);
-//            startActivity(intent);
-//
-//
-//        });
         ZegoSendCallInvitationButton newVoiceCall = findViewById(R.id.new_voice_call);
         newVoiceCall.setIsVideoCall(false);
         newVoiceCall.setResourceID("zegouikit_call");
@@ -213,10 +250,40 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     // Xu ly chuc nang gui tin nhan
-    void handleSendMessage(String message) {
+    void handleSendMessage(String message, String receiverId) {
+        String senderId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
+        // Concatenate the user IDs to form a unique chat room ID
+        String chatRoomId = senderId + "_" + receiverId;
+        if (senderId.compareTo(receiverId) < 0) {
+            chatRoomId = senderId + "_" + receiverId;
+        } else {
+            chatRoomId = receiverId + "_" + senderId;
+        }
+        // Get the current timestamp
+        long timestamp = System.currentTimeMillis() / 1000;
+
+        // Create a new message object
+        HashMap<String, Object> chatMessage = new HashMap<>();
+        chatMessage.put("senderId", senderId);
+        chatMessage.put("timestamp", timestamp);
+        chatMessage.put("text", message);
+
+        // Push this message object to the Firebase database under the chat room ID
+        FirebaseDatabase.getInstance().getReference("Chats")
+                .child(chatRoomId)
+                .push()
+                .setValue(chatMessage)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        // Message sent successfully
+                        Log.d("ChatActivity", "Message sent.");
+                    } else {
+                        // Failed to send the message
+                        Log.w("ChatActivity", "Failed to send message.", task.getException());
+                    }
+                });
     }
-
 }
 
 

@@ -57,7 +57,6 @@ public class ChatHomeAdapter extends ArrayAdapter<ChatDetail> {
                 if(chatDetail.getTimestamp()==0){
                     chatTime.setVisibility(View.INVISIBLE);
                 }
-
                 tvChatName.setText(chatDetail.getUserName());
                 chatMessage.setText(chatDetail.getLastMessage());
                 Date date = new Date(chatDetail.getTimestamp());
