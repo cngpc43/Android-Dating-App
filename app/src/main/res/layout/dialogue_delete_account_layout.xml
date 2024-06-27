@@ -1,29 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+    android:layout_alignParentBottom="true"
     android:layout_gravity="center|bottom"
     android:background="@drawable/dialogue_shape"
-    android:padding="@dimen/_20sdp"
-    android:layout_alignParentBottom="true">
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/description"
-        android:text="PLease enter your current password"
-        android:textSize="18dp"
-        android:gravity="center"
-        android:fontFamily="@font/poppins_bold"
-        android:textStyle="bold"
-        android:layout_marginTop="8dp"
-        />
+    android:orientation="vertical"
+    android:padding="@dimen/_20sdp">
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/editPassword"
         android:layout_width="360dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="12dp"
+        android:hint="Enter your current password"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintLeft_toLeftOf="@id/password"
         app:layout_constraintStart_toStartOf="parent"
@@ -35,19 +27,22 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/rectangle_box"
+            android:drawableStart="@drawable/baseline_password_24"
+            android:drawablePadding="8dp"
             android:inputType="textPassword" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.button.MaterialButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/delete_button"
-        android:text="Delete account"
+        android:layout_width="360dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="12dp"
         android:backgroundTint="#FF0000"
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="20dp"
-        android:layout_gravity="center_horizontal" />
-
-
-
+        android:padding="12dp"
+        android:text="DELETE ACCOUNT"
+        android:textSize="7pt"
+        android:textStyle="bold"
+        app:cornerRadius="10dp" />
 </LinearLayout>

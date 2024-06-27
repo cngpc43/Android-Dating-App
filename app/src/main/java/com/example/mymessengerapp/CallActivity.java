@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.squareup.picasso.Picasso;
 
 public class CallActivity extends AppCompatActivity {
-    private  String callType;
+    private String callType;
 
     private String userId;
 

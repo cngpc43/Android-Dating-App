@@ -18,29 +18,33 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical" >
+            android:orientation="vertical">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:orientation="horizontal"
-                android:layout_weight="1" >
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
                 <ImageButton
+                    android:id="@+id/left_button"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:id="@+id/left_button"
                     android:layout_weight="1"
                     android:background="@android:color/transparent" />
+
                 <ImageButton
+                    android:id="@+id/right_button"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:id="@+id/right_button"
                     android:layout_weight="1"
                     android:background="@android:color/transparent" />
             </LinearLayout>
+
             <LinearLayout
+                android:id="@+id/info_panel"
                 android:layout_width="match_parent"
                 android:layout_height="210dp"
-                android:id="@+id/info_panel"
                 android:background="@drawable/gradient_black_transparent"
                 android:orientation="vertical">
 
@@ -48,19 +52,22 @@
                     android:layout_width="wrap_content"
                     android:layout_height="100dp"
                     android:layout_marginBottom="10dp"
-                    android:orientation="horizontal" >
+                    android:orientation="horizontal">
+
                     <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/profile_pic"
                         android:layout_width="80dp"
                         android:layout_height="80dp"
-                        android:id="@+id/profile_pic"
                         android:layout_gravity="center_vertical"
                         android:layout_marginStart="10dp"
-                        android:src="@drawable/selfie"/>
+                        android:src="@drawable/selfie" />
+
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_gravity="center_vertical">
+                        android:layout_gravity="center_vertical"
+                        android:orientation="vertical">
+
                         <TextView
                             android:id="@+id/username"
                             android:layout_width="wrap_content"
@@ -69,9 +76,9 @@
 
                             android:fontFamily="@font/poppins_bold"
                             android:text="hmm"
-                            android:textStyle="bold"
                             android:textColor="@color/white"
-                            android:textSize="23.40dp" />
+                            android:textSize="23.40dp"
+                            android:textStyle="bold" />
 
                         <TextView
                             android:id="@+id/userstatus"
@@ -114,10 +121,6 @@
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
-
-
-
-
 
 
     </RelativeLayout>

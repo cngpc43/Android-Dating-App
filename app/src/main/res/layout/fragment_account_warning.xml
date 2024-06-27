@@ -9,31 +9,35 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:orientation="vertical"
-        android:layout_marginBottom="20dp">
+        android:layout_marginBottom="20dp"
+        android:orientation="vertical">
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/icon_account_warning"
-            android:layout_gravity="center_horizontal" />
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/icon_account_warning" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
             android:text="Please set up your account to start dating."
             android:textColor="@color/secondary1"
             android:textSize="8pt"
-            android:textStyle="bold"
-            android:layout_marginTop="20dp"
-            android:layout_gravity="center_horizontal" />
+            android:textStyle="bold" />
+
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/setup_button"
             android:layout_width="wrap_content"
             android:layout_height="60dp"
-            android:id="@+id/setup_button"
-            android:text="Go to Account Setup"
-            android:textSize="8pt"
-            android:textColor="@color/white"
+            android:layout_gravity="center_horizontal"
             android:layout_marginTop="20dp"
-            android:layout_gravity="center_horizontal" />
+            android:background="@drawable/rectangle_box"
+            android:text="Go to Account Setup"
+            android:textColor="@color/white"
+            android:textSize="8pt" />
     </LinearLayout>
 
 

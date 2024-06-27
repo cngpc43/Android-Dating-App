@@ -3,13 +3,13 @@
     <!-- When the button is selected -->
     <item android:state_selected="true">
         <shape>
-            <solid android:color="#999999"/>
+            <solid android:color="#999999" />
         </shape>
     </item>
     <!-- Default state -->
     <item>
         <shape>
-            <solid android:color="#ffffff"/>
+            <solid android:color="#ffffff" />
         </shape>
     </item>
 </selector>

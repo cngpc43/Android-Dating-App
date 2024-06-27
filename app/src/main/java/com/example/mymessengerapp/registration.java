@@ -84,6 +84,7 @@ public class registration extends AppCompatActivity {
         rg_signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Get value from user to push into firebase - this is the base, user can change after
                 String name = rg_username.getText().toString();
                 String email = rg_email.getText().toString();
                 String Password = rg_password.getText().toString();
@@ -95,8 +96,9 @@ public class registration extends AppCompatActivity {
                 String location = "";
                 String sexual_orientation = "";
                 String height = "";
-                String age_range = "13-55";
-                String gender_show = "Male and Female";
+                String age_range = "18-40";
+                String gender_show = "Everyone";
+
                 ArrayList<String> photos = new ArrayList<String>();
                 boolean show_me = true;
                 if (TextUtils.isEmpty(name) || TextUtils.isEmpty(email) ||

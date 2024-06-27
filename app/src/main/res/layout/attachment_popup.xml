@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:background="@android:color/transparent"
-        android:src="@drawable/baseline_image_24"
+        android:src="@drawable/baseline_image_40"
         android:tint="@color/primary"
         tools:ignore="UseAppTint" />
 
@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:background="@android:color/transparent"
-        android:src="@drawable/baseline_attach_file_24"
+        android:src="@drawable/baseline_attach_file_40"
         android:tint="@color/primary"
         tools:ignore="UseAppTint" />
 
@@ -35,7 +35,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:background="@android:color/transparent"
-        android:src="@drawable/baseline_add_location_24"
+        android:src="@drawable/baseline_add_location_40"
         android:tint="@color/primary"
         tools:ignore="UseAppTint" />
 
