@@ -155,6 +155,7 @@ public class ChatActivity extends AppCompatActivity {
         chatAdapter = new ChatAdapter(chatMessages);
         mainChat.setAdapter(chatAdapter);
         mainChat.setLayoutManager(new LinearLayoutManager(this));
+        ((LinearLayoutManager)mainChat.getLayoutManager()).setStackFromEnd(true);
 
         // Set content for UI
         userName.setText(getIntent().getStringExtra("userName"));
@@ -193,7 +194,9 @@ public class ChatActivity extends AppCompatActivity {
             chatAdapter.notifyDataSetChanged();
 
             // Scroll the RecyclerView to the last item
-            mainChat.smoothScrollToPosition(chatMessages.size() - 1);
+            if (chatAdapter.getItemCount() > 0) {
+                mainChat.scrollToPosition(chatAdapter.getItemCount() - 1);
+            }
         });
 
         // Init PopupWindow
@@ -239,6 +242,7 @@ public class ChatActivity extends AppCompatActivity {
 
         // Handle option more button
         optMore.setOnClickListener(v -> showPopupMenu());
+
     }
 
     @Override
