@@ -23,9 +23,9 @@
         <item>Asexual</item>
     </string-array>
     <string-array name="gender_show_array">
-        <item>Male and Female</item>
-        <item>Only Male</item>
-        <item>Only Female</item>
+        <item>Everyone</item>
+        <item>Male</item>
+        <item>Female</item>
     </string-array>
     <string-array name="vn_cities_array">
         <item>Hà Nội</item>

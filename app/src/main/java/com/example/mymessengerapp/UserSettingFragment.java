@@ -1,7 +1,5 @@
 package com.example.mymessengerapp;
 
-import static android.content.Context.INPUT_METHOD_SERVICE;
-import static androidx.core.content.ContextCompat.getSystemService;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -11,11 +9,9 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,7 +28,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -59,10 +54,6 @@ import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.Year;
-import java.time.format.DateTimeFormatter;
-import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -202,7 +193,7 @@ public class UserSettingFragment extends Fragment {
                     dob_preview.setText(snapshot.child("dob").getValue(String.class));
                 }
                 if (snapshot.child("photos").hasChildren()) {
-                    photo_count.setText(String.valueOf((int)snapshot.child("photos").getChildrenCount()));
+                    photo_count.setText(String.valueOf((int) snapshot.child("photos").getChildrenCount()));
                 }
                 // profile_picture
                 if (snapshot.child("profilepic").getValue(String.class) == null) {
@@ -219,6 +210,7 @@ public class UserSettingFragment extends Fragment {
                     Picasso.get().load(snapshot.child("profilepic").getValue(String.class)).into(profile_pic_button);
                 }
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 throw error.toException();
@@ -260,7 +252,7 @@ public class UserSettingFragment extends Fragment {
                 uploadImage();
 
                 // hide the keyboard
-                InputMethodManager inputMethodManager =(InputMethodManager)getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
+                InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
                 inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
             }
         });
@@ -414,6 +406,7 @@ public class UserSettingFragment extends Fragment {
                     gender_spinner_initial = true;
                 }
             }
+
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
@@ -428,6 +421,7 @@ public class UserSettingFragment extends Fragment {
                     sexual_spinner_initial = true;
                 }
             }
+
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
@@ -503,8 +497,7 @@ public class UserSettingFragment extends Fragment {
     }
 
     // Select Image method
-    private void SelectImage()
-    {
+    private void SelectImage() {
         // Defining Implicit Intent to mobile gallery
         Intent intent = new Intent();
         intent.setType("image/*");
@@ -515,12 +508,13 @@ public class UserSettingFragment extends Fragment {
                         "Select Image from here..."),
                 PICK_IMAGE_REQUEST);
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == LAUNCH_SECOND_ACTIVITY) {
-            if(resultCode == Activity.RESULT_OK){
+            if (resultCode == Activity.RESULT_OK) {
                 String result = data.getStringExtra("result");
                 location_preview.setText(result);
             }
@@ -551,9 +545,7 @@ public class UserSettingFragment extends Fragment {
                                 filePath);
                 profile_pic_button.setImageBitmap(bitmap);
                 profile_pic.setImageBitmap(bitmap);
-            }
-
-            catch (IOException e) {
+            } catch (IOException e) {
                 // Log the exception
                 e.printStackTrace();
             }
@@ -562,8 +554,7 @@ public class UserSettingFragment extends Fragment {
     } //onActivityResult
 
 
-    private void uploadImage()
-    {
+    private void uploadImage() {
         if (filePath != null) {
 
             // Code for showing progressDialog while uploading
@@ -596,6 +587,7 @@ public class UserSettingFragment extends Fragment {
             });
         }
     }
+
     private void loadFragment(Fragment fragment) {
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.main_frame, fragment);
