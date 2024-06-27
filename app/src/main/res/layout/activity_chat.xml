@@ -81,29 +81,28 @@
             android:layout_centerVertical="true"
             android:orientation="horizontal">
 
-<!--            <ImageButton-->
-<!--                android:id="@+id/option_call"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:background="@android:color/transparent"-->
-<!--                android:src="@drawable/baseline_phone_in_talk"-->
-<!--                android:tint="@color/secondary3"-->
-<!--                tools:ignore="UseAppTint" />-->
-<!--            -->
+            <!--            <ImageButton-->
+            <!--                android:id="@+id/option_call"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:background="@android:color/transparent"-->
+            <!--                android:src="@drawable/baseline_phone_in_talk"-->
+            <!--                android:tint="@color/secondary3"-->
+            <!--                tools:ignore="UseAppTint" />-->
+            <!--            -->
             <com.zegocloud.uikit.prebuilt.call.invite.widget.ZegoSendCallInvitationButton
                 android:id="@+id/new_voice_call"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:layout_marginEnd="8dp"
-                android:textColor="@android:color/white"
-                />
+                android:textColor="@android:color/white" />
+
             <com.zegocloud.uikit.prebuilt.call.invite.widget.ZegoSendCallInvitationButton
                 android:id="@+id/new_video_call"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:layout_marginStart="8dp"
-                android:textColor="@android:color/white"
-                />
+                android:textColor="@android:color/white" />
 
             <ImageButton
                 android:id="@+id/option_more"
@@ -125,8 +124,7 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/send_chat"
         android:layout_below="@+id/chat_tool_bar"
-        android:layout_alignParentEnd="true"
-         />
+        android:layout_alignParentEnd="true" />
 
     <LinearLayout
         android:id="@+id/send_chat"

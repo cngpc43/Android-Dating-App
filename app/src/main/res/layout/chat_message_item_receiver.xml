@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="8dp">
+    android:padding="2dp">
 
     <LinearLayout
         android:id="@+id/receive_layout"
@@ -10,8 +10,9 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginEnd="80dp"
+        android:layout_marginStart="6dp"
         android:orientation="vertical"
-        android:padding="8dp">
+        android:padding="2dp">
 
         <TextView
             android:id="@+id/receive_message_time"
@@ -19,18 +20,19 @@
             android:layout_height="wrap_content"
             android:text="11:00 PM"
             android:textColor="@color/secondary2"
-            android:textSize="10sp" />
+            android:textSize="7pt" />
 
         <FrameLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/rounded_message_receive"
             android:backgroundTint="@color/message_receive"
-            android:padding="8dp">
+            android:padding="6dp">
 
             <TextView
                 android:id="@+id/receive_message"
                 android:layout_width="wrap_content"
+                android:textSize="8pt"
                 android:layout_height="wrap_content"
                 android:text="Hello, how are you ?"
                 android:textColor="@color/secondary3" />

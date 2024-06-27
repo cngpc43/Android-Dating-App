@@ -51,6 +51,7 @@ public class MatchingRequestAdapter extends RecyclerView.Adapter<MatchingRequest
 
     @Override
     public void onBindViewHolder(@NonNull MatchingRequestAdapter.viewholder holder, @SuppressLint("RecyclerView") int position) {
+        // Handle timestamp get from firebase
         Long timestamp = (Long) matchingRequests.get(position).get("timestamp");
         Date date = new Date(timestamp);
         SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy HH:mm:ss");

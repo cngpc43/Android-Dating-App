@@ -259,8 +259,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:stepSize="1"
-                        android:valueFrom="13"
-                        android:valueTo="55" />
+                        android:valueFrom="18"
+                        android:valueTo="60" />
                 </LinearLayout>
             </LinearLayout>
 
