@@ -9,11 +9,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -58,7 +60,7 @@ import java.util.List;
 
 public class ChatActivity extends AppCompatActivity {
     EditText messageInput;
-    ImageButton sendMessBtn, backBtn, audioCall;
+    ImageButton sendMessBtn, backBtn, optMore;
     TextView userName, userStatus;
     ShapeableImageView userAvatar;
     RecyclerView mainChat;
@@ -155,11 +157,12 @@ public class ChatActivity extends AppCompatActivity {
         backBtn = findViewById(R.id.chat_back_button);
         mainChat = findViewById(R.id.chat_main);
         llSendChat = findViewById(R.id.send_chat);
+        optMore = findViewById(R.id.option_more);
 
-        // Khoi tao chat message - day la hard data, thay bang firebase sau
+        // Init chat message model
         chatMessages = new ArrayList<ChatMessage>();
 
-        // Gui chat message vo recyclerView
+        // Send message into the recycle view to display
         chatAdapter = new ChatAdapter(chatMessages);
         mainChat.setAdapter(chatAdapter);
         mainChat.setLayoutManager(new LinearLayoutManager(this));
@@ -208,20 +211,20 @@ public class ChatActivity extends AppCompatActivity {
         View popupView = inflater.inflate(R.layout.attachment_popup, null);
         attachmentPopup = new PopupWindow(popupView, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
-        // Xu ly khi nhan vao icon attachment trong chat_input
+        // Handle chat attachment icon in chat input field
         messageInput.setOnTouchListener((v, event) -> {
             final int DRAWABLE_RIGHT = 2;
 
             if (event.getAction() == MotionEvent.ACTION_UP) {
                 if (event.getRawX() >= (messageInput.getRight() - messageInput.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
-                    // Kiem tra popup co shoing hay k
+                    // Check popup window is showing are not
                     if (attachmentPopup.isShowing()) {
-                        // Neu dang show thi huy no di
+                        // Dismiss if the popup is showing
                         attachmentPopup.dismiss();
                         return true;
                     }
 
-                    // Neu k show thi hien no o tren chat_input view
+                    // Display it if it is not showing
                     attachmentPopup.setWidth(LinearLayout.LayoutParams.MATCH_PARENT); // Set width to match parent
                     attachmentPopup.showAtLocation(messageInput, Gravity.NO_GRAVITY, 0, mainChat.getBottom() - 100); // Show at top of chat_input
                     return true;
@@ -243,6 +246,9 @@ public class ChatActivity extends AppCompatActivity {
         newVoiceCall.setResourceID("zegouikit_call");
         newVoiceCall.setBackgroundResource(R.drawable.icons8_call_36);
         newVoiceCall.setInvitees(Collections.singletonList(new ZegoUIKitUser(getIntent().getStringExtra("userId"), getIntent().getStringExtra("userName"))));
+
+        // Handle option more button
+        optMore.setOnClickListener(v -> showPopupMenu());
     }
 
     // Xu ly chuc nang gui tin nhan
@@ -279,6 +285,28 @@ public class ChatActivity extends AppCompatActivity {
                         Log.w("ChatActivity", "Failed to send message.", task.getException());
                     }
                 });
+    }
+
+    // Show popup menu
+    private void showPopupMenu() {
+        // Init the popup menu and give the reference as current context
+        PopupMenu optPopupMenu = new PopupMenu(ChatActivity.this, optMore);
+
+        // Get the content menu
+        optPopupMenu.getMenuInflater().inflate(R.menu.option_chat_popup_menu, optPopupMenu.getMenu());
+        // Handle the item click in the popup menu
+        optPopupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Toast.makeText(ChatActivity.this, "Click: " + item.getItemId(), Toast.LENGTH_SHORT).show();
+
+                // Return true to finish the click
+                return true;
+            }
+        });
+
+        // Show popup menu
+        optPopupMenu.show();
     }
 }
 
