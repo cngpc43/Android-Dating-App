@@ -5,6 +5,7 @@ import com.google.android.gms.tasks.Task;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 public class ChatMessage {
     private String senderId, message, imgUrl, imgType;
@@ -63,7 +64,18 @@ public class ChatMessage {
         this.imgType = imgType;
     }
     private String convertTimestampToTime(long timestamp) {
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.getDefault());
-        return sdf.format(new Date(timestamp));
+        Date date = new Date(timestamp);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy HH:mm:ss");
+        Date currentDate = new Date();
+        Long difference = currentDate.getTime() - date.getTime();
+
+        if (TimeUnit.MILLISECONDS.toSeconds(difference) < 60)
+            return "Just now";
+        if (TimeUnit.MILLISECONDS.toMinutes(difference) >= 1 && TimeUnit.MILLISECONDS.toMinutes(difference) < 60)
+            return (TimeUnit.MILLISECONDS.toMinutes(difference) + "m");
+        else if (TimeUnit.MILLISECONDS.toHours(difference) >= 1 && TimeUnit.MILLISECONDS.toHours(difference) < 24)
+            return (TimeUnit.MILLISECONDS.toHours(difference) + "h");
+        else
+            return (TimeUnit.MILLISECONDS.toDays(difference) + "d");
     }
 }

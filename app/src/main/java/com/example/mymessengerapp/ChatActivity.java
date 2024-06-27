@@ -256,7 +256,7 @@ public class ChatActivity extends AppCompatActivity {
             chatRoomId = receiverId + "_" + senderId;
         }
         // Get the current timestamp
-        long timestamp = System.currentTimeMillis() / 1000;
+        long timestamp = System.currentTimeMillis();
 
         // Create a new message object
         HashMap<String, Object> chatMessage = new HashMap<>();

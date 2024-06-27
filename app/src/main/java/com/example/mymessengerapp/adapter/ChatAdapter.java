@@ -13,7 +13,10 @@ import com.example.mymessengerapp.R;
 import com.example.mymessengerapp.model.ChatMessage;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder> {
     private static final int VIEW_TYPE_MESSAGE_SENT = 1;
