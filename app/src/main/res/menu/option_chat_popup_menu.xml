@@ -6,7 +6,7 @@
         android:title="Search message"
         tools:ignore="HardcodedText" />
     <item
-        android:id="@+id/view_profile"
-        android:title="View profile"
+        android:id="@+id/unmatch_user"
+        android:title="Unmatch"
         tools:ignore="HardcodedText" />
 </menu>
