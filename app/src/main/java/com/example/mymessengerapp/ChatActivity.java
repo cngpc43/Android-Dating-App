@@ -241,16 +241,7 @@ public class ChatActivity extends AppCompatActivity {
         newVoiceCall.setIsVideoCall(false);
         newVoiceCall.setResourceID("zegouikit_call");
         newVoiceCall.setBackgroundResource(R.drawable.icons8_call_36);
-        newVoiceCall.setOnClickListener(v -> {
-            String targetUserID = getIntent().getStringExtra("userName");
-            String[] split = targetUserID.split(",");
-            List<ZegoUIKitUser> users = new ArrayList<>();
-            for (String userID : split) {
-                String userName = userID + "_name";
-                users.add(new ZegoUIKitUser(userID, userName));
-            }
-            newVoiceCall.setInvitees(users);
-        });
+        newVoiceCall.setInvitees(Collections.singletonList(new ZegoUIKitUser(getIntent().getStringExtra("userId"), getIntent().getStringExtra("userName"))));
     }
 
     // Xu ly chuc nang gui tin nhan
