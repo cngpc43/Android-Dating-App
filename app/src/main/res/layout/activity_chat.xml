@@ -33,12 +33,11 @@
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/chat_back_button">
 
-            <com.google.android.material.imageview.ShapeableImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/user_icon_chat"
                 android:layout_width="49dp"
                 android:layout_height="49dp"
-                android:padding="8dp"
-                android:scaleType="fitCenter"
+                android:padding="4dp"
                 android:src="@drawable/user_icon"
                 android:tint="@color/secondary3"
                 app:shapeAppearanceOverlay="@style/RoundedCorners"
@@ -114,17 +113,53 @@
         </LinearLayout>
     </RelativeLayout>
 
-    <!--  Chat  -->
+    <!--  Chat search bar (DEFAULT: not display)  -->
+    <RelativeLayout
+        android:id="@+id/searchBarMsg"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_below="@+id/chat_tool_bar"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="4dp"
+        android:background="@drawable/rounded_search_box"
+        android:elevation="10dp"
+        android:visibility="gone">
 
-    <!--  Send chat (footer)  -->
+
+        <EditText
+            android:id="@+id/etSearchMsg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:hint="Search here"
+            android:paddingLeft="50dp"
+            android:paddingRight="10dp"
+            android:singleLine="true"
+            android:textColor="@color/black" />
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="left"
+            android:layout_marginLeft="20dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_pink_search" />
+
+    </RelativeLayout>
+
+
+    <!--  Display chat  -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/chat_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/send_chat"
-        android:layout_below="@+id/chat_tool_bar"
+        android:layout_below="@+id/searchBarMsg"
         android:layout_alignParentEnd="true" />
 
+    <!--  Chat field (FOOTER)  -->
     <LinearLayout
         android:id="@+id/send_chat"
         android:layout_width="match_parent"

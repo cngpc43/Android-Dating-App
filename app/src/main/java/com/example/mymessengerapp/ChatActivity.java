@@ -1,9 +1,6 @@
 package com.example.mymessengerapp;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,6 +14,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -58,11 +56,13 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class ChatActivity extends AppCompatActivity {
     EditText messageInput;
     ImageButton sendMessBtn, backBtn, optMore;
     TextView userName, userStatus;
-    ShapeableImageView userAvatar;
+    CircleImageView userAvatar;
     RecyclerView mainChat;
     ArrayList<Users> usersArrayList;
     ChatAdapter chatAdapter;
@@ -88,6 +88,7 @@ public class ChatActivity extends AppCompatActivity {
         } else {
             chatRoomId = receiverId + "_" + senderId;
         }
+
         DatabaseReference chatRoomRef = FirebaseDatabase.getInstance().getReference("Chats").child(chatRoomId);
         chatRoomRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -183,6 +184,7 @@ public class ChatActivity extends AppCompatActivity {
 
         // Xu ly khi nhan back ve
         backBtn.setOnClickListener(v -> onBackPressed());
+
         sendMessBtn.setOnClickListener(v -> {
             String message = messageInput.getText().toString().trim();
 
@@ -251,6 +253,21 @@ public class ChatActivity extends AppCompatActivity {
         optMore.setOnClickListener(v -> showPopupMenu());
     }
 
+    @Override
+    public void onBackPressed() {
+        RelativeLayout searchBarMsg = findViewById(R.id.searchBarMsg);
+
+        // Check if searchBarMsg is visible
+        if (searchBarMsg.getVisibility() == View.VISIBLE) {
+            // If searchBarMsg is visible, hide it and return
+            searchBarMsg.setVisibility(View.GONE);
+            return;
+        }
+
+        // If searchBarMsg is not visible, call the superclass implementation
+        super.onBackPressed();
+    }
+
     // Xu ly chuc nang gui tin nhan
     void handleSendMessage(String message, String receiverId) {
         String senderId = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -296,12 +313,20 @@ public class ChatActivity extends AppCompatActivity {
         optPopupMenu.getMenuInflater().inflate(R.menu.option_chat_popup_menu, optPopupMenu.getMenu());
         // Handle the item click in the popup menu
         optPopupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @SuppressLint("NonConstantResourceId")
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                Toast.makeText(ChatActivity.this, "Click: " + item.getItemId(), Toast.LENGTH_SHORT).show();
-
-                // Return true to finish the click
-                return true;
+                switch (item.getItemId()){
+                    case R.id.search_msg: {
+                        // Find the searchBarMsg view
+                        RelativeLayout searchBarMsg = findViewById(R.id.searchBarMsg);
+                        // Set its visibility to VISIBLE
+                        searchBarMsg.setVisibility(View.VISIBLE);
+                        return true;
+                    }
+                    default:
+                        return true;
+                }
             }
         });
 
