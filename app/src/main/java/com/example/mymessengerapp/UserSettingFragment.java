@@ -88,6 +88,7 @@ public class UserSettingFragment extends Fragment {
     // request code
     private final int PICK_IMAGE_REQUEST = 22;
     int attempts = 0;
+    boolean gender_spinner_initial = false, sexual_spinner_initial = false, gender_show_spinner_initial = false;
 
     public UserSettingFragment() {
     }
@@ -149,16 +150,6 @@ public class UserSettingFragment extends Fragment {
         ArrayAdapter adapter2 = ArrayAdapter.createFromResource(getContext(), R.array.gender_show_array, R.layout.gender_spinner_item);
         adapter2.setDropDownViewResource(R.layout.gender_spinner_dropdown);
         gender_show_spinner.setAdapter(adapter2);
-
-        auth.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                if (firebaseAuth.getCurrentUser() == null) {
-                    if (reference != null && listener != null)
-                        reference.removeEventListener(listener);
-                }
-            }
-        });
 
         // update values from database
         reference.addValueEventListener(listener = new ValueEventListener() {
@@ -397,11 +388,16 @@ public class UserSettingFragment extends Fragment {
             }
         });
 
+
         gender_show_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-                String gender_show = parent.getItemAtPosition(pos).toString();
-                reference.child("gender_show").setValue(gender_show);
+                if (gender_show_spinner_initial) {
+                    String gender_show = parent.getItemAtPosition(pos).toString();
+                    reference.child("gender_show").setValue(gender_show);
+                } else {
+                    gender_show_spinner_initial = true;
+                }
             }
 
             @Override
@@ -411,8 +407,12 @@ public class UserSettingFragment extends Fragment {
 
         gender_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-                String gender = parent.getItemAtPosition(pos).toString();
-                reference.child("gender").setValue(gender);
+                if (gender_spinner_initial) {
+                    String gender = parent.getItemAtPosition(pos).toString();
+                    reference.child("gender").setValue(gender);
+                } else {
+                    gender_spinner_initial = true;
+                }
             }
             public void onNothingSelected(AdapterView<?> parent) {
             }
@@ -421,8 +421,12 @@ public class UserSettingFragment extends Fragment {
 
         sexual_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-                String sexual = parent.getItemAtPosition(pos).toString();
-                reference.child("sexual_orientation").setValue(sexual);
+                if (sexual_spinner_initial) {
+                    String sexual = parent.getItemAtPosition(pos).toString();
+                    reference.child("sexual_orientation").setValue(sexual);
+                } else {
+                    sexual_spinner_initial = true;
+                }
             }
             public void onNothingSelected(AdapterView<?> parent) {
             }
@@ -599,8 +603,8 @@ public class UserSettingFragment extends Fragment {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onStop() {
+        super.onStop();
         if (reference != null && listener != null) {
             reference.removeEventListener(listener);
         }
