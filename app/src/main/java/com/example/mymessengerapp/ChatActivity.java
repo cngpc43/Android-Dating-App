@@ -111,8 +111,9 @@ public class ChatActivity extends AppCompatActivity {
                 // Notify the adapter that the data set has changed
                 chatAdapter.notifyDataSetChanged();
 
-                // Scroll the RecyclerView to the last item
-                mainChat.smoothScrollToPosition(chatMessages.size() - 1);
+                // Scroll the to message receive
+                if (!chatMessages.isEmpty())
+                    mainChat.smoothScrollToPosition(chatMessages.size() - 1);
             }
 
             @Override

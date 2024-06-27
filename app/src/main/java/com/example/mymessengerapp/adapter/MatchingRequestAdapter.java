@@ -109,7 +109,7 @@ public class MatchingRequestAdapter extends RecyclerView.Adapter<MatchingRequest
                 // Add chatroomId into Chats
                 FirebaseDatabase.getInstance().getReference("Chats")
                         .child(chatRoomId)
-                        .setValue("Chat started");
+                        .setValue("");
 
                 FirebaseDatabase.getInstance().getReference().child("MatchRequests/" +
                         matchingRequests.get(position).get("requestId") + "/status").setValue("accepted");
