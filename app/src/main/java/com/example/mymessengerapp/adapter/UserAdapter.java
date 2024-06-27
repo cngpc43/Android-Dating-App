@@ -159,6 +159,19 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.viewholder> {
                         if (temp_hasSentRequest) {
                             Toast.makeText(mainActivity, "You and " + likedUserName + " are now matched", Toast.LENGTH_SHORT).show();
                             // insert code for creating chat room here
+                            String chatRoomId = currentUserId + "_" + likedUserId;
+                            FirebaseDatabase.getInstance().getReference("ChatRooms")
+                                    .child(currentUserId)
+                                    .child(chatRoomId)
+                                    .setValue(true);
+                            FirebaseDatabase.getInstance().getReference("ChatRooms")
+                                    .child(likedUserId)
+                                    .child(chatRoomId)
+                                    .setValue(true);
+                            // Add chatroomId into Chats
+                            FirebaseDatabase.getInstance().getReference("Chats")
+                                    .child(chatRoomId)
+                                    .setValue("Chat started");
                         }
                         else
                             Toast.makeText(mainActivity, "Matching request sent to " + likedUserName, Toast.LENGTH_SHORT).show();
