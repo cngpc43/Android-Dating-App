@@ -1,6 +1,5 @@
 package com.example.mymessengerapp;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -10,17 +9,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import com.example.mymessengerapp.model.ChatDetail;
-import com.example.mymessengerapp.model.ChatMessage;
-import com.google.android.material.search.SearchView;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mymessengerapp.adapter.ChatHomeAdapter;
-import com.example.mymessengerapp.adapter.UserAdapter;
-import com.example.mymessengerapp.model.Users;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -30,21 +24,11 @@ import com.google.firebase.database.ValueEventListener;
 
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
 
 public class ChatFragment extends Fragment {
     FirebaseAuth auth;
@@ -52,7 +36,10 @@ public class ChatFragment extends Fragment {
     FirebaseDatabase database;
     EditText etSearch;
     ListView lv_list_chat;
+    List<String> chatRooms;
     List<ChatDetail> chatDetails;
+    ValueEventListener valueEventListener;
+    DatabaseReference chatRoomReference, chatsReference;
     public ChatFragment() {
     }
 
@@ -61,124 +48,98 @@ public class ChatFragment extends Fragment {
         super.onCreate(savedInstanceState);
         database = FirebaseDatabase.getInstance();
         auth = FirebaseAuth.getInstance();
-        DatabaseReference chatRef = database.getReference("ChatRooms").child(auth.getCurrentUser().getUid());
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        String currentUserId = auth.getCurrentUser().getUid();
-        DatabaseReference userChatRoomsRef = database.getReference("ChatRooms").child(currentUserId);
         chatDetails = new LinkedList<ChatDetail>();
+        chatRooms = new LinkedList<String>();
         adapter = new ChatHomeAdapter(getContext(), chatDetails);
 
-        userChatRoomsRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    for (DataSnapshot chatRoomSnapshot : dataSnapshot.getChildren()) {
-                        Boolean isMember = chatRoomSnapshot.getValue(Boolean.class);
-                        if (isMember != null && isMember) {
-                            String chatRoomId = chatRoomSnapshot.getKey();
-//                            DatabaseReference chatRoomRef = database.getReference("ChatRooms").child(chatRoomId);
-                            // Get all users in the chat room
-                            DatabaseReference chatRoomUsersRef = database.getReference("ChatRooms");
-                            chatRoomUsersRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                    for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
-                                        String userId = userSnapshot.getKey();
-                                        DataSnapshot userChatRoomSnapshot = userSnapshot.child(chatRoomId);
-                                        Boolean isMember = userChatRoomSnapshot.getValue(Boolean.class);
-                                        // Check if the user is not the current user and is a member of the chat room
-                                        if (isMember != null && isMember && !userId.equals(currentUserId)) {
-                                            // Get the last message and its timestamp
-                                            DatabaseReference chatRef = database.getReference("Chats").child(chatRoomId);
-                                            chatRef.orderByKey().limitToLast(1).addListenerForSingleValueEvent(new ValueEventListener() {
-                                                @Override
-                                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                                    if (dataSnapshot.exists()) {
-                                                        for (DataSnapshot messageSnapshot : dataSnapshot.getChildren()) {
-                                                            String lastMessage = messageSnapshot.child("text").getValue(String.class);
-                                                            Log.d("ChatFragment", "Last message: " + lastMessage);
-                                                            long timestamp = messageSnapshot.child("timestamp").getValue(Long.class);
-                                                            // Get the username and user image
-                                                            DatabaseReference userRef = database.getReference("user").child(userId);
-                                                            userRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                                                                @Override
-                                                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                                                    String userId = dataSnapshot.child("userId").getValue(String.class);
-                                                                    String userName = dataSnapshot.child("userName").getValue(String.class);
-                                                                    String userImage = dataSnapshot.child("profilepic").getValue(String.class);
-                                                                    ChatDetail chatDetail = new ChatDetail(userId, userName, userImage, lastMessage, timestamp);
-                                                                    chatDetails.add(chatDetail);
-                                                                    if (isAdded()) {
-                                                                        ChatHomeAdapter adapter = new ChatHomeAdapter(getContext(), chatDetails);
-                                                                        lv_list_chat.setAdapter(adapter);
-                                                                        adapter.notifyDataSetChanged();
-                                                                    } else {
-                                                                        Log.e("ChatFragment", "Fragment not attached to a context.");
-                                                                    }
-                                                                }
+        String currentUserId = auth.getCurrentUser().getUid();
+        chatsReference = database.getReference("Chats");
+        chatRoomReference = database.getReference("ChatRooms/" + currentUserId);
 
-                                                                @Override
-                                                                public void onCancelled(DatabaseError databaseError) {
-                                                                    System.out.println("Error: " + databaseError.getMessage());
-                                                                }
-                                                            });
+
+        // listen for value change in Database/Chats
+        chatsReference.addValueEventListener(valueEventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                // get current user chat rooms
+                chatRooms.clear();
+                chatDetails.clear();
+                chatRoomReference.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+                    @Override
+                    public void onSuccess(DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.hasChildren()) {
+                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                chatRooms.add(snapshot.getKey());
+                            }
+                        }
+
+                        // if current user has chat rooms, get latest message of each room and timestamp of it
+                        if (chatRooms.size() > 0) {
+                            for (String room : chatRooms) {
+                                String firstUserId = room.substring(0, room.indexOf("_"));
+                                String secondUserId = room.substring(room.indexOf("_") + 1, room.length());
+                                String userId = firstUserId;
+                                if (userId.equals(currentUserId))
+                                    userId = secondUserId;
+                                String finalUserId = userId;
+                                chatsReference.child(room).orderByKey().limitToLast(1).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+                                    @Override
+                                    public void onSuccess(DataSnapshot dataSnapshot) {
+                                        if (dataSnapshot.hasChildren()) {
+                                            for (DataSnapshot messageSnapshot : dataSnapshot.getChildren()) {
+                                                String lastMessage = messageSnapshot.child("text").getValue(String.class);
+                                                Log.d("ChatFragment", "Last message: " + lastMessage);
+                                                long timestamp = messageSnapshot.child("timestamp").getValue(Long.class);
+                                                // Get the username and user image
+                                                DatabaseReference userRef = database.getReference("user").child(finalUserId);
+                                                userRef.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+                                                    @Override
+                                                    public void onSuccess(DataSnapshot dataSnapshot) {
+                                                        String userId = dataSnapshot.child("userId").getValue(String.class);
+                                                        String userName = dataSnapshot.child("userName").getValue(String.class);
+                                                        String userImage = dataSnapshot.child("profilepic").getValue(String.class);
+                                                        ChatDetail chatDetail = new ChatDetail(userId, userName, userImage, lastMessage, timestamp);
+                                                        chatDetails.add(chatDetail);
+                                                        if (isAdded()) {
+                                                            adapter.setArraylist(chatDetails);
+                                                            adapter.notifyDataSetChanged();
+                                                        } else {
+                                                            Log.e("ChatFragment", "Fragment not attached to a context.");
                                                         }
                                                     }
-                                                    else{
-                                                        // Get the username and user image
-                                                        DatabaseReference userRef = database.getReference("user").child(userId);
-                                                        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                                                            @Override
-                                                            public void onDataChange(DataSnapshot dataSnapshot) {
-//                                                              Log data snapshot
-                                                                String userId = dataSnapshot.child("userId").getValue(String.class);
-                                                                String userName = dataSnapshot.child("userName").getValue(String.class);
-                                                                String userImage = dataSnapshot.child("profilepic").getValue(String.class);
-                                                                ChatDetail chatDetail = new ChatDetail(userId, userName, userImage, "Send your first message", 0);
-                                                                chatDetails.add(chatDetail);
-                                                                if (isAdded()) {
-                                                                    ChatHomeAdapter adapter = new ChatHomeAdapter(getContext(), chatDetails);
-                                                                    lv_list_chat.setAdapter(adapter);
-                                                                    adapter.notifyDataSetChanged();
-                                                                } else {
-                                                                    Log.e("ChatFragment", "Fragment not attached to a context.");
-                                                                }
-                                                            }
-
-                                                            @Override
-                                                            public void onCancelled(DatabaseError databaseError) {
-                                                                System.out.println("Error: " + databaseError.getMessage());
-                                                            }
-                                                        });
-                                                    }
-
-                                                }
-
+                                                });
+                                            }
+                                        } else {
+                                            DatabaseReference userRef = database.getReference("user").child(finalUserId);
+                                            // Get the username and user image
+                                            userRef.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
                                                 @Override
-                                                public void onCancelled(DatabaseError databaseError) {
-                                                    System.out.println("Error: " + databaseError.getMessage());
+                                                public void onSuccess(DataSnapshot dataSnapshot) {
+                                                    String userId = dataSnapshot.child("userId").getValue(String.class);
+                                                    String userName = dataSnapshot.child("userName").getValue(String.class);
+                                                    String userImage = dataSnapshot.child("profilepic").getValue(String.class);
+                                                    ChatDetail chatDetail = new ChatDetail(userId, userName, userImage, "Send your first message", 0);
+                                                    chatDetails.add(chatDetail);
+                                                    if (isAdded()) {
+                                                        adapter.setArraylist(chatDetails);
+                                                        adapter.notifyDataSetChanged();
+                                                    } else {
+                                                        Log.e("ChatFragment", "Fragment not attached to a context.");
+                                                    }
                                                 }
                                             });
                                         }
                                     }
-                                }
-
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
-                                    System.out.println("Error: " + databaseError.getMessage());
-                                }
-                            });
+                                });
+                            }
                         }
                     }
-                } else {
-                    System.out.println("User is not in any chat rooms");
-                }
+                });
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
-                System.out.println("Error: " + databaseError.getMessage());
+            public void onCancelled(@NonNull DatabaseError error) {
+
             }
         });
     }
@@ -219,127 +180,11 @@ public class ChatFragment extends Fragment {
         });
         return view;
     }
+
     @Override
-    public void onResume() {
-        super.onResume();
-        // Refresh the chat details list
-        refreshChatDetails();
-    }
-
-    private void refreshChatDetails() {
-        // Clear the chatDetails list
-        chatDetails.clear();
-
-        // Get the updated chat details from the database
-        String currentUserId = auth.getCurrentUser().getUid();
-        DatabaseReference userChatRoomsRef = database.getReference("ChatRooms").child(currentUserId);
-        userChatRoomsRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    for (DataSnapshot chatRoomSnapshot : dataSnapshot.getChildren()) {
-                        Boolean isMember = chatRoomSnapshot.getValue(Boolean.class);
-                        if (isMember != null && isMember) {
-                            String chatRoomId = chatRoomSnapshot.getKey();
-                            // Get all users in the chat room
-                            DatabaseReference chatRoomUsersRef = database.getReference("ChatRooms");
-                            chatRoomUsersRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                    for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
-                                        String userId = userSnapshot.getKey();
-                                        DataSnapshot userChatRoomSnapshot = userSnapshot.child(chatRoomId);
-                                        Boolean isMember = userChatRoomSnapshot.getValue(Boolean.class);
-                                        // Check if the user is not the current user and is a member of the chat room
-                                        if (isMember != null && isMember && !userId.equals(currentUserId)) {
-                                            // Get the last message and its timestamp
-                                            DatabaseReference chatRef = database.getReference("Chats").child(chatRoomId);
-                                            chatRef.orderByKey().limitToLast(1).addListenerForSingleValueEvent(new ValueEventListener() {
-                                                @Override
-                                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                                    if (dataSnapshot.exists()) {
-                                                        for (DataSnapshot messageSnapshot : dataSnapshot.getChildren()) {
-                                                            String lastMessage = messageSnapshot.child("text").getValue(String.class);
-                                                            Log.d("ChatFragment", "Last message: " + lastMessage);
-                                                            long timestamp = messageSnapshot.child("timestamp").getValue(Long.class);
-                                                            // Get the username and user image
-                                                            DatabaseReference userRef = database.getReference("user").child(userId);
-                                                            userRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                                                                @Override
-                                                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                                                    String userId = dataSnapshot.child("userId").getValue(String.class);
-                                                                    String userName = dataSnapshot.child("userName").getValue(String.class);
-                                                                    String userImage = dataSnapshot.child("profilepic").getValue(String.class);
-                                                                    ChatDetail chatDetail = new ChatDetail(userId, userName, userImage, lastMessage, timestamp);
-                                                                    chatDetails.add(chatDetail);
-                                                                    if (isAdded()) {
-                                                                        adapter.notifyDataSetChanged();
-                                                                        adapter.setArraylist(chatDetails);
-                                                                    } else {
-                                                                        Log.e("ChatFragment", "Fragment not attached to a context.");
-                                                                    }
-                                                                }
-
-                                                                @Override
-                                                                public void onCancelled(DatabaseError databaseError) {
-                                                                    System.out.println("Error: " + databaseError.getMessage());
-                                                                }
-                                                            });
-                                                        }
-                                                    }
-                                                    else{
-                                                        // Get the username and user image
-                                                        DatabaseReference userRef = database.getReference("user").child(userId);
-                                                        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                                                            @Override
-                                                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                                                String userId = dataSnapshot.child("userId").getValue(String.class);
-                                                                String userName = dataSnapshot.child("userName").getValue(String.class);
-                                                                String userImage = dataSnapshot.child("profilepic").getValue(String.class);
-                                                                ChatDetail chatDetail = new ChatDetail(userId, userName, userImage, "Send your first message", 0);
-                                                                chatDetails.add(chatDetail);
-                                                                if (isAdded()) {
-                                                                    adapter.notifyDataSetChanged();
-                                                                    adapter.setArraylist(chatDetails);
-                                                                } else {
-                                                                    Log.e("ChatFragment", "Fragment not attached to a context.");
-                                                                }
-                                                            }
-
-                                                            @Override
-                                                            public void onCancelled(DatabaseError databaseError) {
-                                                                System.out.println("Error: " + databaseError.getMessage());
-                                                            }
-                                                        });
-                                                    }
-
-                                                }
-
-                                                @Override
-                                                public void onCancelled(DatabaseError databaseError) {
-                                                    System.out.println("Error: " + databaseError.getMessage());
-                                                }
-                                            });
-                                        }
-                                    }
-                                }
-
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
-                                    System.out.println("Error: " + databaseError.getMessage());
-                                }
-                            });
-                        }
-                    }
-                } else {
-                    System.out.println("User is not in any chat rooms");
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                System.out.println("Error: " + databaseError.getMessage());
-            }
-        });
+    public void onDestroy() {
+        super.onDestroy();
+        if (chatsReference != null && valueEventListener != null)
+            chatsReference.removeEventListener(valueEventListener);
     }
 }
