@@ -34,6 +34,8 @@ public class NotificationFragment extends Fragment {
     ArrayList<Users> usersArrayList;
     Context context;
     String currentUserId;
+    ValueEventListener valueEventListener;
+    DatabaseReference reference;
     int matching_request_count = 0, request_sent_count = 0;
 
     public NotificationFragment(Context context) {
@@ -62,10 +64,10 @@ public class NotificationFragment extends Fragment {
         title.setText("Notifications");
 
         currentUserId = auth.getCurrentUser().getUid();
-        DatabaseReference matchRequestsRef = database.getReference("MatchRequests").child(currentUserId);
+        reference = database.getReference("MatchRequests");
 
 
-        database.getReference("MatchRequests").addValueEventListener(new ValueEventListener() {
+        reference.addValueEventListener(valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 matching_request_count = 0;
@@ -105,6 +107,14 @@ public class NotificationFragment extends Fragment {
             }
         });
         return view;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        if (reference != null && valueEventListener != null)
+            reference.removeEventListener(valueEventListener);
     }
 
 }

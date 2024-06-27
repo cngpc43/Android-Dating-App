@@ -207,8 +207,8 @@ public class MainFragment extends Fragment {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onStop() {
+        super.onStop();
         if (auth != null && authStateListener != null)
             auth.removeAuthStateListener(authStateListener);
         if (reference != null && valueEventListener != null)

@@ -123,8 +123,8 @@ public class UserHeightFragment extends Fragment {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onStop() {
+        super.onStop();
         if (reference != null && valueEventListener != null) {
             reference.removeEventListener(valueEventListener);
         }
