@@ -46,7 +46,6 @@ public class MainActivity extends AppCompatActivity {
     LinearLayout home_selected, user_selected, chat_selected, noti_selected;
     MaterialTextView title;
     ValueEventListener valueEventListener;
-    DatabaseReference reference;
     Boolean doubleBackToExitPressedOnce = false;
 
     @Override
@@ -95,6 +94,10 @@ public class MainActivity extends AppCompatActivity {
         } else {
             // No authenticated user handler
             Toast.makeText(this, "No authenticated user", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(MainActivity.this, login.class);
+            startActivity(intent);
+            finish();
+
         }
 
         if (getIntent() == null || getIntent().getStringExtra("fragment") == null) {
@@ -109,20 +112,6 @@ public class MainActivity extends AppCompatActivity {
             else
                 selectHome();
         }
-
-        auth.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                if (firebaseAuth.getCurrentUser() == null) {
-                    /*if (reference != null && valueEventListener != null) {
-                        reference.removeEventListener(valueEventListener);
-                    }*/
-                    Intent intent = new Intent(MainActivity.this, login.class);
-                    startActivity(intent);
-                    finish();
-                }
-            }
-        });
 
 
         user.setOnClickListener(new View.OnClickListener() {
@@ -213,10 +202,4 @@ public class MainActivity extends AppCompatActivity {
         user_selected.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.selected_nav_item));
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (reference != null && valueEventListener != null)
-            reference.removeEventListener(valueEventListener);
-    }
 }
