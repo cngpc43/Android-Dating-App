@@ -33,12 +33,11 @@
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/chat_back_button">
 
-            <com.google.android.material.imageview.ShapeableImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/user_icon_chat"
                 android:layout_width="49dp"
                 android:layout_height="49dp"
-                android:padding="8dp"
-                android:scaleType="fitCenter"
+                android:padding="4dp"
                 android:src="@drawable/user_icon"
                 android:tint="@color/secondary3"
                 app:shapeAppearanceOverlay="@style/RoundedCorners"

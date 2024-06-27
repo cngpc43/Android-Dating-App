@@ -1,9 +1,6 @@
 package com.example.mymessengerapp;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -59,11 +56,13 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class ChatActivity extends AppCompatActivity {
     EditText messageInput;
     ImageButton sendMessBtn, backBtn, optMore;
     TextView userName, userStatus;
-    ShapeableImageView userAvatar;
+    CircleImageView userAvatar;
     RecyclerView mainChat;
     ArrayList<Users> usersArrayList;
     ChatAdapter chatAdapter;
