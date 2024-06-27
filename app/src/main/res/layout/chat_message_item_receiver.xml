@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/rounded_message_receive"
             android:backgroundTint="@color/message_receive"
-            android:padding="6dp">
+            android:padding="10dp">
 
             <TextView
                 android:id="@+id/receive_message"

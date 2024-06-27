@@ -30,7 +30,7 @@
             android:background="@drawable/rounded_message_send"
             android:backgroundTint="@color/message_sent"
             android:layout_gravity="end"
-            android:padding="6dp">
+            android:padding="10dp">
 
             <TextView
                 android:id="@+id/send_message"

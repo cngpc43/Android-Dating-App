@@ -157,7 +157,8 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/send_chat"
         android:layout_below="@+id/searchBarMsg"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:background="@drawable/chat_bg_default" />
 
     <!--  Chat field (FOOTER)  -->
     <LinearLayout
