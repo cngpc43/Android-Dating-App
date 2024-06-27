@@ -595,8 +595,8 @@ public class UserSettingFragment extends Fragment {
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
+    public void onDestroy() {
+        super.onDestroy();
         if (reference != null && listener != null) {
             reference.removeEventListener(listener);
         }

@@ -88,17 +88,20 @@ public class ChatFragment extends Fragment {
                                         if (dataSnapshot.hasChildren()) {
                                             for (DataSnapshot messageSnapshot : dataSnapshot.getChildren()) {
                                                 String lastMessage = messageSnapshot.child("text").getValue(String.class);
+                                                if (messageSnapshot.child("senderId").getValue(String.class).equals(currentUserId))
+                                                    lastMessage = "You: " + lastMessage;
                                                 Log.d("ChatFragment", "Last message: " + lastMessage);
                                                 long timestamp = messageSnapshot.child("timestamp").getValue(Long.class);
                                                 // Get the username and user image
                                                 DatabaseReference userRef = database.getReference("user").child(finalUserId);
+                                                String finalLastMessage = lastMessage;
                                                 userRef.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
                                                     @Override
                                                     public void onSuccess(DataSnapshot dataSnapshot) {
                                                         String userId = dataSnapshot.child("userId").getValue(String.class);
                                                         String userName = dataSnapshot.child("userName").getValue(String.class);
                                                         String userImage = dataSnapshot.child("profilepic").getValue(String.class);
-                                                        ChatDetail chatDetail = new ChatDetail(userId, userName, userImage, lastMessage, timestamp);
+                                                        ChatDetail chatDetail = new ChatDetail(userId, userName, userImage, finalLastMessage, timestamp);
                                                         chatDetails.add(chatDetail);
                                                         if (isAdded()) {
                                                             adapter.setArraylist(chatDetails);
@@ -182,8 +185,8 @@ public class ChatFragment extends Fragment {
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
+    public void onDestroy() {
+        super.onDestroy();
         if (chatsReference != null && valueEventListener != null)
             chatsReference.removeEventListener(valueEventListener);
     }
