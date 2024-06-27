@@ -13,31 +13,37 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <androidx.coordinatorlayout.widget.CoordinatorLayout
-            android:id="@+id/coorl_search"
-            android:layout_width="match_parent"
-            android:layout_height="90dp">
+        <RelativeLayout
+            android:layout_width="360dp"
+            android:layout_height="55dp"
+            android:id="@+id/searchBar"
+            android:background="@drawable/rounded_search_box"
+            android:layout_margin="15dp"
+            android:layout_gravity="center_horizontal"
+            >
 
-            <com.google.android.material.appbar.AppBarLayout
+            <EditText
+                android:id="@+id/etSearch"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent"
+                android:hint="Search here"
+                android:textColor="@color/black"
+                android:paddingLeft="50dp"
+                android:paddingRight="10dp"
+                android:singleLine="true"
+                android:background="@android:color/transparent" />
 
-                <com.google.android.material.search.SearchBar
-                    android:id="@+id/sb_search"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/search_hint" />
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:scaleType = "centerCrop"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="left"
+                android:layout_marginLeft="20dp"
+                android:src="@drawable/ic_pink_search"/>
 
-            </com.google.android.material.appbar.AppBarLayout>
-
-            <com.google.android.material.search.SearchView
-                android:id="@+id/sv_search"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/search_hint"
-                app:layout_anchor="@id/sb_search" />
-
-        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+        </RelativeLayout>
 
         <ListView
             android:id="@+id/lv_list_chat"

@@ -42,19 +42,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
 public class ChatFragment extends Fragment {
     FirebaseAuth auth;
-    RecyclerView mainUserRecyclerView;
-    UserAdapter adapter;
+    ChatHomeAdapter adapter;
     FirebaseDatabase database;
-    ArrayList<Users> usersArrayList;
-    LinearLayout chat_selected;
-    SearchView searchView;
+    EditText etSearch;
     ListView lv_list_chat;
-    ArrayList<ChatDetail> chatDetails;
+    List<ChatDetail> chatDetails;
     public ChatFragment() {
     }
 
@@ -63,13 +61,14 @@ public class ChatFragment extends Fragment {
         super.onCreate(savedInstanceState);
         database = FirebaseDatabase.getInstance();
         auth = FirebaseAuth.getInstance();
-        usersArrayList = new ArrayList<>();
         DatabaseReference chatRef = database.getReference("ChatRooms").child(auth.getCurrentUser().getUid());
         FirebaseAuth auth = FirebaseAuth.getInstance();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         String currentUserId = auth.getCurrentUser().getUid();
         DatabaseReference userChatRoomsRef = database.getReference("ChatRooms").child(currentUserId);
-        chatDetails = new ArrayList<ChatDetail>();
+        chatDetails = new LinkedList<ChatDetail>();
+        adapter = new ChatHomeAdapter(getContext(), chatDetails);
+
         userChatRoomsRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -187,8 +186,10 @@ public class ChatFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_chat, container, false);
-        searchView = view.findViewById(R.id.sv_search);
+        etSearch = view.findViewById(R.id.etSearch);
         lv_list_chat = view.findViewById(R.id.lv_list_chat);
+
+        lv_list_chat.setAdapter(adapter);
         lv_list_chat.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -199,8 +200,8 @@ public class ChatFragment extends Fragment {
                 startActivity(intent);
             }
         });
-        EditText searchEditText = searchView.getEditText();
-        searchEditText.addTextChangedListener(new TextWatcher() {
+
+        etSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 // khong lam gi
@@ -208,7 +209,7 @@ public class ChatFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                adapter.filter(etSearch.getText().toString());
             }
 
             @Override
@@ -272,9 +273,8 @@ public class ChatFragment extends Fragment {
                                                                     ChatDetail chatDetail = new ChatDetail(userId, userName, userImage, lastMessage, timestamp);
                                                                     chatDetails.add(chatDetail);
                                                                     if (isAdded()) {
-                                                                        ChatHomeAdapter adapter = new ChatHomeAdapter(getContext(), chatDetails);
-                                                                        lv_list_chat.setAdapter(adapter);
                                                                         adapter.notifyDataSetChanged();
+                                                                        adapter.setArraylist(chatDetails);
                                                                     } else {
                                                                         Log.e("ChatFragment", "Fragment not attached to a context.");
                                                                     }
@@ -299,9 +299,8 @@ public class ChatFragment extends Fragment {
                                                                 ChatDetail chatDetail = new ChatDetail(userId, userName, userImage, "Send your first message", 0);
                                                                 chatDetails.add(chatDetail);
                                                                 if (isAdded()) {
-                                                                    ChatHomeAdapter adapter = new ChatHomeAdapter(getContext(), chatDetails);
-                                                                    lv_list_chat.setAdapter(adapter);
                                                                     adapter.notifyDataSetChanged();
+                                                                    adapter.setArraylist(chatDetails);
                                                                 } else {
                                                                     Log.e("ChatFragment", "Fragment not attached to a context.");
                                                                 }
