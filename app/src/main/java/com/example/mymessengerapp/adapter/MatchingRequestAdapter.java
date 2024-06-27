@@ -93,10 +93,6 @@ public class MatchingRequestAdapter extends RecyclerView.Adapter<MatchingRequest
                 String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
                 String matchedUserId = matchingRequests.get(position).get("requesterId").toString();
 
-                FirebaseDatabase.getInstance().getReference("MatchRequests")
-                        .child(currentUserId)
-                        .child(matchedUserId)
-                        .setValue("accepted");
                 String chatRoomId = currentUserId + "_" + matchedUserId;
                 FirebaseDatabase.getInstance().getReference("ChatRooms")
                         .child(currentUserId)
