@@ -72,7 +72,6 @@ public class ChatHomeAdapter extends ArrayAdapter<ChatDetail> {
             TextView chatTime = convertView.findViewById(R.id.tv_chat_time);
             ChatDetail chatDetail = getItem(position);
             if (chatDetail != null) {
-
                 if(chatDetail.getTimestamp()==0){
                     chatTime.setVisibility(View.INVISIBLE);
                 }
