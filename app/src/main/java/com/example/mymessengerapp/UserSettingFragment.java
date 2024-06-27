@@ -521,7 +521,7 @@ public class UserSettingFragment extends Fragment {
                 location_preview.setText(result);
             }
             if (resultCode == Activity.RESULT_CANCELED) {
-                // Write your code if there's no result
+//                No result handler
             }
         }
 

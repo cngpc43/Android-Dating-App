@@ -92,16 +92,13 @@ public class ChatFragment extends Fragment {
                                         if (isMember != null && isMember && !userId.equals(currentUserId)) {
                                             // Get the last message and its timestamp
                                             DatabaseReference chatRef = database.getReference("Chats").child(chatRoomId);
-
                                             chatRef.orderByKey().limitToLast(1).addListenerForSingleValueEvent(new ValueEventListener() {
                                                 @Override
                                                 public void onDataChange(DataSnapshot dataSnapshot) {
-
                                                     if (dataSnapshot.exists()) {
-
                                                         for (DataSnapshot messageSnapshot : dataSnapshot.getChildren()) {
-                                                            String lastMessage = messageSnapshot.child("message").getValue(String.class);
-
+                                                            String lastMessage = messageSnapshot.child("text").getValue(String.class);
+                                                            Log.d("ChatFragment", "Last message: " + lastMessage);
                                                             long timestamp = messageSnapshot.child("timestamp").getValue(Long.class);
                                                             // Get the username and user image
                                                             DatabaseReference userRef = database.getReference("user").child(userId);
