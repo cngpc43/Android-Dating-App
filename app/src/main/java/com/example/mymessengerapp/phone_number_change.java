@@ -1,12 +1,11 @@
 package com.example.mymessengerapp;
 
-import android.app.ProgressDialog;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -14,27 +13,25 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.PhoneAuthProvider;
-import com.google.firebase.auth.SignInMethodQueryResult;
-import com.google.firebase.database.FirebaseDatabase;
 
 public class phone_number_change extends AppCompatActivity {
     ImageButton back_icon;
     TextInputEditText etPassword, etEmail;
     MaterialButton continue_button;
+    TextInputLayout textLayoutEmail;
     LinearLayout password_hint_wrong;
     FirebaseAuth auth;
-    TextView password_hint, title, email;
+    TextView password_hint, title;
     int attempts = 0;
+
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,17 +41,18 @@ public class phone_number_change extends AppCompatActivity {
         }
 
         auth = FirebaseAuth.getInstance();
-        back_icon = (ImageButton)findViewById(R.id.back_icon);
-        etPassword = (TextInputEditText)findViewById(R.id.etPassword);
-        etEmail = (TextInputEditText)findViewById(R.id.etEmail);
-        continue_button = (MaterialButton)findViewById(R.id.continue_button);
-        password_hint_wrong = (LinearLayout)findViewById(R.id.password_hint_wrong);
-        password_hint = (TextView)findViewById(R.id.password_hint);
-        title = (TextView)findViewById(R.id.title);
-        email = (TextView)findViewById(R.id.email);
+        back_icon = (ImageButton) findViewById(R.id.back_icon);
+        etPassword = (TextInputEditText) findViewById(R.id.etPassword);
+        etEmail = (TextInputEditText) findViewById(R.id.etEmail);
+        continue_button = (MaterialButton) findViewById(R.id.continue_button);
+        password_hint_wrong = (LinearLayout) findViewById(R.id.password_hint_wrong);
+        password_hint = (TextView) findViewById(R.id.password_hint);
+        title = (TextView) findViewById(R.id.title);
+        textLayoutEmail = (TextInputLayout) findViewById(R.id.editEmail);
 
         title.setText("Change your phone number");
-        email.setText("Enter your new phone number:");
+        textLayoutEmail.setHint("Enter your new phone number");
+        etEmail.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.baseline_local_phone_24, 0, 0, 0);
 
         back_icon.setOnClickListener(new View.OnClickListener() {
             @Override

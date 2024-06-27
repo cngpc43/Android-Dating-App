@@ -1,5 +1,6 @@
 package com.example.mymessengerapp;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -32,9 +34,11 @@ public class phone_number_add extends AppCompatActivity {
     TextInputEditText etPassword, etEmail;
     MaterialButton continue_button;
     LinearLayout password_hint_wrong;
+    TextInputLayout textInputLayout;
     FirebaseAuth auth;
-    TextView password_hint, title, email;
+    TextView password_hint, title;
     int attempts = 0;
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,10 +55,12 @@ public class phone_number_add extends AppCompatActivity {
         password_hint_wrong = (LinearLayout)findViewById(R.id.password_hint_wrong);
         password_hint = (TextView)findViewById(R.id.password_hint);
         title = (TextView)findViewById(R.id.title);
-        email = (TextView)findViewById(R.id.email);
-
+        textInputLayout = (TextInputLayout) findViewById(R.id.editEmail); 
+        
         title.setText("Add your phone number");
-        email.setText("Enter your phone number:");
+        textInputLayout.setHint("Enter your phone number");
+        etEmail.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.baseline_local_phone_24, 0, 0, 0);
+
 
         back_icon.setOnClickListener(new View.OnClickListener() {
             @Override
