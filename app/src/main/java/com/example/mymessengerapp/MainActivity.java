@@ -8,7 +8,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Application;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
@@ -21,7 +20,6 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.mymessengerapp.adapter.UserAdapter;
-import com.example.mymessengerapp.model.Users;
 import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -33,19 +31,12 @@ import com.google.firebase.database.ValueEventListener;
 import com.zegocloud.uikit.prebuilt.call.ZegoUIKitPrebuiltCallService;
 import com.zegocloud.uikit.prebuilt.call.invite.ZegoUIKitPrebuiltCallInvitationConfig;
 
-import java.util.ArrayList;
-import java.util.Objects;
-
 public class MainActivity extends AppCompatActivity {
     FirebaseAuth auth;
-    //    RecyclerView mainUserRecyclerView;
-    UserAdapter adapter;
     FirebaseDatabase database;
-    ArrayList<Users> usersArrayList;
     FrameLayout home, user, message, notification;
     LinearLayout home_selected, user_selected, chat_selected, noti_selected;
     MaterialTextView title;
-    ValueEventListener valueEventListener;
     Boolean doubleBackToExitPressedOnce = false;
 
     @Override
@@ -55,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
+
         database = FirebaseDatabase.getInstance();
         auth = FirebaseAuth.getInstance();
         user = findViewById(R.id.user);
@@ -73,6 +65,8 @@ public class MainActivity extends AppCompatActivity {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference databaseReference = database.getReference();
         FirebaseUser currentUser = auth.getCurrentUser();
+
+        // Check the user
         if (currentUser != null) {
             String userId = currentUser.getUid();
             DatabaseReference userNameRef = databaseReference.child("user").child(currentUser.getUid()).child("userName");
@@ -84,22 +78,22 @@ public class MainActivity extends AppCompatActivity {
                     ZegoUIKitPrebuiltCallInvitationConfig callInvitationConfig = new ZegoUIKitPrebuiltCallInvitationConfig();
                     ZegoUIKitPrebuiltCallService.init(getApplication(), appId, appSign, userId, userName, callInvitationConfig);
                 }
+
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
                     Log.w("MainActivity", "Failed to read username.", databaseError.toException());
                 }
             });
 
-
+            // No authenticated user handler -> LOGIN
         } else {
-            // No authenticated user handler
             Toast.makeText(this, "No authenticated user", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(MainActivity.this, login.class);
             startActivity(intent);
             finish();
-
         }
 
+        // Bottom navigation
         if (getIntent() == null || getIntent().getStringExtra("fragment") == null) {
             selectHome();
         } else {
@@ -155,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
                     new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            doubleBackToExitPressedOnce=false;
+                            doubleBackToExitPressedOnce = false;
                         }
                     }, 2000);
                 }
@@ -177,6 +171,7 @@ public class MainActivity extends AppCompatActivity {
         user_selected.setBackground(null);
         home_selected.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.selected_nav_item));
     }
+
     private void selectMessage() {
         loadFragment(new ChatFragment());
         title.setText("Chat");
@@ -185,6 +180,7 @@ public class MainActivity extends AppCompatActivity {
         user_selected.setBackground(null);
         chat_selected.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.selected_nav_item));
     }
+
     private void selectNotification() {
         loadFragment(new NotificationFragment(MainActivity.this));
         title.setText("Notifications");
@@ -193,6 +189,7 @@ public class MainActivity extends AppCompatActivity {
         user_selected.setBackground(null);
         noti_selected.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.selected_nav_item));
     }
+
     private void selectUser() {
         loadFragment(new UserSettingFragment());
         title.setText("User");

@@ -34,6 +34,7 @@
             android:fontFamily="@font/poppins_bold"
             android:paddingTop="5dp"
             android:paddingLeft="5dp"
+            android:textStyle="bold"
             android:text="Add more photos"
             android:textColor="#2a364e"
             android:textSize="@dimen/_20sdp"
@@ -43,7 +44,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/add_button"
+            android:background="@drawable/rectangle_box"
             android:text="ADD"
+            android:textSize="7pt"
             android:layout_marginRight="10dp"
             android:layout_gravity="center_vertical"/>
     </LinearLayout>

@@ -16,7 +16,6 @@ import android.widget.PopupMenu;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,8 +28,6 @@ import com.example.mymessengerapp.model.ChatMessage;
 
 import com.example.mymessengerapp.model.Users;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.material.imageview.ShapeableImageView;
-import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -39,15 +36,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.squareup.picasso.Picasso;
-import com.zegocloud.uikit.plugin.invitation.ZegoInvitationType;
-import com.zegocloud.uikit.prebuilt.call.ZegoUIKitPrebuiltCallConfig;
-import com.zegocloud.uikit.prebuilt.call.ZegoUIKitPrebuiltCallFragment;
-import com.zegocloud.uikit.prebuilt.call.ZegoUIKitPrebuiltCallService;
-import com.zegocloud.uikit.prebuilt.call.config.ZegoNotificationConfig;
-import com.zegocloud.uikit.prebuilt.call.invite.ZegoUIKitPrebuiltCallInvitationConfig;
-import com.zegocloud.uikit.prebuilt.call.invite.ZegoUIKitPrebuiltCallInvitationService;
-import com.zegocloud.uikit.prebuilt.call.invite.internal.ZegoCallInvitationData;
-import com.zegocloud.uikit.prebuilt.call.invite.internal.ZegoUIKitPrebuiltCallConfigProvider;
 import com.zegocloud.uikit.prebuilt.call.invite.widget.ZegoSendCallInvitationButton;
 import com.zegocloud.uikit.service.defines.ZegoUIKitUser;
 
@@ -78,11 +66,12 @@ public class ChatActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_chat);
         String senderId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         String receiverId = getIntent().getStringExtra("userId");
         String chatRoomId = senderId + "_" + receiverId;
+
+        // Create chat room id from sender and receiver
         if (senderId.compareTo(receiverId) < 0) {
             chatRoomId = senderId + "_" + receiverId;
         } else {
@@ -93,7 +82,6 @@ public class ChatActivity extends AppCompatActivity {
         chatRoomRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                // Clear the chatMessages list
                 chatMessages.clear();
 
                 // Loop through the messages in the chat room
@@ -111,7 +99,6 @@ public class ChatActivity extends AppCompatActivity {
                     chatMessages.add(chatMessage);
                 }
 
-                // Notify the adapter that the data set has changed
                 chatAdapter.notifyDataSetChanged();
 
                 // Scroll the RecyclerView to the last item
@@ -126,7 +113,8 @@ public class ChatActivity extends AppCompatActivity {
                 Log.w("ChatActivity", "Failed to read messages.", error.toException());
             }
         });
-        // lấy ID của users và chatroom
+
+        // Get user id and chat room id
         usersArrayList = new ArrayList<>();
         auth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
@@ -316,7 +304,7 @@ public class ChatActivity extends AppCompatActivity {
             @SuppressLint("NonConstantResourceId")
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()){
+                switch (item.getItemId()) {
                     case R.id.search_msg: {
                         // Find the searchBarMsg view
                         RelativeLayout searchBarMsg = findViewById(R.id.searchBarMsg);
