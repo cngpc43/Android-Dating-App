@@ -58,10 +58,29 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
         if (getItemViewType(position) == VIEW_TYPE_MESSAGE_SENT) {
             holder.sendMessage.setText(chatMessage.getMessage());
             holder.sendMessageTime.setText(chatMessage.getTime());
+            holder.sendMessageTime.setVisibility(View.GONE);
         } else {
             holder.receiveMessage.setText(chatMessage.getMessage());
             holder.receiveMessageTime.setText(chatMessage.getTime());
+            holder.receiveMessageTime.setVisibility(View.GONE);
         }
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (getItemViewType(position) == VIEW_TYPE_MESSAGE_SENT) {
+                    if (holder.sendMessageTime.getVisibility() == View.GONE)
+                        holder.sendMessageTime.setVisibility(View.VISIBLE);
+                    else if (holder.sendMessageTime.getVisibility() == View.VISIBLE)
+                        holder.sendMessageTime.setVisibility(View.GONE);
+                } else {
+                    if (holder.receiveMessageTime.getVisibility() == View.GONE)
+                        holder.receiveMessageTime.setVisibility(View.VISIBLE);
+                    else if (holder.receiveMessageTime.getVisibility() == View.VISIBLE)
+                        holder.receiveMessageTime.setVisibility(View.GONE);
+                }
+            }
+        });
     }
 
     @Override
