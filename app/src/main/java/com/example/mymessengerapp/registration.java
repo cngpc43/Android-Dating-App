@@ -96,7 +96,7 @@ public class registration extends AppCompatActivity {
                 String location = "";
                 String sexual_orientation = "";
                 String height = "";
-                String age_range = "18-40";
+                String age_range = "18-24";
                 String gender_show = "Everyone";
 
                 ArrayList<String> photos = new ArrayList<String>();
@@ -140,7 +140,7 @@ public class registration extends AppCompatActivity {
                                                     public void onSuccess(Uri uri) {
                                                         imageuri = uri.toString();
 
-                                                        Users users = new Users(id, name, email, Password, imageuri, status, gender, dob, phone, location, sexual_orientation, height, age_range, gender_show, show_me, photos);
+                                                        Users users = new Users(id, name, email, Password, imageuri, status, gender, dob, phone, location, sexual_orientation, height, age_range, gender_show, show_me, photos, "", "", "", "30");
                                                         reference.setValue(users).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                             @Override
                                                             public void onComplete(@NonNull Task<Void> task) {
@@ -168,7 +168,7 @@ public class registration extends AppCompatActivity {
                                 } else {
                                     String status = "Hey I'm Using This Application";
                                     imageuri = "https://firebasestorage.googleapis.com/v0/b/messenger-app-b4fed.appspot.com/o/default.png?alt=media&token=0a199e05-7e3a-42cd-8a5a-bfb7d3f61755";
-                                    Users users = new Users(id, name, email, Password, imageuri, status, gender, dob, phone, location, sexual_orientation, height, age_range, gender_show, show_me, photos);
+                                    Users users = new Users(id, name, email, Password, imageuri, status, gender, dob, phone, location, sexual_orientation, height, age_range, gender_show, show_me, photos, "", "", "", "30");
                                     reference.setValue(users).addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {

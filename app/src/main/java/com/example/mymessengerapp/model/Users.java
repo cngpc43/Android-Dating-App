@@ -13,14 +13,14 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 public class Users {
-    String profilepic,mail,userName,password,userId,lastMessage,status, gender, dob, phone, location, sexual_orientation, height, age_range, gender_show;
+    String profilepic,mail,userName,password,userId,lastMessage,status, gender, dob, phone, location, sexual_orientation, height, age_range, gender_show, latitude, longitude, isOnline, location_distance;
     boolean show_me;
     ArrayList<String> photos;
     public  Users(){}
 
 
     public Users(String userId, String userName, String mail, String password, String profilepic, String status, String gender, String dob, String phone, String location, String sexual_orientation, String height, String age_range,
-                 String gender_show, boolean show_me, ArrayList<String> photos) {
+                 String gender_show, boolean show_me, ArrayList<String> photos, String latitude, String longitude, String isOnline, String location_distance) {
         this.userId = userId;
         this.userName = userName;
         this.mail = mail;
@@ -37,6 +37,10 @@ public class Users {
         this.gender_show = gender_show;
         this.show_me = show_me;
         this.photos = photos;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.isOnline = isOnline;
+        this.location_distance = location_distance;
     }
 
     public String getProfilepic() {
@@ -200,5 +204,37 @@ public class Users {
 
     public void setPhotos(ArrayList<String> photos) {
         this.photos = photos;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getIsOnline() {
+        return isOnline;
+    }
+
+    public void setIsOnline(String isOnline) {
+        this.isOnline = isOnline;
+    }
+
+    public String getLocation_distance() {
+        return location_distance;
+    }
+
+    public void setLocation_distance(String location_distance) {
+        this.location_distance = location_distance;
     }
 }

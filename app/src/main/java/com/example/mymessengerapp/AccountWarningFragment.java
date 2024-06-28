@@ -73,7 +73,9 @@ public class AccountWarningFragment extends Fragment {
                         dataSnapshot.child("phone").getValue(String.class), dataSnapshot.child("location").getValue(String.class),
                         dataSnapshot.child("sexual_orientation").getValue(String.class), dataSnapshot.child("height").getValue(String.class),
                         dataSnapshot.child("age_range").getValue(String.class), dataSnapshot.child("gender_show").getValue(String.class),
-                        dataSnapshot.child("show_me").getValue(Boolean.class), new ArrayList<String>());
+                        dataSnapshot.child("show_me").getValue(Boolean.class), new ArrayList<String>(),
+                        dataSnapshot.child("latitude").getValue(String.class), dataSnapshot.child("longitude").getValue(String.class),
+                        dataSnapshot.child("isOnline").getValue(String.class), dataSnapshot.child("location_distance").getValue(String.class));
 
                 if (user != null) {
                     if (dataSnapshot.child("photos").hasChildren()) {
@@ -95,6 +97,9 @@ public class AccountWarningFragment extends Fragment {
                         Toast.makeText(getActivity(), "Please set your desired gender", Toast.LENGTH_SHORT).show();
                     else if (user.getPhotos().size() <= 0)
                         Toast.makeText(getActivity(), "Please add your photos", Toast.LENGTH_SHORT).show();
+                    else if (user.getLocation() == null || user.getLocation().equals("") || user.getLatitude() == null ||
+                            user.getLatitude().equals("") || user.getLongitude() == null || user.getLongitude().equals(""))
+                        Toast.makeText(getActivity(), "Please add location", Toast.LENGTH_SHORT).show();
                 }
             }
 
