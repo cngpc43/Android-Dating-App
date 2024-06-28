@@ -229,7 +229,6 @@ public class UserSettingFragment extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                throw error.toException();
             }
         });
 
@@ -286,6 +285,7 @@ public class UserSettingFragment extends Fragment {
                 yes.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        dialog.dismiss();
                         FirebaseAuth.getInstance().signOut();
                         Intent intent = new Intent(getContext(), login.class);
                         startActivity(intent);
