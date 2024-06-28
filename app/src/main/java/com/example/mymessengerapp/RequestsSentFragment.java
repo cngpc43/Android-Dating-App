@@ -22,6 +22,7 @@ import com.example.mymessengerapp.model.Users;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
@@ -39,6 +40,8 @@ public class RequestsSentFragment extends Fragment {
     RecyclerView matchingRequestsRecyclerView;
     FirebaseDatabase database;
     ArrayList<HashMap<String, Object>> matchingItems;
+    ValueEventListener valueEventListener;
+    DatabaseReference reference;
     public RequestsSentFragment() {
 
     }
@@ -69,7 +72,9 @@ public class RequestsSentFragment extends Fragment {
         RequestSentAdapter adapter = new RequestSentAdapter(getContext(), matchingItems);
         matchingRequestsRecyclerView.setAdapter(adapter);
 
-        database.getReference("MatchRequests").addValueEventListener(new ValueEventListener() {
+        reference = FirebaseDatabase.getInstance().getReference().child("MatchRequests");
+
+        reference.addValueEventListener(valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 matchingItems.clear();
@@ -103,5 +108,13 @@ public class RequestsSentFragment extends Fragment {
         });
 
         return view;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (reference != null && valueEventListener != null) {
+            reference.removeEventListener(valueEventListener);
+        }
     }
 }
