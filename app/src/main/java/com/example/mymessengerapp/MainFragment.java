@@ -1,6 +1,7 @@
 package com.example.mymessengerapp;
 
 import android.content.Context;
+import android.location.Location;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.mymessengerapp.adapter.UserAdapter;
+import com.example.mymessengerapp.model.UserDistanceComparator;
 import com.example.mymessengerapp.model.Users;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -33,6 +35,7 @@ import java.time.Year;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Locale;
 
 public class MainFragment extends Fragment {
@@ -104,7 +107,9 @@ public class MainFragment extends Fragment {
                                 dataSnapshot.child("phone").getValue(String.class), dataSnapshot.child("location").getValue(String.class),
                                 dataSnapshot.child("sexual_orientation").getValue(String.class), dataSnapshot.child("height").getValue(String.class),
                                 dataSnapshot.child("age_range").getValue(String.class), dataSnapshot.child("gender_show").getValue(String.class),
-                                dataSnapshot.child("show_me").getValue(Boolean.class), new ArrayList<String>());
+                                dataSnapshot.child("show_me").getValue(Boolean.class), new ArrayList<String>(),
+                                dataSnapshot.child("latitude").getValue(String.class), dataSnapshot.child("longitude").getValue(String.class),
+                                dataSnapshot.child("isOnline").getValue(String.class), dataSnapshot.child("location_distance").getValue(String.class));
 
                         if (dataSnapshot.child("photos").hasChildren()) {
                             ArrayList<String> arrayList = new ArrayList<String>();
@@ -150,7 +155,9 @@ public class MainFragment extends Fragment {
                                                 dataSnapshot2.child("phone").getValue(String.class), dataSnapshot2.child("location").getValue(String.class),
                                                 dataSnapshot2.child("sexual_orientation").getValue(String.class), dataSnapshot2.child("height").getValue(String.class),
                                                 dataSnapshot2.child("age_range").getValue(String.class), dataSnapshot2.child("gender_show").getValue(String.class),
-                                                dataSnapshot2.child("show_me").getValue(Boolean.class), new ArrayList<String>());
+                                                dataSnapshot2.child("show_me").getValue(Boolean.class), new ArrayList<String>(),
+                                                dataSnapshot2.child("latitude").getValue(String.class), dataSnapshot2.child("longitude").getValue(String.class),
+                                                dataSnapshot2.child("isOnline").getValue(String.class), dataSnapshot2.child("location_distance").getValue(String.class));
                                         if (dataSnapshot2.child("photos").hasChildren()) {
                                             ArrayList<String> arrayList = new ArrayList<String>();
                                             for (DataSnapshot photoSnapshot : dataSnapshot2.child("photos").getChildren()) {
@@ -160,6 +167,8 @@ public class MainFragment extends Fragment {
                                             users.setPhotos(arrayList);
                                         }
                                         if (users != null) {
+                                            // filter user based on below conditions
+                                            // userID != current userID, user.isShow_me = true, user is not in current user RequestSent list, and user has set up their account
                                             if (!users.getUserId().equals(currentUserId) && users.isShow_me() && !requestList.contains(users.getUserId()) && checkForAccountSetup(users)) {
                                                 // current user age range
                                                 int startAge = Integer.valueOf(currentUser.getAge_range().substring(0, currentUser.getAge_range().indexOf("-")));
@@ -167,13 +176,30 @@ public class MainFragment extends Fragment {
                                                 // another user age
                                                 int userAge = Calendar.getInstance().get(Calendar.YEAR) - Integer.valueOf(users.getDob().substring(users.getDob().indexOf(",") + 2, users.getDob().length()));
 
-                                                if (userAge >= startAge && userAge <= endAge && currentUser.getGender_show().contains(users.getGender()))
-                                                    usersArrayList.add(users);
+                                                // user is in current user desired age range
+                                                if (userAge >= startAge && userAge <= endAge) {
+                                                    // user gender is suitable with current user desired gender show
+                                                    if (currentUser.getGender_show().equals(users.getGender()) || currentUser.getGender_show().equals("Everyone")) {
+                                                        // user location is in current user desired location distance
+                                                        float[] distance = new float[1];
+                                                        Location.distanceBetween(Double.valueOf(currentUser.getLatitude()), Double.valueOf(currentUser.getLongitude()),
+                                                                Double.valueOf(users.getLatitude()), Double.valueOf(users.getLongitude()), distance);
+                                                        Log.d("distance_between_users", String.valueOf(distance[0]/1000));
+                                                        if (distance[0]/1000 <= Float.valueOf(currentUser.getLocation_distance())) {
+                                                            usersArrayList.add(users);
+                                                        }
+                                                    }
+                                                }
                                             }
                                         }
                                     }
-                                    if (usersArrayList.size() == 0)
-                                        Toast.makeText(getActivity(), "No users match your requests, try changing your desired gender, age range or location", Toast.LENGTH_LONG).show();
+                                    if (usersArrayList.size() < 1) {
+                                        if (getActivity() != null)
+                                            Toast.makeText(getActivity(), "No users match your requests, try changing your desired gender, age range or location", Toast.LENGTH_LONG).show();
+                                    } else {
+                                        // sort userList by the distance to currentUser (ascending)
+                                        Collections.sort(usersArrayList, new UserDistanceComparator(currentUser));
+                                    }
                                     adapter.notifyDataSetChanged();
                                 }
                             });
@@ -191,7 +217,7 @@ public class MainFragment extends Fragment {
         return view;
     }
 
-    // function to check if user has set up information for dating or not (dob, age_range, gender_show, gender, photos)
+    // function to check if user has set up information for dating or not (dob, age_range, gender_show, gender, photos, location, latitude, longitude)
     public Boolean checkForAccountSetup(Users user) {
         if (user.getDob() == null || user.getDob().equals(""))
             return false;
@@ -202,6 +228,9 @@ public class MainFragment extends Fragment {
         if (user.getGender() == null || user.getGender().equals("") || user.getGender().equals("none"))
             return false;
         if (user.getPhotos().size() <= 0)
+            return false;
+        if (user.getLocation() == null || user.getLocation().equals("") || user.getLatitude() == null ||
+                user.getLatitude().equals("") || user.getLongitude() == null || user.getLongitude().equals(""))
             return false;
         return true;
     }
@@ -214,4 +243,5 @@ public class MainFragment extends Fragment {
         if (reference != null && valueEventListener != null)
             reference.removeEventListener(valueEventListener);
     }
+
 }
