@@ -63,4 +63,7 @@ dependencies {
     implementation("com.mesibo.api:webrtc:1.0.5")
     implementation("com.github.ZEGOCLOUD:zego_uikit_prebuilt_call_android:+")
     implementation("com.github.ZEGOCLOUD:zego_uikit_signaling_plugin_android:+")
+
+    implementation("pub.devrel:easypermissions:3.0.0")
+    implementation("com.google.android.gms:play-services-location:21.3.0")
 }
