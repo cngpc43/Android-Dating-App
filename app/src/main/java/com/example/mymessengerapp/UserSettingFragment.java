@@ -204,14 +204,9 @@ public class UserSettingFragment extends Fragment {
                         }
                         // profile_picture
                         if (snapshot.child("profilepic").getValue(String.class) == null) {
-                            FirebaseStorage.getInstance().getReference().child("default.png").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                @Override
-                                public void onSuccess(Uri uri) {
-                                    Picasso.get().load(uri).into(profile_pic);
-                                    Picasso.get().load(uri).into(profile_pic_button);
-                                    reference.child("profilepic").setValue(uri.toString());
-                                }
-                            });
+                            Picasso.get().load(R.drawable.default_profile_pic).into(profile_pic);
+                            Picasso.get().load(R.drawable.default_profile_pic).into(profile_pic_button);
+                            reference.child("profilepic").setValue("https://firebasestorage.googleapis.com/v0/b/messenger-app-b4fed.appspot.com/o/default.png?alt=media&token=0a199e05-7e3a-42cd-8a5a-bfb7d3f617");
                         } else {
                             Picasso.get().load(snapshot.child("profilepic").getValue(String.class)).into(profile_pic);
                             Picasso.get().load(snapshot.child("profilepic").getValue(String.class)).into(profile_pic_button);
