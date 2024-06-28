@@ -1,8 +1,12 @@
 package com.example.mymessengerapp.model;
 
+import android.annotation.SuppressLint;
+import android.util.Log;
+
 import com.google.android.gms.tasks.Task;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
@@ -13,6 +17,7 @@ public class ChatMessage {
     ChatRoom chatRoom;
     long timeStamp;
     boolean isLastMessage;
+
     public ChatMessage() {
 
     }
@@ -31,19 +36,24 @@ public class ChatMessage {
     public boolean isSent() {
         return isSent;
     }
+
     public Task<String> getUserName() {
         Users user = new Users();
         return user.getUserNameById(senderId);
     }
+
     public String getLastMessage() {
         return message;
     }
+
     public String getTime() {
         return convertTimestampToTime(timeStamp);
     }
+
     public String getSenderId() {
         return senderId;
     }
+
     public long getTimeStamp() {
         return timeStamp;
     }
@@ -63,19 +73,39 @@ public class ChatMessage {
     public void setImgType(String imgType) {
         this.imgType = imgType;
     }
+
     private String convertTimestampToTime(long timestamp) {
+        String[] dayInWeek = {"Sun", "Mon", "Tue", "Wed", "Thur", "Fri", "Sat"};
+        String[] months = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+
         Date date = new Date(timestamp);
-        SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy HH:mm:ss");
         Date currentDate = new Date();
         Long difference = currentDate.getTime() - date.getTime();
 
-        if (TimeUnit.MILLISECONDS.toSeconds(difference) < 60)
-            return "Just now";
-        if (TimeUnit.MILLISECONDS.toMinutes(difference) >= 1 && TimeUnit.MILLISECONDS.toMinutes(difference) < 60)
-            return (TimeUnit.MILLISECONDS.toMinutes(difference) + "m");
-        else if (TimeUnit.MILLISECONDS.toHours(difference) >= 1 && TimeUnit.MILLISECONDS.toHours(difference) < 24)
-            return (TimeUnit.MILLISECONDS.toHours(difference) + "h");
-        else
-            return (TimeUnit.MILLISECONDS.toDays(difference) + "d");
+        // hh:mm
+        @SuppressLint("DefaultLocale") String hourMin = String.format("%02d:%02d", date.getHours(), date.getMinutes());
+
+        // Get Calendar instances for comparison
+        Calendar dateCalendar = Calendar.getInstance();
+        dateCalendar.setTime(date);
+        Calendar currentCalendar = Calendar.getInstance();
+        currentCalendar.setTime(currentDate);
+
+        // NOT CURRENT YEAR -> 12 June, 2022 hh:mm
+        if (currentCalendar.get(Calendar.YEAR) != dateCalendar.get(Calendar.YEAR)) {
+            return dateCalendar.get(Calendar.DAY_OF_MONTH) + " " + months[dateCalendar.get(Calendar.MONTH)] + ", " + (dateCalendar.get(Calendar.YEAR)) + " " + hourMin;
+        }
+        // Not current week -> 12 June hh:mm
+        else if (currentCalendar.get(Calendar.WEEK_OF_YEAR) != dateCalendar.get(Calendar.WEEK_OF_YEAR)) {
+            return dateCalendar.get(Calendar.DAY_OF_MONTH) + " " + months[dateCalendar.get(Calendar.MONTH)] + " " + hourMin;
+        }
+        // Not current day but in the current week -> Mon hh:mm
+        else if (currentCalendar.get(Calendar.DAY_OF_YEAR) != dateCalendar.get(Calendar.DAY_OF_YEAR)) {
+            return dayInWeek[dateCalendar.get(Calendar.DAY_OF_WEEK) - 1] + " " + hourMin;
+        }
+        // Current day
+        else {
+            return hourMin;
+        }
     }
 }

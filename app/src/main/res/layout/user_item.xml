@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:cardCornerRadius="12dp">
@@ -66,29 +67,53 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
+                        android:layout_marginStart="10dp"
                         android:orientation="vertical">
 
-                        <TextView
-                            android:id="@+id/username"
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
+                            android:orientation="horizontal">
 
-                            android:fontFamily="@font/poppins_bold"
-                            android:text="hmm"
-                            android:textColor="@color/white"
-                            android:textSize="23.40dp"
-                            android:textStyle="bold" />
+                            <TextView
+                                android:id="@+id/username"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Dao Minh Huy"
+                                android:textColor="@color/white"
+                                android:textSize="12pt"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/userAge"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="6dp"
+                                android:text="18"
+                                android:textColor="@color/white"
+                                android:textSize="10pt" />
+                        </LinearLayout>
 
                         <TextView
                             android:id="@+id/userstatus"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
                             android:fontFamily="@font/poppins_regular"
                             android:text="Status: I'm very happy"
                             android:textColor="@color/white"
-                            android:textSize="15dp" />
+                            android:textSize="7pt" />
+
+                        <TextView
+                            android:id="@+id/distance"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="-4dp"
+                            android:drawablePadding="2dp"
+                            android:drawableTint="@color/white"
+                            android:text="2 kilomets away"
+                            android:textColor="@color/white"
+                            android:textSize="7pt"
+                            app:drawableStartCompat="@drawable/baseline_location_on_24" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -96,7 +121,6 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-
                     android:gravity="center"
                     android:orientation="horizontal">
 
@@ -105,19 +129,19 @@
                         android:layout_width="70dp"
                         android:layout_height="70dp"
                         android:layout_marginEnd="70dp"
-                        android:background="@drawable/circle_red_shape"
-                        android:padding="12dp"
+                        android:background="@drawable/circle_white_bg"
                         android:scaleType="centerInside"
-                        android:src="@drawable/cross_16px" />
+                        android:src="@drawable/cancel_svgrepo_com"
+                        tools:ignore="ContentDescription" />
 
                     <ImageButton
                         android:id="@+id/like"
                         android:layout_width="70dp"
                         android:layout_height="70dp"
-                        android:background="@drawable/circle_green_shape"
-                        android:padding="5dp"
+                        android:background="@drawable/circle_white_bg"
                         android:scaleType="centerInside"
-                        android:src="@drawable/heart" />
+                        android:src="@drawable/heart_love_like_favourite_follow_svgrepo_com"
+                        tools:ignore="ContentDescription" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

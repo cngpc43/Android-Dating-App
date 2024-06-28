@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Application;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.core.content.ContextCompat;
@@ -16,6 +17,7 @@ import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -36,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     FirebaseDatabase database;
     FrameLayout home, user, message, notification;
     LinearLayout home_selected, user_selected, chat_selected, noti_selected;
+    ImageView ic_home, ic_chat, ic_noti, ic_user;
     MaterialTextView title;
     Boolean doubleBackToExitPressedOnce = false;
 
@@ -49,6 +52,13 @@ public class MainActivity extends AppCompatActivity {
 
         database = FirebaseDatabase.getInstance();
         auth = FirebaseAuth.getInstance();
+
+        long appId = Long.parseLong(getString(R.string.app_id));
+        String appSign = getString(R.string.app_sign);
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference databaseReference = database.getReference();
+        FirebaseUser currentUser = auth.getCurrentUser();
+
         user = findViewById(R.id.user);
         message = findViewById(R.id.message);
         home = findViewById(R.id.home);
@@ -57,14 +67,11 @@ public class MainActivity extends AppCompatActivity {
         noti_selected = findViewById(R.id.noti_selected);
         chat_selected = findViewById(R.id.chat_selected);
         user_selected = findViewById(R.id.user_selected);
+        ic_home = findViewById(R.id.icon_home);
+        ic_chat = findViewById(R.id.icon_chat);
+        ic_noti = findViewById(R.id.icon_noti);
+        ic_user = findViewById(R.id.icon_user);
         title = findViewById(R.id.title);
-
-        Application app = getApplication();
-        long appId = Long.parseLong(getString(R.string.app_id));
-        String appSign = getString(R.string.app_sign);
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference databaseReference = database.getReference();
-        FirebaseUser currentUser = auth.getCurrentUser();
 
         // Check the user
         if (currentUser != null) {
@@ -166,37 +173,61 @@ public class MainActivity extends AppCompatActivity {
     private void selectHome() {
         loadFragment(new MainFragment());
         title.setText("Tindeo");
+
         noti_selected.setBackground(null);
         chat_selected.setBackground(null);
         user_selected.setBackground(null);
         home_selected.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.selected_nav_item));
+
+        ic_chat.setColorFilter(Color.BLACK);
+        ic_noti.setColorFilter(Color.BLACK);
+        ic_user.setColorFilter(Color.BLACK);
+        ic_home.setColorFilter(Color.rgb(236, 83, 131));
     }
 
     private void selectMessage() {
         loadFragment(new ChatFragment());
         title.setText("Chat");
+
         home_selected.setBackground(null);
         noti_selected.setBackground(null);
         user_selected.setBackground(null);
         chat_selected.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.selected_nav_item));
+
+        ic_home.setColorFilter(Color.BLACK);
+        ic_noti.setColorFilter(Color.BLACK);
+        ic_user.setColorFilter(Color.BLACK);
+        ic_chat.setColorFilter(Color.rgb(236, 83, 131));
     }
 
     private void selectNotification() {
         loadFragment(new NotificationFragment(MainActivity.this));
         title.setText("Notifications");
+
         home_selected.setBackground(null);
         chat_selected.setBackground(null);
         user_selected.setBackground(null);
         noti_selected.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.selected_nav_item));
+
+        ic_home.setColorFilter(Color.BLACK);
+        ic_chat.setColorFilter(Color.BLACK);
+        ic_user.setColorFilter(Color.BLACK);
+        ic_noti.setColorFilter(Color.rgb(236, 83, 131));
     }
 
     private void selectUser() {
         loadFragment(new UserSettingFragment());
-        title.setText("User");
+        title.setText("Your profile");
+
         home_selected.setBackground(null);
         noti_selected.setBackground(null);
         chat_selected.setBackground(null);
         user_selected.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.selected_nav_item));
+
+        ic_home.setColorFilter(Color.BLACK);
+        ic_chat.setColorFilter(Color.BLACK);
+        ic_noti.setColorFilter(Color.BLACK);
+        ic_user.setColorFilter(Color.rgb(236, 83, 131));
     }
 
 }

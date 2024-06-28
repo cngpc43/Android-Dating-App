@@ -167,12 +167,12 @@ public class location_change extends AppCompatActivity implements EasyPermission
     }
 
     private boolean hasLocationPermission() {
-        return EasyPermissions.hasPermissions(this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION});
+        return EasyPermissions.hasPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION});
     }
 
     private void requestLocationPermission() {
         EasyPermissions.requestPermissions(this, "Please allow location permission to sync your exact location",
-                1, new String[] {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION});
+                1, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION});
     }
 
 
