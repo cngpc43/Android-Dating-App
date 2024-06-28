@@ -40,6 +40,7 @@ import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.materialswitch.MaterialSwitch;
 import com.google.android.material.slider.RangeSlider;
+import com.google.android.material.slider.Slider;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -54,6 +55,9 @@ import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -63,9 +67,10 @@ public class UserSettingFragment extends Fragment {
     private FirebaseStorage storage;
     private ValueEventListener listener;
     RangeSlider age_range;
+    Slider location_distance_slider;
     LinearLayout account_settings, location, height, dob, add_photo;
     Spinner gender_spinner, sexual_spinner, gender_show_spinner;
-    TextView age_range_preview, location_preview, profile_username, profile_status, height_preview, dob_preview, photo_count;
+    TextView age_range_preview, location_preview, profile_username, profile_status, height_preview, dob_preview, photo_count, location_distance_preview;
     EditText et_username, et_status;
     CircleImageView profile_pic, profile_pic_button;
     ImageButton edit_button, save_button;
@@ -78,8 +83,9 @@ public class UserSettingFragment extends Fragment {
     private Uri filePath;
     // request code
     private final int PICK_IMAGE_REQUEST = 22;
-    int attempts = 0;
-    boolean gender_spinner_initial = false, sexual_spinner_initial = false, gender_show_spinner_initial = false;
+    private int attempts = 0;
+    private boolean gender_spinner_initial = true, sexual_spinner_initial = true, gender_show_spinner_initial = true,
+            age_range_initial = true, location_distance_initial = true;
 
     public UserSettingFragment() {
     }
@@ -125,6 +131,8 @@ public class UserSettingFragment extends Fragment {
         dob_preview = view.findViewById(R.id.dob_preview);
         delete_account = view.findViewById(R.id.delete_account);
         add_photo = view.findViewById(R.id.add_photo);
+        location_distance_preview = view.findViewById(R.id.location_distance_preview);
+        location_distance_slider = view.findViewById(R.id.location_distance_slider);
 
         // for text marquee
         profile_username.setSelected(true);
@@ -153,61 +161,69 @@ public class UserSettingFragment extends Fragment {
                 if (snapshot.child("gender_show").getValue(String.class) != null) {
                     int gender_show_position = adapter2.getPosition(snapshot.child("gender_show").getValue(String.class));
                     gender_show_spinner.setSelection(gender_show_position);
-                }
-                // gender
-                if (snapshot.child("gender").getValue(String.class) != null) {
-                    int gender_position = adapter.getPosition(snapshot.child("gender").getValue(String.class));
-                    gender_spinner.setSelection(gender_position);
-                }
-                // sexual_orientation
-                if (snapshot.child("sexual_orientation").getValue(String.class) != null) {
-                    int sexual_position = adapter1.getPosition(snapshot.child("sexual_orientation").getValue(String.class));
-                    sexual_spinner.setSelection(sexual_position);
-                }
-                // age_range
-                if (snapshot.child("age_range").getValue(String.class) == null) {
-                    age_range.setValues(18f, 24f);
-                    age_range_preview.setText("18 - 24");
-                } else {
-                    String age_range_string = snapshot.child("age_range").getValue(String.class);
-                    float age_valueFrom = Float.valueOf(age_range_string.substring(0, age_range_string.indexOf('-')));
-                    float age_valueTo = Float.valueOf(age_range_string.substring(age_range_string.indexOf('-') + 1, age_range_string.length()));
-                    age_range.setValues(age_valueFrom, age_valueTo);
-                    age_range_preview.setText(age_range.getValues().get(0).intValue() + "-" + age_range.getValues().get(1).intValue());
-                }
-                // username
-                if (snapshot.child("userName").getValue(String.class) != null)
-                    profile_username.setText(snapshot.child("userName").getValue(String.class));
-                // status
-                if (snapshot.child("status").getValue(String.class) != null)
-                    profile_status.setText(snapshot.child("status").getValue(String.class));
-                // show me
-                if (snapshot.child("show_me").getValue(boolean.class) != null)
-                    show_me_switch.setChecked(snapshot.child("show_me").getValue(boolean.class));
-                // height
-                if (snapshot.child("height").getValue(String.class) != null) {
-                    height_preview.setText(snapshot.child("height").getValue(String.class) + "cm");
-                }
-                // dob
-                if (snapshot.child("dob").getValue(String.class) != null) {
-                    dob_preview.setText(snapshot.child("dob").getValue(String.class));
-                }
-                if (snapshot.child("photos").hasChildren()) {
-                    photo_count.setText(String.valueOf((int) snapshot.child("photos").getChildrenCount()));
-                }
-                // profile_picture
-                if (snapshot.child("profilepic").getValue(String.class) == null) {
-                    FirebaseStorage.getInstance().getReference().child("default.png").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                        @Override
-                        public void onSuccess(Uri uri) {
-                            Picasso.get().load(uri).into(profile_pic);
-                            Picasso.get().load(uri).into(profile_pic_button);
-                            reference.child("profilepic").setValue(uri.toString());
+
+                    // gender
+                    if (snapshot.child("gender").getValue(String.class) != null) {
+                        int gender_position = adapter.getPosition(snapshot.child("gender").getValue(String.class));
+                        gender_spinner.setSelection(gender_position);
+                        // sexual_orientation
+                        if (snapshot.child("sexual_orientation").getValue(String.class) != null) {
+                            int sexual_position = adapter1.getPosition(snapshot.child("sexual_orientation").getValue(String.class));
+                            sexual_spinner.setSelection(sexual_position);
                         }
-                    });
-                } else {
-                    Picasso.get().load(snapshot.child("profilepic").getValue(String.class)).into(profile_pic);
-                    Picasso.get().load(snapshot.child("profilepic").getValue(String.class)).into(profile_pic_button);
+                        // age_range
+                        if (snapshot.child("age_range").getValue(String.class) == null) {
+                            age_range.setValues(18f, 24f);
+                        } else {
+                            if (age_range_initial) {
+                                String age_range_string = snapshot.child("age_range").getValue(String.class);
+                                float age_valueFrom = Float.valueOf(age_range_string.substring(0, age_range_string.indexOf('-')));
+                                float age_valueTo = Float.valueOf(age_range_string.substring(age_range_string.indexOf('-') + 1, age_range_string.length()));
+                                age_range.setValues(age_valueFrom, age_valueTo);
+                            }
+                        }
+                        // username
+                        if (snapshot.child("userName").getValue(String.class) != null)
+                            profile_username.setText(snapshot.child("userName").getValue(String.class));
+                        // status
+                        if (snapshot.child("status").getValue(String.class) != null)
+                            profile_status.setText(snapshot.child("status").getValue(String.class));
+                        // show me
+                        if (snapshot.child("show_me").getValue(boolean.class) != null)
+                            show_me_switch.setChecked(snapshot.child("show_me").getValue(boolean.class));
+                        // height
+                        if (snapshot.child("height").getValue(String.class) != null) {
+                            height_preview.setText(snapshot.child("height").getValue(String.class) + "cm");
+                        }
+                        // dob
+                        if (snapshot.child("dob").getValue(String.class) != null) {
+                            dob_preview.setText(snapshot.child("dob").getValue(String.class));
+                        }
+                        if (snapshot.child("photos").hasChildren()) {
+                            photo_count.setText(String.valueOf((int) snapshot.child("photos").getChildrenCount()));
+                        }
+                        // profile_picture
+                        if (snapshot.child("profilepic").getValue(String.class) == null) {
+                            FirebaseStorage.getInstance().getReference().child("default.png").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    Picasso.get().load(uri).into(profile_pic);
+                                    Picasso.get().load(uri).into(profile_pic_button);
+                                    reference.child("profilepic").setValue(uri.toString());
+                                }
+                            });
+                        } else {
+                            Picasso.get().load(snapshot.child("profilepic").getValue(String.class)).into(profile_pic);
+                            Picasso.get().load(snapshot.child("profilepic").getValue(String.class)).into(profile_pic_button);
+                        }
+                        // location_distance
+                        if (snapshot.child("location_distance").getValue(String.class) == null) {
+                            location_distance_slider.setValue(30);
+                        } else {
+                            if (location_distance_initial)
+                                location_distance_slider.setValue(Float.valueOf(snapshot.child("location_distance").getValue(String.class)));
+                        }
+                    }
                 }
             }
 
@@ -384,12 +400,13 @@ public class UserSettingFragment extends Fragment {
         gender_show_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-                if (gender_show_spinner_initial) {
+                if (gender_show_spinner_initial)
+                    gender_show_spinner_initial = false;
+                else {
                     String gender_show = parent.getItemAtPosition(pos).toString();
                     reference.child("gender_show").setValue(gender_show);
-                } else {
-                    gender_show_spinner_initial = true;
                 }
+                gender_show_spinner_initial = false;
             }
 
             @Override
@@ -399,11 +416,11 @@ public class UserSettingFragment extends Fragment {
 
         gender_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-                if (gender_spinner_initial) {
+                if (gender_spinner_initial)
+                    gender_spinner_initial = false;
+                else {
                     String gender = parent.getItemAtPosition(pos).toString();
                     reference.child("gender").setValue(gender);
-                } else {
-                    gender_spinner_initial = true;
                 }
             }
 
@@ -414,11 +431,11 @@ public class UserSettingFragment extends Fragment {
 
         sexual_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-                if (sexual_spinner_initial) {
+                if (sexual_spinner_initial)
+                    sexual_spinner_initial = false;
+                else {
                     String sexual = parent.getItemAtPosition(pos).toString();
                     reference.child("sexual_orientation").setValue(sexual);
-                } else {
-                    sexual_spinner_initial = true;
                 }
             }
 
@@ -431,7 +448,7 @@ public class UserSettingFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getContext(), location_change.class);
-                startActivityForResult(intent, LAUNCH_SECOND_ACTIVITY);
+                startActivity(intent);
             }
         });
 
@@ -441,6 +458,7 @@ public class UserSettingFragment extends Fragment {
                 String string = age_range.getValues().get(0).intValue() + "-" + age_range.getValues().get(1).intValue();
                 reference.child("age_range").setValue(string);
                 age_range_preview.setText(string);
+                age_range_initial = false;
             }
         });
 
@@ -473,8 +491,10 @@ public class UserSettingFragment extends Fragment {
                 new MaterialPickerOnPositiveButtonClickListener() {
                     @Override
                     public void onPositiveButtonClick(Object selection) {
-                        dob_preview.setText(materialDatePicker.getHeaderText());
-                        reference.child("dob").setValue(materialDatePicker.getHeaderText());
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.setTimeInMillis((Long)selection);
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy", Locale.ENGLISH);
+                        reference.child("dob").setValue(dateFormat.format(calendar.getTime()));
                     }
                 });
 
@@ -490,6 +510,15 @@ public class UserSettingFragment extends Fragment {
             public void onClick(View view) {
                 Intent intent = new Intent(getContext(), add_photo.class);
                 startActivity(intent);
+            }
+        });
+
+        location_distance_slider.addOnChangeListener(new Slider.OnChangeListener() {
+            @Override
+            public void onValueChange(@NonNull Slider slider, float v, boolean b) {
+                reference.child("location_distance").setValue(String.valueOf((int)v));
+                location_distance_preview.setText((int)v + " km.");
+                location_distance_initial = false;
             }
         });
 
@@ -512,16 +541,6 @@ public class UserSettingFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == LAUNCH_SECOND_ACTIVITY) {
-            if (resultCode == Activity.RESULT_OK) {
-                String result = data.getStringExtra("result");
-                location_preview.setText(result);
-            }
-            if (resultCode == Activity.RESULT_CANCELED) {
-//                No result handler
-            }
-        }
 
         // checking request code and result code
         // if request code is PICK_IMAGE_REQUEST and
@@ -556,7 +575,6 @@ public class UserSettingFragment extends Fragment {
 
     private void uploadImage() {
         if (filePath != null) {
-
             // Code for showing progressDialog while uploading
             ProgressDialog progressDialog
                     = new ProgressDialog(getContext());
@@ -601,5 +619,4 @@ public class UserSettingFragment extends Fragment {
             reference.removeEventListener(listener);
         }
     }
-
 }
