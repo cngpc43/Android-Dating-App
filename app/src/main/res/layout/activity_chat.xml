@@ -213,7 +213,7 @@
         android:orientation="horizontal">
 
         <ImageButton
-            android:id="@+id/chat_send_voice"
+            android:id="@+id/voice_attach"
             android:layout_width="0dp"
             android:layout_height="48dp"
             android:layout_marginStart="4dp"

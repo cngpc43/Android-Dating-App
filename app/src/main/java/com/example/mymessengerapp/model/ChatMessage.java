@@ -17,16 +17,20 @@ public class ChatMessage {
     ChatRoom chatRoom;
     long timeStamp;
     boolean isLastMessage;
+    private String attachmentUrl;
+    private String attachmentType;
 
     public ChatMessage() {
 
     }
 
-    public ChatMessage(String message, long timeStamp, String senderId, boolean isLastMessage) {
+    public ChatMessage(String message, long timeStamp, String senderId, boolean isLastMessage, String attachmentUrl, String attachmentType) {
         this.message = message;
         this.senderId = senderId;
         this.timeStamp = timeStamp;
         this.isLastMessage = true;
+        this.attachmentUrl = attachmentUrl;
+        this.attachmentType = attachmentType;
     }
 
     public String getMessage() {
@@ -36,7 +40,21 @@ public class ChatMessage {
     public boolean isSent() {
         return isSent;
     }
+    public String getAttachmentUrl() {
+        return attachmentUrl;
+    }
 
+    public void setAttachmentUrl(String attachmentUrl) {
+        this.attachmentUrl = attachmentUrl;
+    }
+
+    public String getAttachmentType() {
+        return attachmentType;
+    }
+
+    public void setAttachmentType(String attachmentType) {
+        this.attachmentType = attachmentType;
+    }
     public Task<String> getUserName() {
         Users user = new Users();
         return user.getUserNameById(senderId);
