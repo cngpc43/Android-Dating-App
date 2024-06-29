@@ -54,11 +54,11 @@
                     android:id="@+id/user_name_chat"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:singleLine="true"
                     android:text="Chi Cuong"
                     android:textColor="@color/secondary3"
                     android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:singleLine="true"/>
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/user_status_chat"
@@ -155,9 +155,52 @@
         android:id="@+id/chat_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/send_chat"
+        android:layout_above="@+id/attachment_popup"
         android:layout_below="@+id/searchBarMsg"
         android:background="@drawable/chat_bg_default" />
+
+    <!--  Attachment menu  -->
+    <LinearLayout
+        android:id="@+id/attachment_popup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/send_chat"
+        android:background="@drawable/rounded_attachment_popup"
+        android:orientation="horizontal"
+        android:paddingVertical="8dp"
+        android:visibility="gone">
+
+        <ImageButton
+            android:id="@+id/icon_image"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:src="@drawable/baseline_image_40"
+            android:tint="@color/primary"
+            tools:ignore="UseAppTint" />
+
+        <ImageButton
+            android:id="@+id/icon_attachment"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:src="@drawable/baseline_attach_file_40"
+            android:tint="@color/primary"
+            tools:ignore="UseAppTint" />
+
+        <ImageButton
+            android:id="@+id/icon_location"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:src="@drawable/baseline_add_location_40"
+            android:tint="@color/primary"
+            tools:ignore="UseAppTint" />
+
+    </LinearLayout>
 
     <!--  Chat field (FOOTER)  -->
     <LinearLayout

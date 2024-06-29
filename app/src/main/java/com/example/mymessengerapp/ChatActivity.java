@@ -55,12 +55,10 @@ public class ChatActivity extends AppCompatActivity {
     ArrayList<Users> usersArrayList;
     ChatAdapter chatAdapter;
     List<ChatMessage> chatMessages;
-    LinearLayout llSendChat;
+    LinearLayout llSendChat, attachmentPopup;
     FirebaseDatabase database;
 
     FirebaseAuth auth;
-
-    PopupWindow attachmentPopup;
 
     @SuppressLint({"MissingInflatedId", "ClickableViewAccessibility", "ResourceAsColor"})
     @Override
@@ -135,13 +133,16 @@ public class ChatActivity extends AppCompatActivity {
                             dataSnapshot.child("show_me").getValue(Boolean.class), new ArrayList<String>(),
                             dataSnapshot.child("latitude").getValue(String.class), dataSnapshot.child("longitude").getValue(String.class),
                             "", dataSnapshot.child("location_distance").getValue(String.class));
+
                     Object isOnline = dataSnapshot.child("isOnline").getValue(Object.class);
+
                     if (isOnline != null) {
                         if (isOnline.equals("true"))
                             users.setIsOnline("true");
                         else
                             users.setIsOnline(isOnline.toString());
                     }
+
                     if (users != null && !users.getUserId().equals(currentUserId)) {
                         usersArrayList.add(users);
                     }
@@ -163,6 +164,7 @@ public class ChatActivity extends AppCompatActivity {
         mainChat = findViewById(R.id.chat_main);
         llSendChat = findViewById(R.id.send_chat);
         optMore = findViewById(R.id.option_more);
+        attachmentPopup = findViewById(R.id.attachment_popup);
 
         // Init chat message model
         chatMessages = new ArrayList<ChatMessage>();
@@ -215,11 +217,6 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
-        // Init PopupWindow
-        LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-        View popupView = inflater.inflate(R.layout.attachment_popup, null);
-        attachmentPopup = new PopupWindow(popupView, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-
         // Handle chat attachment icon in chat input field
         messageInput.setOnTouchListener((v, event) -> {
             final int DRAWABLE_RIGHT = 2;
@@ -227,18 +224,17 @@ public class ChatActivity extends AppCompatActivity {
             if (event.getAction() == MotionEvent.ACTION_UP) {
                 if (event.getRawX() >= (messageInput.getRight() - messageInput.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
                     // Check popup window is showing are not
-                    if (attachmentPopup.isShowing()) {
+                    if (attachmentPopup.getVisibility() == View.VISIBLE) {
                         // Dismiss if the popup is showing
-                        attachmentPopup.dismiss();
+                        attachmentPopup.setVisibility(View.GONE);
                         return true;
                     }
 
-                    // Display it if it is not showing
-                    attachmentPopup.setWidth(LinearLayout.LayoutParams.MATCH_PARENT); // Set width to match parent
-                    attachmentPopup.showAtLocation(messageInput, Gravity.NO_GRAVITY, 0, mainChat.getBottom() - 100); // Show at top of chat_input
+                    attachmentPopup.setVisibility(View.VISIBLE);
                     return true;
                 }
             }
+
             return false;
         });
 
