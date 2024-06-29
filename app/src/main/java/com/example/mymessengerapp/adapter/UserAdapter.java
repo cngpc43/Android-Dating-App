@@ -2,6 +2,7 @@ package com.example.mymessengerapp.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.location.Location;
 import android.net.Uri;
 import android.util.Log;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 
 import com.example.mymessengerapp.MainActivity;
 import com.example.mymessengerapp.R;
+import com.example.mymessengerapp.ViewAnotherProfile;
 import com.example.mymessengerapp.model.ChatRoom;
 import com.example.mymessengerapp.model.MyImageSwitcher;
 import com.example.mymessengerapp.model.Users;
@@ -32,6 +34,7 @@ import com.squareup.picasso.Picasso;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -73,6 +76,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.viewholder> {
         Users users = usersArrayList.get(position);
         holder.username.setText(users.getUserName());
         holder.userstatus.setText(users.getStatus());
+        holder.userAge.setText(String.valueOf(Calendar.getInstance().get(Calendar.YEAR) - Integer.valueOf(users.getDob().substring(users.getDob().indexOf(",") + 2, users.getDob().length()))));
         String profilepic = users.getProfilepic();
         if (profilepic != null) {
             Picasso.get().load(profilepic).into(holder.profile_pic);
@@ -105,7 +109,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.viewholder> {
                 Location.distanceBetween(Double.valueOf(currentUser.getLatitude()), Double.valueOf(currentUser.getLongitude()),
                         Double.valueOf(users.getLatitude()), Double.valueOf(users.getLongitude()), distance);
                 if (((int)distance[0])/1000 == 0)
-                    holder.distance.setText("1 km away (nearby)");
+                    holder.distance.setText("1 km away");
                 else
                     holder.distance.setText(((int)distance[0])/1000 + " km away");
             }
@@ -242,6 +246,15 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.viewholder> {
             }
         });
 
+        holder.profile_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mainActivity, ViewAnotherProfile.class);
+                intent.putExtra("userId", users.getUserId());
+                mainActivity.startActivity(intent);
+            }
+        });
+
     }
 
     @Override
@@ -252,8 +265,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.viewholder> {
     public class viewholder extends RecyclerView.ViewHolder {
         MyImageSwitcher userimg;
         CircleImageView profile_pic;
-        TextView username, userstatus, distance;
-        ImageButton likeButton, dislikeButton, left_button, right_button;
+        TextView username, userstatus, distance, userAge;
+        ImageButton likeButton, dislikeButton, left_button, right_button, profile_button;
 
         public viewholder(@NonNull View itemView) {
             super(itemView);
@@ -266,6 +279,11 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.viewholder> {
             left_button = itemView.findViewById(R.id.left_button);
             right_button = itemView.findViewById(R.id.right_button);
             distance = itemView.findViewById(R.id.distance);
+            userAge = itemView.findViewById(R.id.userAge);
+            profile_button = itemView.findViewById(R.id.btn_another_info);
+
+            // text marquee
+            username.setSelected(true);
             userimg.setFactory(new ViewSwitcher.ViewFactory() {
                 public View makeView() {
                     ImageView myView = new ImageView(mainActivity.getApplicationContext());

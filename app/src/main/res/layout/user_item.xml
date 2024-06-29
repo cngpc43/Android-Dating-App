@@ -80,16 +80,21 @@
                                 android:id="@+id/username"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
                                 android:text="Dao Minh Huy"
                                 android:textColor="@color/white"
-                                android:textSize="12pt"
-                                android:textStyle="bold" />
+                                android:textSize="13pt"
+                                android:textStyle="bold"
+                                android:singleLine="true"
+                                android:ellipsize="marquee"
+                                android:marqueeRepeatLimit="marquee_forever"/>
 
                             <TextView
                                 android:id="@+id/userAge"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="6dp"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginStart="10dp"
                                 android:text="18"
                                 android:textColor="@color/white"
                                 android:textSize="10pt" />
@@ -101,6 +106,7 @@
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins_regular"
                             android:text="Status: I'm very happy"
+                            android:singleLine="true"
                             android:textColor="@color/white"
                             android:textSize="7pt" />
 
@@ -113,6 +119,7 @@
                             android:text="2 kilomets away"
                             android:textColor="@color/white"
                             android:textSize="7pt"
+                            android:singleLine="true"
                             app:drawableStartCompat="@drawable/map_tag_svgrepo_com" />
                     </LinearLayout>
 
