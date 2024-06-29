@@ -46,7 +46,7 @@ public class AnotherUserPhotoAdapter extends ArrayAdapter<String> {
             @Override
             public void onClick(View v) {
                 Log.d("Another photo", "Image clicked");
-                Dialog dialog = new Dialog(getContext());
+                Dialog dialog=new Dialog(getContext(), android.R.style.Theme_Black_NoTitleBar_Fullscreen);
                 dialog.setContentView(R.layout.dialog_full_image);
                 PhotoView photoView = dialog.findViewById(R.id.full_image);
                 Picasso.get().load(photo).into(photoView);
@@ -60,7 +60,6 @@ public class AnotherUserPhotoAdapter extends ArrayAdapter<String> {
                     layoutParams.height = WindowManager.LayoutParams.MATCH_PARENT;
                     window.setAttributes(layoutParams);
                 }
-
                 dialog.show();
             }
         });
