@@ -24,6 +24,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 
 import okhttp3.internal.Util;
 
@@ -126,7 +127,14 @@ public class password_change extends AppCompatActivity {
                                         public void onSuccess(Void unused) {
                                             // update new password to Firebase Realtime Database
                                             reference.setValue(new_pass);
-                                            auth.signOut();
+
+                                            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference().child("user/" + auth.getCurrentUser().getUid() + "/isOnline");
+                                            userRef.setValue(ServerValue.TIMESTAMP).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    auth.signOut();
+                                                }
+                                            });
 
                                             Intent intent = new Intent(password_change.this, password_change_success.class);
                                             // clear all previous activities

@@ -35,6 +35,7 @@ import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.auth.internal.IdTokenListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.internal.InternalTokenResult;
 
 import java.text.SimpleDateFormat;
@@ -145,7 +146,16 @@ public class phone_number_confirm extends AppCompatActivity {
                             reference.child("phone").setValue(phone_number).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void unused) {
-                                    Intent intent = new Intent(phone_number_confirm.this, account_settings.class);
+                                    Toast.makeText(phone_number_confirm.this, "Phone number added successfully, please log in again.", Toast.LENGTH_SHORT).show();
+
+                                    DatabaseReference userRef = FirebaseDatabase.getInstance().getReference().child("user/" + auth.getCurrentUser().getUid() + "/isOnline");
+                                    userRef.setValue(ServerValue.TIMESTAMP).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            auth.signOut();
+                                        }
+                                    });
+                                    Intent intent = new Intent(phone_number_confirm.this, login.class);
                                     // clear all previous activities
                                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                     startActivity(intent);
@@ -166,8 +176,16 @@ public class phone_number_confirm extends AppCompatActivity {
                             reference.child("phone").setValue(phone_number).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void unused) {
-                                    Toast.makeText(phone_number_confirm.this, "Phone number updated", Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(phone_number_confirm.this, account_settings.class);
+                                    Toast.makeText(phone_number_confirm.this, "Phone number updated, please log in again.", Toast.LENGTH_SHORT).show();
+
+                                    DatabaseReference userRef = FirebaseDatabase.getInstance().getReference().child("user/" + auth.getCurrentUser().getUid() + "/isOnline");
+                                    userRef.setValue(ServerValue.TIMESTAMP).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            auth.signOut();
+                                        }
+                                    });
+                                    Intent intent = new Intent(phone_number_confirm.this, login.class);
                                     // clear all previous activities
                                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                     startActivity(intent);

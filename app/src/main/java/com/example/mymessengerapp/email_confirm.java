@@ -27,6 +27,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.internal.IdTokenListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.internal.InternalTokenResult;
 
 import java.text.SimpleDateFormat;
@@ -108,7 +109,14 @@ public class email_confirm extends AppCompatActivity {
                                 @Override
                                 public void onSuccess(Void unused) {
                                     Toast.makeText(email_confirm.this, "Email changed successfully.", Toast.LENGTH_SHORT).show();
-                                    auth.signOut();
+
+                                    DatabaseReference userRef = FirebaseDatabase.getInstance().getReference().child("user/" + auth.getCurrentUser().getUid() + "/isOnline");
+                                    userRef.setValue(ServerValue.TIMESTAMP).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            auth.signOut();
+                                        }
+                                    });
 
                                     Intent intent = new Intent(email_confirm.this, email_change_success.class);
                                     // clear all previous activities
