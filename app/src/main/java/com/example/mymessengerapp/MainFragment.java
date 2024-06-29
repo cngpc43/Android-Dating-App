@@ -142,7 +142,7 @@ public class MainFragment extends Fragment {
                                 dataSnapshot.child("age_range").getValue(String.class), dataSnapshot.child("gender_show").getValue(String.class),
                                 dataSnapshot.child("show_me").getValue(Boolean.class), new ArrayList<String>(),
                                 dataSnapshot.child("latitude").getValue(String.class), dataSnapshot.child("longitude").getValue(String.class),
-                                dataSnapshot.child("isOnline").getValue(String.class), dataSnapshot.child("location_distance").getValue(String.class));
+                                "", dataSnapshot.child("location_distance").getValue(String.class));
                         Object isOnline = dataSnapshot.child("isOnline").getValue(Object.class);
                         if (isOnline != null) {
                             if (isOnline.equals("true"))

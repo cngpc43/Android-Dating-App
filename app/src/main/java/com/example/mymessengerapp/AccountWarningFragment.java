@@ -122,11 +122,6 @@ public class AccountWarningFragment extends Fragment {
                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.main_frame, new UserSettingFragment());
                 transaction.commit();
-                title.setText("User");
-                home_selected.setBackground(null);
-                noti_selected.setBackground(null);
-                chat_selected.setBackground(null);
-                user_selected.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.selected_nav_item));
             }
         });
 
