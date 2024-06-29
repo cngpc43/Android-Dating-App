@@ -57,7 +57,8 @@
                     android:text="Chi Cuong"
                     android:textColor="@color/secondary3"
                     android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:singleLine="true"/>
 
                 <TextView
                     android:id="@+id/user_status_chat"
