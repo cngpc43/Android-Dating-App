@@ -50,16 +50,6 @@ public class AnotherUserPhotoAdapter extends ArrayAdapter<String> {
                 dialog.setContentView(R.layout.dialog_full_image);
                 PhotoView photoView = dialog.findViewById(R.id.full_image);
                 Picasso.get().load(photo).into(photoView);
-
-                // Make the dialog full screen
-                Window window = dialog.getWindow();
-                if (window != null) {
-                    WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
-                    layoutParams.copyFrom(window.getAttributes());
-                    layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
-                    layoutParams.height = WindowManager.LayoutParams.MATCH_PARENT;
-                    window.setAttributes(layoutParams);
-                }
                 dialog.show();
             }
         });
