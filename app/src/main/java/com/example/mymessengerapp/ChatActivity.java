@@ -1,8 +1,10 @@
 package com.example.mymessengerapp;
+
 import static androidx.core.content.PackageManagerCompat.LOG_TAG;
 
 import java.io.File;
 import java.io.IOException;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
@@ -61,268 +63,266 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+
 import de.hdodenhof.circleimageview.CircleImageView;
+
 import android.content.DialogInterface;
 import android.app.AlertDialog;
+
 public class ChatActivity extends AppCompatActivity {
     ImageButton voiceAttach;
     private static final int GALLERY_REQUEST_CODE = 123;
-        EditText messageInput;
-        ImageButton sendMessBtn, backBtn, optMore;
-        TextView userName, userStatus;
-        CircleImageView userAvatar;
-        RecyclerView mainChat;
-        ArrayList<Users> usersArrayList;
-        ChatAdapter chatAdapter;
-        List<ChatMessage> chatMessages;
-        LinearLayout llSendChat;
-        FirebaseDatabase database;
-        FirebaseAuth auth;
+    EditText messageInput;
+    ImageButton sendMessBtn, backBtn, optMore;
+    TextView userName, userStatus;
+    CircleImageView userAvatar;
+    RecyclerView mainChat;
+    ArrayList<Users> usersArrayList;
+    ChatAdapter chatAdapter;
+    List<ChatMessage> chatMessages;
+    LinearLayout llSendChat, attachmentPopup;
+    FirebaseDatabase database;
+    FirebaseAuth auth;
+    ImageButton chatInput;
+    private MediaRecorder recorder;
+    private StorageReference storageReference;
+    private String audioFilePath;
+    private boolean isRecording = false;
+    boolean isRecordingStarted = false;
+    private ArrayList<Uri> selectedMediaUris = new ArrayList<>();
+    private static final int PICK_MEDIA_REQUEST = 1;
 
-        PopupWindow attachmentPopup;
-        ImageButton chatInput;
-        private MediaRecorder recorder;
-        private String fileName;
-        private StorageReference storageReference;
-        private String audioFilePath;
-        private boolean isRecording = false;
-        boolean isRecordingStarted = false;
-        private ArrayList<Uri> selectedMediaUris = new ArrayList<>();
-        private static final int PICK_MEDIA_REQUEST = 1;
+    @SuppressLint({"MissingInflatedId", "ClickableViewAccessibility", "ResourceAsColor", "WrongViewCast"})
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_chat);
+        storageReference = FirebaseStorage.getInstance().getReference();
+        String senderId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        String receiverId = getIntent().getStringExtra("userId");
+        String chatRoomId = senderId + "_" + receiverId;
 
-        @SuppressLint({"MissingInflatedId", "ClickableViewAccessibility", "ResourceAsColor"})
-        @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_chat);
-            storageReference = FirebaseStorage.getInstance().getReference();
-            String senderId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-            String receiverId = getIntent().getStringExtra("userId");
-            String chatRoomId = senderId + "_" + receiverId;
+        // Create chat room id from sender and receiver
+        if (senderId.compareTo(receiverId) < 0) {
+            chatRoomId = senderId + "_" + receiverId;
+        } else {
+            chatRoomId = receiverId + "_" + senderId;
+        }
 
-            // Create chat room id from sender and receiver
-            if (senderId.compareTo(receiverId) < 0) {
-                chatRoomId = senderId + "_" + receiverId;
-            } else {
-                chatRoomId = receiverId + "_" + senderId;
-            }
+        DatabaseReference chatRoomRef = FirebaseDatabase.getInstance().getReference("Chats").child(chatRoomId);
+        chatRoomRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                chatMessages.clear();
 
-            DatabaseReference chatRoomRef = FirebaseDatabase.getInstance().getReference("Chats").child(chatRoomId);
-            chatRoomRef.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    chatMessages.clear();
+                // Loop through the messages in the chat room
+                for (DataSnapshot messageSnapshot : snapshot.getChildren()) {
+                    // Get the message data
+                    String message = messageSnapshot.child("text").getValue(String.class);
+                    long timestamp = messageSnapshot.child("timestamp").getValue(Long.class);
+                    String senderId = messageSnapshot.child("senderId").getValue(String.class);
+                    String attachmentUrl = messageSnapshot.child("attachmentUrl").getValue(String.class);
+                    String attachmentType = messageSnapshot.child("attachmentType").getValue(String.class);
+                    // Create a new ChatMessage object
+                    ChatMessage chatMessage = new ChatMessage(message, timestamp, senderId, true, attachmentUrl, attachmentType);
+                    Log.d("ChatActivity", "Message: " + message + ", Timestamp: " + timestamp + ", Sender ID: " + senderId);
 
-                    // Loop through the messages in the chat room
-                    for (DataSnapshot messageSnapshot : snapshot.getChildren()) {
-                        // Get the message data
-                        String message = messageSnapshot.child("text").getValue(String.class);
-                        long timestamp = messageSnapshot.child("timestamp").getValue(Long.class);
-                        String senderId = messageSnapshot.child("senderId").getValue(String.class);
-                        String attachmentUrl = messageSnapshot.child("attachmentUrl").getValue(String.class);
-                        String attachmentType = messageSnapshot.child("attachmentType").getValue(String.class);
-                        // Create a new ChatMessage object
-                        ChatMessage chatMessage = new ChatMessage(message, timestamp, senderId, true, attachmentUrl, attachmentType);
-                        Log.d("ChatActivity", "Message: " + message + ", Timestamp: " + timestamp + ", Sender ID: " + senderId);
-
-                        // Add the chat message to the chatMessages list
-                        chatMessages.add(chatMessage);
-                    }
-
-                    chatAdapter.notifyDataSetChanged();
-
-                    // Scroll the RecyclerView to the last item
-                    if (chatAdapter.getItemCount() > 0) {
-                        mainChat.scrollToPosition(chatAdapter.getItemCount() - 1);
-                    }
+                    // Add the chat message to the chatMessages list
+                    chatMessages.add(chatMessage);
                 }
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                    // Log the error
-                    Log.w("ChatActivity", "Failed to read messages.", error.toException());
-                }
-            });
-
-            // Get user id and chat room id
-            usersArrayList = new ArrayList<>();
-            auth = FirebaseAuth.getInstance();
-            database = FirebaseDatabase.getInstance();
-            DatabaseReference reference = database.getReference().child("user");
-            reference.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    usersArrayList.clear();
-                    String currentUserId = auth.getCurrentUser().getUid();
-                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                        Users users = new Users(dataSnapshot.child("userId").getValue(String.class), dataSnapshot.child("userName").getValue(String.class),
-                                dataSnapshot.child("mail").getValue(String.class), dataSnapshot.child("password").getValue(String.class),
-                                dataSnapshot.child("profilepic").getValue(String.class), dataSnapshot.child("status").getValue(String.class),
-                                dataSnapshot.child("gender").getValue(String.class), dataSnapshot.child("dob").getValue(String.class),
-                                dataSnapshot.child("phone").getValue(String.class), dataSnapshot.child("location").getValue(String.class),
-                                dataSnapshot.child("sexual_orientation").getValue(String.class), dataSnapshot.child("height").getValue(String.class),
-                                dataSnapshot.child("age_range").getValue(String.class), dataSnapshot.child("gender_show").getValue(String.class),
-                                dataSnapshot.child("show_me").getValue(Boolean.class), new ArrayList<String>(),
-                                dataSnapshot.child("latitude").getValue(String.class), dataSnapshot.child("longitude").getValue(String.class),
-                                "", dataSnapshot.child("location_distance").getValue(String.class));
-                        Object isOnline = dataSnapshot.child("isOnline").getValue(Object.class);
-                        if (isOnline != null) {
-                            if (isOnline.equals("true"))
-                                users.setIsOnline("true");
-                            else
-                                users.setIsOnline(isOnline.toString());
-                        }
-                        if (users != null && !users.getUserId().equals(currentUserId)) {
-                            usersArrayList.add(users);
-                        }
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
-                }
-            });
-            // Get UI from xml
-            userName = findViewById(R.id.user_name_chat);
-            userStatus = findViewById(R.id.user_status_chat);
-            userAvatar = findViewById(R.id.user_icon_chat);
-            messageInput = findViewById(R.id.chat_input);
-            sendMessBtn = findViewById(R.id.chat_send_button);
-            backBtn = findViewById(R.id.chat_back_button);
-            mainChat = findViewById(R.id.chat_main);
-            llSendChat = findViewById(R.id.send_chat);
-            optMore = findViewById(R.id.option_more);
-            voiceAttach = findViewById(R.id.voice_attach);
-
-
-            // Init chat message model
-            chatMessages = new ArrayList<ChatMessage>();
-
-            // Send message into the recycle view to display
-            chatAdapter = new ChatAdapter(chatMessages);
-            mainChat.setAdapter(chatAdapter);
-            mainChat.setLayoutManager(new LinearLayoutManager(this));
-            ((LinearLayoutManager) mainChat.getLayoutManager()).setStackFromEnd(true);
-
-            // Set content for UI
-            userName.setText(getIntent().getStringExtra("userName"));
-            String profileUri = getIntent().getStringExtra("userImage");
-            if (profileUri == null) {
-                FirebaseStorage.getInstance().getReference().child("default.png").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        Picasso.get().load(uri).into(userAvatar);
-                    }
-                });
-            } else {
-                Picasso.get().load(profileUri).into(userAvatar);
-            }
-
-            // Xu ly khi nhan back ve
-            backBtn.setOnClickListener(v -> onBackPressed());
-
-            sendMessBtn.setOnClickListener(v -> {
-                String message = messageInput.getText().toString().trim();
-
-                // Don't proceed if the message is empty
-                if (message.isEmpty())
-                    return;
-
-                handleSendMessage(message, receiverId, null, "text");
-
-                // Clear the input field
-                messageInput.setText("");
-
-                // Add the new message to the chatMessages list
-                long timestamp = System.currentTimeMillis();
-                chatMessages.add(new ChatMessage(message, timestamp, senderId, true, null, "text"));
-
-                // Notify the adapter that the data set has changed
                 chatAdapter.notifyDataSetChanged();
 
                 // Scroll the RecyclerView to the last item
                 if (chatAdapter.getItemCount() > 0) {
                     mainChat.scrollToPosition(chatAdapter.getItemCount() - 1);
                 }
-            });
+            }
 
-            // Init PopupWindow
-            LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-            View popupView = inflater.inflate(R.layout.attachment_popup, null);
-            attachmentPopup = new PopupWindow(popupView, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            chatInput = popupView.findViewById(R.id.image_attachment);
-            Log.d("ChatActivity", "Chat input: " + chatInput);
-            chatInput.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Log the error
+                Log.w("ChatActivity", "Failed to read messages.", error.toException());
+            }
+        });
+
+        // Get user id and chat room id
+        usersArrayList = new ArrayList<>();
+        auth = FirebaseAuth.getInstance();
+        database = FirebaseDatabase.getInstance();
+        DatabaseReference reference = database.getReference().child("user");
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                usersArrayList.clear();
+                String currentUserId = auth.getCurrentUser().getUid();
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    Users users = new Users(dataSnapshot.child("userId").getValue(String.class), dataSnapshot.child("userName").getValue(String.class),
+                            dataSnapshot.child("mail").getValue(String.class), dataSnapshot.child("password").getValue(String.class),
+                            dataSnapshot.child("profilepic").getValue(String.class), dataSnapshot.child("status").getValue(String.class),
+                            dataSnapshot.child("gender").getValue(String.class), dataSnapshot.child("dob").getValue(String.class),
+                            dataSnapshot.child("phone").getValue(String.class), dataSnapshot.child("location").getValue(String.class),
+                            dataSnapshot.child("sexual_orientation").getValue(String.class), dataSnapshot.child("height").getValue(String.class),
+                            dataSnapshot.child("age_range").getValue(String.class), dataSnapshot.child("gender_show").getValue(String.class),
+                            dataSnapshot.child("show_me").getValue(Boolean.class), new ArrayList<String>(),
+                            dataSnapshot.child("latitude").getValue(String.class), dataSnapshot.child("longitude").getValue(String.class),
+                            "", dataSnapshot.child("location_distance").getValue(String.class));
+                    Object isOnline = dataSnapshot.child("isOnline").getValue(Object.class);
+                    if (isOnline != null) {
+                        if (isOnline.equals("true"))
+                            users.setIsOnline("true");
+                        else
+                            users.setIsOnline(isOnline.toString());
+                    }
+                    if (users != null && !users.getUserId().equals(currentUserId)) {
+                        usersArrayList.add(users);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+        // Get UI from xml
+        userName = findViewById(R.id.user_name_chat);
+        userStatus = findViewById(R.id.user_status_chat);
+        userAvatar = findViewById(R.id.user_icon_chat);
+        messageInput = findViewById(R.id.chat_input);
+        sendMessBtn = findViewById(R.id.chat_send_button);
+        backBtn = findViewById(R.id.chat_back_button);
+        mainChat = findViewById(R.id.chat_main);
+        llSendChat = findViewById(R.id.send_chat);
+        optMore = findViewById(R.id.option_more);
+        voiceAttach = findViewById(R.id.voice_attach);
+        attachmentPopup = findViewById(R.id.attachment_popup);
+
+        // Init chat message model
+        chatMessages = new ArrayList<ChatMessage>();
+
+        // Send message into the recycle view to display
+        chatAdapter = new ChatAdapter(chatMessages);
+        mainChat.setAdapter(chatAdapter);
+        mainChat.setLayoutManager(new LinearLayoutManager(this));
+        ((LinearLayoutManager) mainChat.getLayoutManager()).setStackFromEnd(true);
+
+        // Set content for UI
+        userName.setText(getIntent().getStringExtra("userName"));
+        String profileUri = getIntent().getStringExtra("userImage");
+        if (profileUri == null) {
+            FirebaseStorage.getInstance().getReference().child("default.png").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                 @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-                    intent.addCategory(Intent.CATEGORY_OPENABLE);
-                    intent.setType("*/*");
-                    String[] mimetypes = {"image/*", "video/*"};
-                    intent.putExtra(Intent.EXTRA_MIME_TYPES, mimetypes);
-                    intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-                    startActivityForResult(intent, PICK_MEDIA_REQUEST);
+                public void onSuccess(Uri uri) {
+                    Picasso.get().load(uri).into(userAvatar);
                 }
             });
+        } else {
+            Picasso.get().load(profileUri).into(userAvatar);
+        }
 
-            // Handle chat attachment icon in chat input field
-            messageInput.setOnTouchListener((v, event) -> {
-                final int DRAWABLE_RIGHT = 2;
+        // Xu ly khi nhan back ve
+        backBtn.setOnClickListener(v -> onBackPressed());
 
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-                    if (event.getRawX() >= (messageInput.getRight() - messageInput.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
-                        // Check popup window is showing are not
-                        if (attachmentPopup.isShowing()) {
-                            // Dismiss if the popup is showing
-                            attachmentPopup.dismiss();
-                            return true;
-                        }
+        sendMessBtn.setOnClickListener(v -> {
+            String message = messageInput.getText().toString().trim();
 
-                        // Display it if it is not showing
-                        attachmentPopup.setWidth(LinearLayout.LayoutParams.MATCH_PARENT);
-                        attachmentPopup.showAtLocation(messageInput, Gravity.NO_GRAVITY, 0, mainChat.getBottom() - 100);
+            // Don't proceed if the message is empty
+            if (message.isEmpty())
+                return;
+
+            handleSendMessage(message, receiverId, null, "text");
+
+            // Clear the input field
+            messageInput.setText("");
+
+            // Add the new message to the chatMessages list
+            long timestamp = System.currentTimeMillis();
+            chatMessages.add(new ChatMessage(message, timestamp, senderId, true, null, "text"));
+
+            // Notify the adapter that the data set has changed
+            chatAdapter.notifyDataSetChanged();
+
+            // Scroll the RecyclerView to the last item
+            if (chatAdapter.getItemCount() > 0) {
+                mainChat.scrollToPosition(chatAdapter.getItemCount() - 1);
+            }
+        });
+
+        // Init PopupWindow
+        chatInput = findViewById(R.id.image_attachment);
+        Log.d("ChatActivity", "Chat input: " + chatInput);
+        chatInput.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                intent.setType("*/*");
+                String[] mimetypes = {"image/*", "video/*"};
+                intent.putExtra(Intent.EXTRA_MIME_TYPES, mimetypes);
+                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+                startActivityForResult(intent, PICK_MEDIA_REQUEST);
+            }
+        });
+
+        // Handle chat attachment icon in chat input field
+        messageInput.setOnTouchListener((v, event) -> {
+            final int DRAWABLE_RIGHT = 2;
+
+            if (event.getAction() == MotionEvent.ACTION_UP) {
+                if (event.getRawX() >= (messageInput.getRight() - messageInput.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                    // Check popup window is showing are not
+                    if (attachmentPopup.getVisibility() == View.VISIBLE) {
+                        // Dismiss if the popup is showing
+                        attachmentPopup.setVisibility(View.GONE);
                         return true;
                     }
+
+                    // Display it if it is not showing
+                    attachmentPopup.setVisibility(View.VISIBLE);
+                    return true;
                 }
-                return false;
-            });
+            }
 
-            voiceAttach.setOnTouchListener((v, event) -> {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    if (isRecordingStarted == false) {
-                        startRecording();
-                        isRecordingStarted = true;
-                    } else {
-                        stopRecording();
-                        isRecordingStarted = false;
-                    }
+            return false;
+        });
+
+        voiceAttach.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                if (isRecordingStarted == false) {
+                    startRecording();
+                    isRecordingStarted = true;
+                } else {
+                    stopRecording();
+                    isRecordingStarted = false;
                 }
-                return false;
-            });
+            }
+            return false;
+        });
 
 
-            // Zego call listener
-            ZegoSendCallInvitationButton newVideoCall = findViewById(R.id.new_video_call);
-            newVideoCall.setIsVideoCall(true);
-            newVideoCall.setResourceID("zego_uikit_call");
-            newVideoCall.setBackgroundResource(R.drawable.icons8_video_call_36);
-            newVideoCall.setInvitees(Collections.singletonList(new ZegoUIKitUser(getIntent().getStringExtra("userId"), getIntent().getStringExtra("userName"))));
+        // Zego call listener
+        ZegoSendCallInvitationButton newVideoCall = findViewById(R.id.new_video_call);
+        newVideoCall.setIsVideoCall(true);
+        newVideoCall.setResourceID("zego_uikit_call");
+        newVideoCall.setBackgroundResource(R.drawable.icons8_video_call_36);
+        newVideoCall.setInvitees(Collections.singletonList(new ZegoUIKitUser(getIntent().getStringExtra("userId"), getIntent().getStringExtra("userName"))));
 
-            // Audio call handler
-            ZegoSendCallInvitationButton newVoiceCall = findViewById(R.id.new_voice_call);
-            newVoiceCall.setIsVideoCall(false);
-            newVoiceCall.setResourceID("zegouikit_call");
-            newVoiceCall.setBackgroundResource(R.drawable.icons8_call_36);
-            newVoiceCall.setInvitees(Collections.singletonList(new ZegoUIKitUser(getIntent().getStringExtra("userId"), getIntent().getStringExtra("userName"))));
+        // Audio call handler
+        ZegoSendCallInvitationButton newVoiceCall = findViewById(R.id.new_voice_call);
+        newVoiceCall.setIsVideoCall(false);
+        newVoiceCall.setResourceID("zegouikit_call");
+        newVoiceCall.setBackgroundResource(R.drawable.icons8_call_36);
+        newVoiceCall.setInvitees(Collections.singletonList(new ZegoUIKitUser(getIntent().getStringExtra("userId"), getIntent().getStringExtra("userName"))));
 
-            // Handle option more button
-            optMore.setOnClickListener(v -> showPopupMenu());
+        // Handle option more button
+        optMore.setOnClickListener(v -> showPopupMenu());
 
-        }
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -344,129 +344,133 @@ public class ChatActivity extends AppCompatActivity {
             showImagePreviewDialog(selectedMediaUris);
         }
     }
-        @Override
-        public void onBackPressed() {
-            RelativeLayout searchBarMsg = findViewById(R.id.searchBarMsg);
 
-            // Check if searchBarMsg is visible
-            if (searchBarMsg.getVisibility() == View.VISIBLE) {
-                // If searchBarMsg is visible, hide it and return
-                searchBarMsg.setVisibility(View.GONE);
-                return;
-            }
+    @Override
+    public void onBackPressed() {
+        RelativeLayout searchBarMsg = findViewById(R.id.searchBarMsg);
 
-            // If searchBarMsg is not visible, call the superclass implementation
-            super.onBackPressed();
+        // Check if searchBarMsg is visible
+        if (searchBarMsg.getVisibility() == View.VISIBLE) {
+            // If searchBarMsg is visible, hide it and return
+            searchBarMsg.setVisibility(View.GONE);
+            return;
         }
 
-        // Xu ly chuc nang gui tin nhan
-        public void showImagePreviewDialog(ArrayList<Uri> selectedMediaUris) {
-            // Create a dialog
-            Dialog dialog = new Dialog(this);
-            dialog.setContentView(R.layout.dialog_image_preview);
+        // If searchBarMsg is not visible, call the superclass implementation
+        super.onBackPressed();
+    }
 
-            // Find the ViewPager and Buttons in the layout
-            ViewPager imagePreviewPager = dialog.findViewById(R.id.image_preview_pager);
-            Button confirmButton = dialog.findViewById(R.id.confirm_button);
-            Button cancelButton = dialog.findViewById(R.id.cancel_button);
+    // Xu ly chuc nang gui tin nhan
+    public void showImagePreviewDialog(ArrayList<Uri> selectedMediaUris) {
+        // Create a dialog
+        Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.dialog_image_preview);
 
-            // Set the adapter for the ViewPager
-            imagePreviewPager.setAdapter(new ImagePagerAdapter(this, selectedMediaUris));
+        // Find the ViewPager and Buttons in the layout
+        ViewPager imagePreviewPager = dialog.findViewById(R.id.image_preview_pager);
+        Button confirmButton = dialog.findViewById(R.id.confirm_button);
+        Button cancelButton = dialog.findViewById(R.id.cancel_button);
 
-            confirmButton.setOnClickListener(v -> {
-                // Handle the confirmation action here
-                for (Uri mediaUri : selectedMediaUris) {
-                    StorageReference fileRef = storageReference.child("files/" + mediaUri.getLastPathSegment());
-                    UploadTask uploadTask = fileRef.putFile(mediaUri);
+        // Set the adapter for the ViewPager
+        imagePreviewPager.setAdapter(new ImagePagerAdapter(this, selectedMediaUris));
 
-                    uploadTask.addOnSuccessListener(taskSnapshot -> {
-                        fileRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                            String fileUrl = uri.toString();
-                            String receiverId = getIntent().getStringExtra("userId");
-                            handleSendMessage("Image", receiverId, fileUrl, "media");
-                        });
-                    }).addOnFailureListener(e -> {
-                        Toast.makeText(ChatActivity.this, "Failed to upload file", Toast.LENGTH_SHORT).show();
+        confirmButton.setOnClickListener(v -> {
+            // Handle the confirmation action here
+            for (Uri mediaUri : selectedMediaUris) {
+                StorageReference fileRef = storageReference.child("files/" + mediaUri.getLastPathSegment());
+                UploadTask uploadTask = fileRef.putFile(mediaUri);
+
+                uploadTask.addOnSuccessListener(taskSnapshot -> {
+                    fileRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                        String fileUrl = uri.toString();
+                        String receiverId = getIntent().getStringExtra("userId");
+                        handleSendMessage("Image", receiverId, fileUrl, "media");
                     });
+                }).addOnFailureListener(e -> {
+                    Toast.makeText(ChatActivity.this, "Failed to upload file", Toast.LENGTH_SHORT).show();
+                });
+            }
+            // Clear the selected images and dismiss the dialog
+            selectedMediaUris.clear();
+            dialog.dismiss();
+        });
+        cancelButton.setOnClickListener(v -> {
+            // Clear the selected images and dismiss the dialog
+            selectedMediaUris.clear();
+            dialog.dismiss();
+        });
+
+        // Show the dialog
+        dialog.show();
+    }
+
+    void handleSendMessage(String message, String receiverId, String attachmentUrl, String
+            attachmentType) {
+        String senderId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        // Concatenate the user IDs to form a unique chat room ID
+        String chatRoomId = senderId + "_" + receiverId;
+        if (senderId.compareTo(receiverId) < 0) {
+            chatRoomId = senderId + "_" + receiverId;
+        } else {
+            chatRoomId = receiverId + "_" + senderId;
+        }
+        // Get the current timestamp
+        long timestamp = System.currentTimeMillis();
+
+        // Create a new message object
+        HashMap<String, Object> chatMessage = new HashMap<>();
+        chatMessage.put("senderId", senderId);
+        chatMessage.put("timestamp", timestamp);
+        chatMessage.put("text", message);
+        chatMessage.put("attachmentUrl", attachmentUrl);
+        chatMessage.put("attachmentType", attachmentType);
+        // Push this message object to the Firebase database under the chat room ID
+        FirebaseDatabase.getInstance().getReference("Chats")
+                .child(chatRoomId)
+                .push()
+                .setValue(chatMessage)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        // Message sent successfully
+                        Log.d("ChatActivity", "Message sent.");
+                    } else {
+                        // Failed to send the message
+                        Log.w("ChatActivity", "Failed to send message.", task.getException());
+                    }
+                });
+    }
+
+    // Show popup menu
+    private void showPopupMenu() {
+        // Init the popup menu and give the reference as current context
+        PopupMenu optPopupMenu = new PopupMenu(ChatActivity.this, optMore);
+
+        // Get the content menu
+        optPopupMenu.getMenuInflater().inflate(R.menu.option_chat_popup_menu, optPopupMenu.getMenu());
+        // Handle the item click in the popup menu
+        optPopupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @SuppressLint("NonConstantResourceId")
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.search_msg: {
+                        // Find the searchBarMsg view
+                        RelativeLayout searchBarMsg = findViewById(R.id.searchBarMsg);
+                        // Set its visibility to VISIBLE
+                        searchBarMsg.setVisibility(View.VISIBLE);
+                        return true;
+                    }
+                    default:
+                        return true;
                 }
-                // Clear the selected images and dismiss the dialog
-                selectedMediaUris.clear();
-                dialog.dismiss();
-            });
-            cancelButton.setOnClickListener(v -> {
-                // Clear the selected images and dismiss the dialog
-                selectedMediaUris.clear();
-                dialog.dismiss();
-            });
-
-            // Show the dialog
-            dialog.show();
-        }
-        void handleSendMessage(String message, String receiverId, String attachmentUrl, String attachmentType) {
-            String senderId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
-            // Concatenate the user IDs to form a unique chat room ID
-            String chatRoomId = senderId + "_" + receiverId;
-            if (senderId.compareTo(receiverId) < 0) {
-                chatRoomId = senderId + "_" + receiverId;
-            } else {
-                chatRoomId = receiverId + "_" + senderId;
             }
-            // Get the current timestamp
-            long timestamp = System.currentTimeMillis();
-
-            // Create a new message object
-            HashMap<String, Object> chatMessage = new HashMap<>();
-            chatMessage.put("senderId", senderId);
-            chatMessage.put("timestamp", timestamp);
-            chatMessage.put("text", message);
-            chatMessage.put("attachmentUrl", attachmentUrl);
-            chatMessage.put("attachmentType", attachmentType);
-            // Push this message object to the Firebase database under the chat room ID
-            FirebaseDatabase.getInstance().getReference("Chats")
-                    .child(chatRoomId)
-                    .push()
-                    .setValue(chatMessage)
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            // Message sent successfully
-                            Log.d("ChatActivity", "Message sent.");
-                        } else {
-                            // Failed to send the message
-                            Log.w("ChatActivity", "Failed to send message.", task.getException());
-                        }
-                    });
-        }
+        });
 
         // Show popup menu
-        private void showPopupMenu() {
-            // Init the popup menu and give the reference as current context
-            PopupMenu optPopupMenu = new PopupMenu(ChatActivity.this, optMore);
+        optPopupMenu.show();
+    }
 
-            // Get the content menu
-            optPopupMenu.getMenuInflater().inflate(R.menu.option_chat_popup_menu, optPopupMenu.getMenu());
-            // Handle the item click in the popup menu
-            optPopupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                @SuppressLint("NonConstantResourceId")
-                @Override
-                public boolean onMenuItemClick(MenuItem item) {
-                    switch (item.getItemId()) {
-                        case R.id.search_msg: {
-                            // Find the searchBarMsg view
-                            RelativeLayout searchBarMsg = findViewById(R.id.searchBarMsg);
-                            // Set its visibility to VISIBLE
-                            searchBarMsg.setVisibility(View.VISIBLE);
-                            return true;
-                        }
-                        default:
-                            return true;
-                    }
-                }
-            });
-
-            // Show popup menu
-            optPopupMenu.show();
-        }
     public void showConfirmationDialog(ArrayList<Uri> selectedMediaUris) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Confirm Selection");
@@ -484,56 +488,57 @@ public class ChatActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
-        private void startRecording() {
-            audioFilePath = getExternalCacheDir().getAbsolutePath() + "/audiorecord.3gp";
-            recorder = new MediaRecorder();
-            recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-            recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-            recorder.setOutputFile(audioFilePath);
-            recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
 
+    private void startRecording() {
+        audioFilePath = getExternalCacheDir().getAbsolutePath() + "/audiorecord.3gp";
+        recorder = new MediaRecorder();
+        recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+        recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+        recorder.setOutputFile(audioFilePath);
+        recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+
+        try {
+            recorder.prepare();
+        } catch (IOException e) {
+
+            Toast.makeText(ChatActivity.this, "Failed to start recording", Toast.LENGTH_SHORT).show();
+
+        }
+        recorder.start();
+        isRecording = true;
+    }
+
+    private void stopRecording() {
+        if (isRecording && recorder != null) {
             try {
-                recorder.prepare();
-            } catch (IOException e) {
+                recorder.stop();
+            } catch (RuntimeException e) {
 
-                Toast.makeText(ChatActivity.this, "Failed to start recording", Toast.LENGTH_SHORT).show();
-
+                Toast.makeText(ChatActivity.this, "Failed to stop recording", Toast.LENGTH_SHORT).show();
             }
-            recorder.start();
-            isRecording = true;
+            recorder.release();
+            recorder = null;
+            isRecording = false;
+            uploadAudioFile();
         }
+    }
 
-        private void stopRecording() {
-            if (isRecording && recorder != null) {
-                try {
-                    recorder.stop();
-                } catch (RuntimeException e) {
+    private void uploadAudioFile() {
+        Uri audioFileUri = Uri.fromFile(new File(audioFilePath));
+        StorageReference audioRef = storageReference.child("audio/" + audioFileUri.getLastPathSegment());
+        UploadTask uploadTask = audioRef.putFile(audioFileUri);
 
-                    Toast.makeText(ChatActivity.this, "Failed to stop recording", Toast.LENGTH_SHORT).show();
-                }
-                recorder.release();
-                recorder = null;
-                isRecording = false;
-                uploadAudioFile();
-            }
-        }
-
-        private void uploadAudioFile() {
-            Uri audioFileUri = Uri.fromFile(new File(audioFilePath));
-            StorageReference audioRef = storageReference.child("audio/" + audioFileUri.getLastPathSegment());
-            UploadTask uploadTask = audioRef.putFile(audioFileUri);
-
-            uploadTask.addOnSuccessListener(taskSnapshot -> {
-                audioRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                    String audioUrl = uri.toString();
-                    String receiverId = getIntent().getStringExtra("userId");
-                    handleSendMessage(null, receiverId, audioUrl, "audio");
-                });
-            }).addOnFailureListener(e -> {
-                Toast.makeText(ChatActivity.this, "Failed to upload audio file", Toast.LENGTH_SHORT).show();
+        uploadTask.addOnSuccessListener(taskSnapshot -> {
+            audioRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                String audioUrl = uri.toString();
+                String receiverId = getIntent().getStringExtra("userId");
+                handleSendMessage(null, receiverId, audioUrl, "audio");
             });
+        }).addOnFailureListener(e -> {
+            Toast.makeText(ChatActivity.this, "Failed to upload audio file", Toast.LENGTH_SHORT).show();
+        });
 
-        }
+    }
 
     private void uploadFiles() {
         for (Uri fileUri : selectedMediaUris) {
