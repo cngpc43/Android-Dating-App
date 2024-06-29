@@ -3,13 +3,17 @@ package com.example.mymessengerapp;
 import android.annotation.SuppressLint;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
+import android.view.View;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -39,6 +43,7 @@ public class ViewAnotherProfile extends AppCompatActivity {
     ImageButton back_btn;
     ArrayList<String> photoList;
     AnotherUserPhotoAdapter adapter;
+    ValueEventListener valueEventListener;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -65,7 +70,7 @@ public class ViewAnotherProfile extends AppCompatActivity {
         anotherPhotos.setAdapter(adapter);
 
         // Get another user info from firebase
-        reference.addValueEventListener(new ValueEventListener() {
+        reference.addValueEventListener(valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 // Clear photo list, avoid stack image
@@ -100,6 +105,26 @@ public class ViewAnotherProfile extends AppCompatActivity {
         });
 
         // Handle back button
-        back_btn.setOnClickListener(v -> onBackPressed());
+        back_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
+        // handle on back pressed
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                finish();
+            }
+        });
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (reference != null && valueEventListener != null)
+            reference.removeEventListener(valueEventListener);
     }
 }
