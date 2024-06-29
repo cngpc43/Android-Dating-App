@@ -1,9 +1,14 @@
 package com.example.mymessengerapp.adapter;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 
@@ -11,8 +16,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.mymessengerapp.R;
+import com.github.chrisbanes.photoview.PhotoView;
 import com.squareup.picasso.Picasso;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class AnotherUserPhotoAdapter extends ArrayAdapter<String> {
@@ -33,6 +40,31 @@ public class AnotherUserPhotoAdapter extends ArrayAdapter<String> {
         ImageView imageView = convertView.findViewById(R.id.image);
 
         Picasso.get().load(photo).into(imageView);
+
+        // View full "that" image
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("Another photo", "Image clicked");
+                Dialog dialog = new Dialog(getContext());
+                dialog.setContentView(R.layout.dialog_full_image);
+                PhotoView photoView = dialog.findViewById(R.id.full_image);
+                Picasso.get().load(photo).into(photoView);
+
+                // Make the dialog full screen
+                Window window = dialog.getWindow();
+                if (window != null) {
+                    WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+                    layoutParams.copyFrom(window.getAttributes());
+                    layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
+                    layoutParams.height = WindowManager.LayoutParams.MATCH_PARENT;
+                    window.setAttributes(layoutParams);
+                }
+
+                dialog.show();
+            }
+        });
+
         return convertView;
     }
 }

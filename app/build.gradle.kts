@@ -21,8 +21,8 @@ android {
         release {
             isMinifyEnabled = false
             proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                    getDefaultProguardFile("proguard-android-optimize.txt"),
+                    "proguard-rules.pro"
             )
         }
     }
@@ -66,4 +66,5 @@ dependencies {
 
     implementation("pub.devrel:easypermissions:3.0.0")
     implementation("com.google.android.gms:play-services-location:21.3.0")
+    implementation("com.github.chrisbanes:PhotoView:2.3.0")
 }
