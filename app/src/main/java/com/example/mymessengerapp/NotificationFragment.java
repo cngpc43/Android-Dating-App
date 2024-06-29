@@ -7,6 +7,10 @@ import android.os.Bundle;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import com.example.mymessengerapp.MainActivity;
+import com.example.mymessengerapp.MatchingRequestsFragment;
+import com.example.mymessengerapp.R;
+import com.example.mymessengerapp.RequestsSentFragment;
 import com.example.mymessengerapp.adapter.UserAdapter;
 import com.example.mymessengerapp.model.Users;
 import com.google.firebase.auth.FirebaseAuth;

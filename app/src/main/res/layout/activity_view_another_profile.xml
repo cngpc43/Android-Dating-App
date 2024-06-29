@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
@@ -28,6 +29,7 @@
             tools:ignore="UseAppTint" />
     </FrameLayout>
 
+    <!--  AVATAR  -->
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/another_avt"
         android:layout_width="104dp"
@@ -39,7 +41,153 @@
         android:src="@drawable/user_icon"
         tools:ignore="ContentDescription" />
 
+    <!--  NAME  -->
     <TextView
+        android:id="@+id/another_name"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_below="@id/another_avt"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="6dp"
+        android:text="Huynh Huu Duc"
+        android:textSize="10pt"
+        android:textStyle="bold" />
+
+    <!--  STATUS  -->
+    <LinearLayout
+        android:id="@+id/ll_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/another_name"
+        android:layout_marginTop="8dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/emoji_laugh_svgrepo_com"
+            android:drawablePadding="4dp"
+            android:paddingHorizontal="20dp"
+            android:text="Status"
+            android:textSize="8pt"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/another_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/another_name"
+            android:background="@drawable/rectangle_box"
+            android:paddingVertical="6dp"
+            android:paddingStart="20dp"
+            android:text="I am happy now !!"
+            android:textSize="7pt" />
+    </LinearLayout>
+
+    <!--  BASIC INFORMATION  -->
+    <LinearLayout
+        android:id="@+id/another_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ll_status"
+        android:layout_marginTop="16dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/info_svgrepo_com"
+            android:drawablePadding="4dp"
+            android:paddingHorizontal="20dp"
+            android:text="Basic information"
+            android:textSize="8pt"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rectangle_box"
+            android:orientation="vertical"
+            android:paddingHorizontal="20dp">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingVertical="4dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Date of birth"
+                    android:textSize="7pt" />
+
+                <TextView
+                    android:id="@+id/another_dob"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="June 17, 2003"
+                    android:textSize="6pt" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:orientation="vertical"
+                android:paddingVertical="4dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Gender"
+                    android:textSize="7pt" />
+
+                <TextView
+                    android:id="@+id/another_gender"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:drawablePadding="4dp"
+                    android:text="Male"
+                    android:textSize="6pt"
+                    app:drawableStartCompat="@drawable/male_svgrepo_com" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:orientation="vertical"
+                android:paddingVertical="4dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Location"
+                    android:textSize="7pt" />
+
+                <TextView
+                    android:id="@+id/another_location"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="Ho Chi Minh City"
+                    android:textSize="6pt" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <GridView
+        android:id="@+id/another_photos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/another_info"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/rectangle_box"
+        android:horizontalSpacing="3dp"
+        android:numColumns="3"
+        android:verticalSpacing="3dp" />
 </RelativeLayout>

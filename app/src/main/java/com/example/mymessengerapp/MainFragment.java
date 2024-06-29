@@ -8,12 +8,14 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.example.mymessengerapp.AccountWarningFragment;
+import com.example.mymessengerapp.R;
+import com.example.mymessengerapp.SpaceItemDecoration;
 import com.example.mymessengerapp.adapter.UserAdapter;
 import com.example.mymessengerapp.model.UserDistanceComparator;
 import com.example.mymessengerapp.model.Users;
@@ -37,13 +39,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.time.LocalDate;
-import java.time.Year;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Locale;
 
 public class MainFragment extends Fragment {
     FirebaseAuth auth;
@@ -66,7 +64,7 @@ public class MainFragment extends Fragment {
         auth = FirebaseAuth.getInstance();
         usersArrayList = new ArrayList<>();
         requestList = new ArrayList<>();
-        adapter = new UserAdapter( getContext(), usersArrayList);
+        adapter = new UserAdapter(getContext(), usersArrayList);
     }
 
     @Override
@@ -87,7 +85,6 @@ public class MainFragment extends Fragment {
         PagerSnapHelper snapHelper = new PagerSnapHelper();
         snapHelper.attachToRecyclerView(mainUserRecyclerView);
         reference = database.getReference();
-
 
 
         auth.addAuthStateListener(authStateListener = new FirebaseAuth.AuthStateListener() {
@@ -210,8 +207,8 @@ public class MainFragment extends Fragment {
                                                         float[] distance = new float[1];
                                                         Location.distanceBetween(Double.valueOf(currentUser.getLatitude()), Double.valueOf(currentUser.getLongitude()),
                                                                 Double.valueOf(users.getLatitude()), Double.valueOf(users.getLongitude()), distance);
-                                                        Log.d("distance_between_users", String.valueOf(distance[0]/1000));
-                                                        if (distance[0]/1000 <= Float.valueOf(currentUser.getLocation_distance())) {
+                                                        Log.d("distance_between_users", String.valueOf(distance[0] / 1000));
+                                                        if (distance[0] / 1000 <= Float.valueOf(currentUser.getLocation_distance())) {
                                                             usersArrayList.add(users);
                                                         }
                                                     }

@@ -389,7 +389,7 @@ public class UserSettingFragment extends Fragment {
         account_settings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getContext(), account_settings.class);
+                Intent intent = new Intent(getContext(), com.example.mymessengerapp.account_settings.class);
                 startActivity(intent);
             }
         });
@@ -490,7 +490,7 @@ public class UserSettingFragment extends Fragment {
                     @Override
                     public void onPositiveButtonClick(Object selection) {
                         Calendar calendar = Calendar.getInstance();
-                        calendar.setTimeInMillis((Long)selection);
+                        calendar.setTimeInMillis((Long) selection);
                         SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy", Locale.ENGLISH);
                         reference.child("dob").setValue(dateFormat.format(calendar.getTime()));
                     }
@@ -506,7 +506,7 @@ public class UserSettingFragment extends Fragment {
         add_photo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getContext(), add_photo.class);
+                Intent intent = new Intent(getContext(), com.example.mymessengerapp.add_photo.class);
                 startActivity(intent);
             }
         });
@@ -514,8 +514,8 @@ public class UserSettingFragment extends Fragment {
         location_distance_slider.addOnChangeListener(new Slider.OnChangeListener() {
             @Override
             public void onValueChange(@NonNull Slider slider, float v, boolean b) {
-                reference.child("location_distance").setValue(String.valueOf((int)v));
-                location_distance_preview.setText((int)v + " km.");
+                reference.child("location_distance").setValue(String.valueOf((int) v));
+                location_distance_preview.setText((int) v + " km.");
                 location_distance_initial = false;
             }
         });

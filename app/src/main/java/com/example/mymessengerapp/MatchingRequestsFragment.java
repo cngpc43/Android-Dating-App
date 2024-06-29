@@ -7,20 +7,14 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.Handler;
-import android.os.Looper;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.mymessengerapp.adapter.MatchingRequestAdapter;
 import com.example.mymessengerapp.model.MapComparator;
-import com.example.mymessengerapp.model.MatchingItem;
-import com.example.mymessengerapp.model.Users;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -29,13 +23,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
-import java.sql.Time;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.concurrent.TimeUnit;
 
 
 public class MatchingRequestsFragment extends Fragment {
@@ -47,10 +37,10 @@ public class MatchingRequestsFragment extends Fragment {
     ArrayList<HashMap<String, Object>> matchingItems;
     ValueEventListener valueEventListener;
     DatabaseReference reference;
+
     public MatchingRequestsFragment() {
 
     }
-
 
 
     @Override
@@ -86,7 +76,8 @@ public class MatchingRequestsFragment extends Fragment {
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     if (dataSnapshot.child("recipientId").getValue(String.class) != null && dataSnapshot.child("status").getValue(String.class) != null) {
                         if (dataSnapshot.child("recipientId").getValue(String.class).equals(currentUserId) && dataSnapshot.child("status").getValue(String.class).equals("pending")) {
-                            GenericTypeIndicator<HashMap<String, Object>> to = new GenericTypeIndicator<HashMap<String, Object>>() {};
+                            GenericTypeIndicator<HashMap<String, Object>> to = new GenericTypeIndicator<HashMap<String, Object>>() {
+                            };
                             HashMap<String, Object> hashMap = dataSnapshot.getValue(to);
                             hashMap.put("requestId", dataSnapshot.getKey());
 
@@ -109,7 +100,7 @@ public class MatchingRequestsFragment extends Fragment {
         requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                ((MainActivity)getContext()).getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, new NotificationFragment((MainActivity)getContext())).commit();
+                ((MainActivity) getContext()).getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, new NotificationFragment((MainActivity) getContext())).commit();
             }
         });
 

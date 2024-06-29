@@ -9,6 +9,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 
+import com.example.mymessengerapp.ChatActivity;
+import com.example.mymessengerapp.R;
 import com.example.mymessengerapp.model.ChatDetail;
 import com.google.android.gms.tasks.OnSuccessListener;
 
@@ -48,6 +50,7 @@ public class ChatFragment extends Fragment {
     List<ChatDetail> chatDetails;
     ValueEventListener valueEventListener;
     DatabaseReference chatRoomReference, chatsReference, onlineRef;
+
     public ChatFragment() {
     }
 
@@ -169,6 +172,7 @@ public class ChatFragment extends Fragment {
         });
 
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

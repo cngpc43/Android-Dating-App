@@ -8,17 +8,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.mymessengerapp.adapter.MatchingRequestAdapter;
 import com.example.mymessengerapp.adapter.RequestSentAdapter;
 import com.example.mymessengerapp.model.MapComparator;
-import com.example.mymessengerapp.model.MatchingItem;
-import com.example.mymessengerapp.model.Users;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -30,7 +26,6 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Map;
 
 
 public class RequestsSentFragment extends Fragment {

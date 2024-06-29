@@ -1,66 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
+
     <LinearLayout
+        android:id="@+id/toolBar"
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:id="@+id/toolBar"
-        android:paddingLeft="10dp"
-        android:orientation="horizontal"
         android:background="@drawable/unrounded_corners"
-        app:layout_constraintTop_toTopOf="parent"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent">
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageButton
+            android:id="@+id/back_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/back_icon"
             android:layout_gravity="start|center_vertical"
             android:background="@android:color/transparent"
+            android:scaleType="centerCrop"
             android:src="@drawable/baseline_arrow_back"
             android:tint="@color/primary"
-            android:scaleType="centerCrop"
             tools:ignore="UseAppTint" />
 
         <TextView
+            android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:id="@+id/title"
+            android:layout_weight="1"
             android:fontFamily="@font/poppins_bold"
-            android:paddingTop="5dp"
             android:paddingLeft="5dp"
-            android:textStyle="bold"
+            android:paddingTop="5dp"
             android:text="Add more photos"
             android:textColor="#2a364e"
             android:textSize="@dimen/_20sdp"
-            android:layout_weight="1"/>
+            android:textStyle="bold" />
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/add_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/add_button"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="10dp"
             android:background="@drawable/rectangle_box"
             android:text="ADD"
-            android:textSize="7pt"
-            android:layout_marginRight="10dp"
-            android:layout_gravity="center_vertical"/>
+            android:textSize="7pt" />
     </LinearLayout>
 
     <GridView
+        android:id="@+id/photo_gridview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/photo_gridview"
         android:horizontalSpacing="3dp"
-        android:verticalSpacing="3dp"
         android:numColumns="3"
-        app:layout_constraintTop_toBottomOf="@id/toolBar"
+        android:verticalSpacing="3dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
-
-
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolBar" />
 </androidx.constraintlayout.widget.ConstraintLayout>

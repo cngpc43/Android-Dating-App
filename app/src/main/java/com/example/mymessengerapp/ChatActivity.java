@@ -171,7 +171,7 @@ public class ChatActivity extends AppCompatActivity {
         chatAdapter = new ChatAdapter(chatMessages);
         mainChat.setAdapter(chatAdapter);
         mainChat.setLayoutManager(new LinearLayoutManager(this));
-        ((LinearLayoutManager)mainChat.getLayoutManager()).setStackFromEnd(true);
+        ((LinearLayoutManager) mainChat.getLayoutManager()).setStackFromEnd(true);
 
         // Set content for UI
         userName.setText(getIntent().getStringExtra("userName"));

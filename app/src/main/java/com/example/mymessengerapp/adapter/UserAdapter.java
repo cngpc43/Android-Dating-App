@@ -2,6 +2,7 @@ package com.example.mymessengerapp.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 
 import com.example.mymessengerapp.MainActivity;
 import com.example.mymessengerapp.R;
+import com.example.mymessengerapp.ViewAnotherProfile;
 import com.example.mymessengerapp.model.ChatRoom;
 import com.example.mymessengerapp.model.MyImageSwitcher;
 import com.example.mymessengerapp.model.Users;
@@ -80,35 +82,36 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.viewholder> {
         holder.userimg.setImageUrl(imageList.get(currentIndex[0]));
 
         FirebaseDatabase.getInstance().getReference("MatchRequests").addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        hasSentRequest = false;
-                        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                            if (dataSnapshot.child("status").getValue(String.class) != null && dataSnapshot.child("requesterId").getValue(String.class) != null
-                                    && dataSnapshot.child("recipientId").getValue(String.class) != null) {
-                                // if current user has received request from the user on RecyclerView already
-                                if (dataSnapshot.child("recipientId").getValue(String.class).equals(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                                        && dataSnapshot.child("requesterId").getValue(String.class).equals(usersArrayList.get(holder.getAdapterPosition()).getUserId())
-                                        && dataSnapshot.child("status").getValue(String.class).equals("pending")) {
-                                    hasSentRequest = true;
-                                    matchRequestId = dataSnapshot.getKey();
-                                    break;
-                                }
-                            }
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                hasSentRequest = false;
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    if (dataSnapshot.child("status").getValue(String.class) != null && dataSnapshot.child("requesterId").getValue(String.class) != null
+                            && dataSnapshot.child("recipientId").getValue(String.class) != null) {
+                        // if current user has received request from the user on RecyclerView already
+                        if (dataSnapshot.child("recipientId").getValue(String.class).equals(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                && dataSnapshot.child("requesterId").getValue(String.class).equals(usersArrayList.get(holder.getAdapterPosition()).getUserId())
+                                && dataSnapshot.child("status").getValue(String.class).equals("pending")) {
+                            hasSentRequest = true;
+                            matchRequestId = dataSnapshot.getKey();
+                            break;
                         }
                     }
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        // Handle error here
-                    }
-                });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Handle error here
+            }
+        });
         holder.left_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (currentIndex[0] > 0) {
                     // setting animation to swipe image from right to left
-                    holder.userimg.setInAnimation(mainActivity.getApplicationContext(),R.anim.from_left);
-                    holder.userimg.setOutAnimation(mainActivity.getApplicationContext(),R.anim.to_right);
+                    holder.userimg.setInAnimation(mainActivity.getApplicationContext(), R.anim.from_left);
+                    holder.userimg.setOutAnimation(mainActivity.getApplicationContext(), R.anim.to_right);
                     currentIndex[0]--;
 
                     holder.userimg.setImageUrl(imageList.get(currentIndex[0]));
@@ -122,7 +125,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.viewholder> {
                 if (currentIndex[0] < imageList.size() - 1) {
                     // setting animation to swipe image from left to right
                     holder.userimg.setInAnimation(mainActivity.getApplicationContext(), R.anim.from_right);
-                    holder.userimg.setOutAnimation(mainActivity.getApplicationContext(),R.anim.to_left);
+                    holder.userimg.setOutAnimation(mainActivity.getApplicationContext(), R.anim.to_left);
                     currentIndex[0]++;
 
                     holder.userimg.setImageUrl(imageList.get(currentIndex[0]));
@@ -142,8 +145,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.viewholder> {
                     matchRequestData.put("status", "accepted");
                     currentUserId = usersArrayList.get(holder.getAdapterPosition()).getUserId();
                     likedUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                }
-                else {
+                } else {
                     matchRequestData.put("status", "pending");
                     matchRequestId = reference.push().getKey();
                     currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -172,8 +174,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.viewholder> {
                             FirebaseDatabase.getInstance().getReference("Chats")
                                     .child(chatRoomId)
                                     .setValue("Chat started");
-                        }
-                        else
+                        } else
                             Toast.makeText(mainActivity, "Matching request sent to " + likedUserName, Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -190,8 +191,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.viewholder> {
                 if (temp_hasSentRequest) {
                     currentUserId = usersArrayList.get(holder.getAdapterPosition()).getUserId();
                     dislikedUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                }
-                else {
+                } else {
                     matchRequestId = reference.push().getKey();
                     currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
                     dislikedUserId = usersArrayList.get(holder.getAdapterPosition()).getUserId();
@@ -210,6 +210,14 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.viewholder> {
             }
         });
 
+        holder.profile_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mainActivity, ViewAnotherProfile.class);
+                intent.putExtra("userId", users.getUserId());
+                mainActivity.startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -221,7 +229,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.viewholder> {
         MyImageSwitcher userimg;
         CircleImageView profile_pic;
         TextView username, userstatus;
-        ImageButton likeButton, dislikeButton, left_button, right_button;
+        ImageButton likeButton, dislikeButton, left_button, right_button, profile_button;
 
         public viewholder(@NonNull View itemView) {
             super(itemView);
@@ -233,6 +241,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.viewholder> {
             dislikeButton = itemView.findViewById(R.id.dislike);
             left_button = itemView.findViewById(R.id.left_button);
             right_button = itemView.findViewById(R.id.right_button);
+            profile_button = itemView.findViewById(R.id.btn_another_info);
+
             userimg.setFactory(new ViewSwitcher.ViewFactory() {
                 public View makeView() {
                     ImageView myView = new ImageView(mainActivity.getApplicationContext());

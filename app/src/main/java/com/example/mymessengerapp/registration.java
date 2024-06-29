@@ -89,7 +89,7 @@ public class registration extends AppCompatActivity {
                 String email = rg_email.getText().toString();
                 String Password = rg_password.getText().toString();
                 String cPassword = rg_repassword.getText().toString();
-                String status = "Hey I'm Using This Application";
+                String status = "I am happy now !!";
                 String gender = "";
                 String dob = "";
                 String phone = "";
