@@ -1,11 +1,14 @@
 package com.example.mymessengerapp;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,6 +31,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.time.LocalDate;
@@ -48,6 +55,9 @@ public class MainFragment extends Fragment {
     FirebaseAuth.AuthStateListener authStateListener;
     DatabaseReference reference;
     ArrayList<String> requestList;
+    ImageView ic_home, ic_chat, ic_noti, ic_user;
+    LinearLayout home_selected, user_selected, chat_selected, noti_selected;
+    TextView title;
 
     public MainFragment() {
     }
@@ -66,19 +76,42 @@ public class MainFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
+
         mainUserRecyclerView = view.findViewById(R.id.mainUserRecyclerView);
+        title = getActivity().findViewById(R.id.title);
+        home_selected = getActivity().findViewById(R.id.home_selected);
+        noti_selected = getActivity().findViewById(R.id.noti_selected);
+        chat_selected = getActivity().findViewById(R.id.chat_selected);
+        user_selected = getActivity().findViewById(R.id.user_selected);
+        ic_home = getActivity().findViewById(R.id.icon_home);
+        ic_chat = getActivity().findViewById(R.id.icon_chat);
+        ic_noti = getActivity().findViewById(R.id.icon_noti);
+        ic_user = getActivity().findViewById(R.id.icon_user);
+
         int spacingInPixels = getResources().getDimensionPixelSize(R.dimen._16sdp);
         mainUserRecyclerView.addItemDecoration(new SpaceItemDecoration(spacingInPixels));
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         layoutManager.setReverseLayout(true);
-
         layoutManager.setStackFromEnd(true);
         mainUserRecyclerView.setLayoutManager(layoutManager);
         mainUserRecyclerView.setAdapter(adapter);
         PagerSnapHelper snapHelper = new PagerSnapHelper();
         snapHelper.attachToRecyclerView(mainUserRecyclerView);
         reference = database.getReference();
+
+        title.setText("Tindeo");
+
+        noti_selected.setBackground(null);
+        chat_selected.setBackground(null);
+        user_selected.setBackground(null);
+        home_selected.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.selected_nav_item));
+
+        ic_chat.setColorFilter(Color.BLACK);
+        ic_noti.setColorFilter(Color.BLACK);
+        ic_user.setColorFilter(Color.BLACK);
+        ic_home.setColorFilter(Color.rgb(236, 83, 131));
+
 
         auth.addAuthStateListener(authStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -121,6 +154,8 @@ public class MainFragment extends Fragment {
                         }
 
                         if (!checkForAccountSetup(currentUser)) {
+                            if (getActivity().getSupportFragmentManager().getBackStackEntryCount() > 0)
+                                getActivity().getSupportFragmentManager().popBackStack();
                             FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                             transaction.replace(R.id.main_frame, new AccountWarningFragment());
                             transaction.commit();
@@ -216,6 +251,7 @@ public class MainFragment extends Fragment {
 
         return view;
     }
+
 
     // function to check if user has set up information for dating or not (dob, age_range, gender_show, gender, photos, location, latitude, longitude)
     public Boolean checkForAccountSetup(Users user) {

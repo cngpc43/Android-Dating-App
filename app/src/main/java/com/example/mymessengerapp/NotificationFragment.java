@@ -1,8 +1,10 @@
 package com.example.mymessengerapp;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.mymessengerapp.adapter.UserAdapter;
@@ -18,6 +20,7 @@ import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -27,11 +30,11 @@ import java.util.HashMap;
 
 public class NotificationFragment extends Fragment {
     FirebaseAuth auth;
-    UserAdapter adapter;
     RelativeLayout matchingRequests, requestsSent;
     TextView badge, sent_badge, title;
+    LinearLayout home_selected, user_selected, chat_selected, noti_selected;
+    ImageView ic_home, ic_chat, ic_noti, ic_user;
     FirebaseDatabase database;
-    ArrayList<Users> usersArrayList;
     Context context;
     String currentUserId;
     ValueEventListener valueEventListener;
@@ -60,8 +63,25 @@ public class NotificationFragment extends Fragment {
         matchingRequests = view.findViewById(R.id.matching_requests);
         requestsSent = view.findViewById(R.id.requests_sent);
         title = getActivity().findViewById(R.id.title);
+        home_selected = getActivity().findViewById(R.id.home_selected);
+        noti_selected = getActivity().findViewById(R.id.noti_selected);
+        chat_selected = getActivity().findViewById(R.id.chat_selected);
+        user_selected = getActivity().findViewById(R.id.user_selected);
+        ic_home = getActivity().findViewById(R.id.icon_home);
+        ic_chat = getActivity().findViewById(R.id.icon_chat);
+        ic_noti = getActivity().findViewById(R.id.icon_noti);
+        ic_user = getActivity().findViewById(R.id.icon_user);
 
         title.setText("Notifications");
+        home_selected.setBackground(null);
+        chat_selected.setBackground(null);
+        user_selected.setBackground(null);
+        noti_selected.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.selected_nav_item));
+
+        ic_home.setColorFilter(Color.BLACK);
+        ic_chat.setColorFilter(Color.BLACK);
+        ic_user.setColorFilter(Color.BLACK);
+        ic_noti.setColorFilter(Color.rgb(236, 83, 131));
 
         currentUserId = auth.getCurrentUser().getUid();
         reference = database.getReference("MatchRequests");

@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Application;
+import android.app.FragmentManager;
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -102,44 +103,44 @@ public class MainActivity extends AppCompatActivity {
 
         // Bottom navigation
         if (getIntent() == null || getIntent().getStringExtra("fragment") == null) {
-            selectHome();
+            loadFragment(new MainFragment(), "Tindeo");
         } else {
             if (getIntent().getStringExtra("fragment").equals("user"))
-                selectUser();
+                loadFragment(new UserSettingFragment(), "Your profile");
             else if (getIntent().getStringExtra("fragment").equals("message"))
-                selectMessage();
+                loadFragment(new ChatFragment(), "Chat");
             else if (getIntent().getStringExtra("fragment").equals("notification"))
-                selectNotification();
+                loadFragment(new NotificationFragment(MainActivity.this), "Notifications");
             else
-                selectHome();
+                loadFragment(new MainFragment(), "Tindeo");
         }
 
 
         user.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selectUser();
+                loadFragment(new UserSettingFragment(), "Your profile");
             }
         });
 
         message.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selectMessage();
+                loadFragment(new ChatFragment(), "Chat");
             }
         });
 
         home.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selectHome();
+                loadFragment(new MainFragment(), "Tindeo");
             }
         });
 
         notification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                selectNotification();
+                loadFragment(new NotificationFragment(MainActivity.this), "Notifications");
             }
         });
 
@@ -147,87 +148,33 @@ public class MainActivity extends AppCompatActivity {
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                if (doubleBackToExitPressedOnce) {
-                    finishAffinity();
-                } else {
-                    doubleBackToExitPressedOnce = true;
-                    Toast.makeText(MainActivity.this, "Please swipe BACK again to exit", Toast.LENGTH_SHORT).show();
+                if (title.getText().toString().equals("Tindeo")) {
+                    if (doubleBackToExitPressedOnce) {
+                        finishAffinity();
+                    } else {
+                        doubleBackToExitPressedOnce = true;
+                        Toast.makeText(MainActivity.this, "Please swipe BACK again to exit", Toast.LENGTH_SHORT).show();
 
-                    new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            doubleBackToExitPressedOnce = false;
-                        }
-                    }, 2000);
+                        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                doubleBackToExitPressedOnce = false;
+                            }
+                        }, 2000);
+                    }
+                } else {
+                    loadFragment(new MainFragment(), "Tindeo");
                 }
             }
         });
     }
 
-    private void loadFragment(Fragment fragment) {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.main_frame, fragment);
-        transaction.commit();
-    }
-
-    private void selectHome() {
-        loadFragment(new MainFragment());
-        title.setText("Tindeo");
-
-        noti_selected.setBackground(null);
-        chat_selected.setBackground(null);
-        user_selected.setBackground(null);
-        home_selected.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.selected_nav_item));
-
-        ic_chat.setColorFilter(Color.BLACK);
-        ic_noti.setColorFilter(Color.BLACK);
-        ic_user.setColorFilter(Color.BLACK);
-        ic_home.setColorFilter(Color.rgb(236, 83, 131));
-    }
-
-    private void selectMessage() {
-        loadFragment(new ChatFragment());
-        title.setText("Chat");
-
-        home_selected.setBackground(null);
-        noti_selected.setBackground(null);
-        user_selected.setBackground(null);
-        chat_selected.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.selected_nav_item));
-
-        ic_home.setColorFilter(Color.BLACK);
-        ic_noti.setColorFilter(Color.BLACK);
-        ic_user.setColorFilter(Color.BLACK);
-        ic_chat.setColorFilter(Color.rgb(236, 83, 131));
-    }
-
-    private void selectNotification() {
-        loadFragment(new NotificationFragment(MainActivity.this));
-        title.setText("Notifications");
-
-        home_selected.setBackground(null);
-        chat_selected.setBackground(null);
-        user_selected.setBackground(null);
-        noti_selected.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.selected_nav_item));
-
-        ic_home.setColorFilter(Color.BLACK);
-        ic_chat.setColorFilter(Color.BLACK);
-        ic_user.setColorFilter(Color.BLACK);
-        ic_noti.setColorFilter(Color.rgb(236, 83, 131));
-    }
-
-    private void selectUser() {
-        loadFragment(new UserSettingFragment());
-        title.setText("Your profile");
-
-        home_selected.setBackground(null);
-        noti_selected.setBackground(null);
-        chat_selected.setBackground(null);
-        user_selected.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.selected_nav_item));
-
-        ic_home.setColorFilter(Color.BLACK);
-        ic_chat.setColorFilter(Color.BLACK);
-        ic_noti.setColorFilter(Color.BLACK);
-        ic_user.setColorFilter(Color.rgb(236, 83, 131));
+    private void loadFragment(Fragment fragment, String title) {
+        if (!this.title.getText().toString().equals(title)) {
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.main_frame, fragment);
+            transaction.commit();
+        }
     }
 
 }
