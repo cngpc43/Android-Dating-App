@@ -1,14 +1,17 @@
 package com.example.mymessengerapp;
 
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,6 +35,7 @@ public class AccountWarningFragment extends Fragment {
     DatabaseReference reference;
     FirebaseAuth auth;
     ValueEventListener valueEventListener;
+    ImageView ic_home, ic_chat, ic_noti, ic_user;
     public AccountWarningFragment() {
         // Required empty public constructor
     }
@@ -61,6 +65,10 @@ public class AccountWarningFragment extends Fragment {
         chat_selected = getActivity().findViewById(R.id.chat_selected);
         noti_selected = getActivity().findViewById(R.id.noti_selected);
         user_selected = getActivity().findViewById(R.id.user_selected);
+        ic_home = getActivity().findViewById(R.id.icon_home);
+        ic_chat = getActivity().findViewById(R.id.icon_chat);
+        ic_noti = getActivity().findViewById(R.id.icon_noti);
+        ic_user = getActivity().findViewById(R.id.icon_user);
 
         reference.addValueEventListener(valueEventListener = new ValueEventListener() {
             @Override
@@ -121,6 +129,17 @@ public class AccountWarningFragment extends Fragment {
                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.main_frame, new UserSettingFragment());
                 transaction.commit();
+                title.setText("Your profile");
+
+                home_selected.setBackground(null);
+                noti_selected.setBackground(null);
+                chat_selected.setBackground(null);
+                user_selected.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.selected_nav_item));
+
+                ic_home.setColorFilter(Color.BLACK);
+                ic_chat.setColorFilter(Color.BLACK);
+                ic_noti.setColorFilter(Color.BLACK);
+                ic_user.setColorFilter(Color.rgb(236, 83, 131));
             }
         });
 

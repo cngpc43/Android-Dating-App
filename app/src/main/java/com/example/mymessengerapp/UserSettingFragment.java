@@ -50,6 +50,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -284,10 +285,17 @@ public class UserSettingFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         dialog.dismiss();
-                        FirebaseAuth.getInstance().signOut();
-                        Intent intent = new Intent(getContext(), login.class);
-                        startActivity(intent);
-                        getActivity().finish();
+                        DatabaseReference userRef = database.getReference().child("user/" + auth.getCurrentUser().getUid() + "/isOnline");
+                        userRef.setValue(ServerValue.TIMESTAMP).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                FirebaseAuth.getInstance().signOut();
+
+                                Intent intent = new Intent(getContext(), login.class);
+                                startActivity(intent);
+                                getActivity().finish();
+                            }
+                        });
                     }
                 });
                 no.setOnClickListener(new View.OnClickListener() {

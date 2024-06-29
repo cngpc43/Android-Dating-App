@@ -18,7 +18,7 @@ public class UserDistanceComparator implements Comparator<Users> {
                 Double.valueOf(first.getLatitude()), Double.valueOf(first.getLongitude()), distance1);
         Location.distanceBetween(Double.valueOf(currentUser.getLatitude()), Double.valueOf(currentUser.getLongitude()),
                 Double.valueOf(second.getLatitude()), Double.valueOf(second.getLongitude()), distance2);
-        return Float.compare(distance1[0], distance2[0]);
+        return Float.compare(distance2[0], distance1[0]);
     }
 }
 

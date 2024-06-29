@@ -117,7 +117,7 @@ public class ChatFragment extends Fragment {
 
                                                         ChatDetail chatDetail = new ChatDetail(userId, userName, userImage, finalLastMessage, timestamp, false);
                                                         if (isOnline != null) {
-                                                            if (isOnline.equals(true))
+                                                            if (isOnline.equals("true"))
                                                                 chatDetail.setOnline(true);
                                                             Log.d("ChatFragment", isOnline.toString());
                                                         }

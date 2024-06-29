@@ -2,7 +2,7 @@ package com.example.mymessengerapp.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
+import android.location.Location;
 import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,7 +14,6 @@ import android.widget.TextView;
 
 import com.example.mymessengerapp.MainActivity;
 import com.example.mymessengerapp.R;
-import com.example.mymessengerapp.ViewAnotherProfile;
 import com.example.mymessengerapp.model.ChatRoom;
 import com.example.mymessengerapp.model.MyImageSwitcher;
 import com.example.mymessengerapp.model.Users;
@@ -81,37 +80,67 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.viewholder> {
 
         holder.userimg.setImageUrl(imageList.get(currentIndex[0]));
 
-        FirebaseDatabase.getInstance().getReference("MatchRequests").addListenerForSingleValueEvent(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference().child("user/" + FirebaseAuth.getInstance().getCurrentUser().getUid()).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                hasSentRequest = false;
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    if (dataSnapshot.child("status").getValue(String.class) != null && dataSnapshot.child("requesterId").getValue(String.class) != null
-                            && dataSnapshot.child("recipientId").getValue(String.class) != null) {
-                        // if current user has received request from the user on RecyclerView already
-                        if (dataSnapshot.child("recipientId").getValue(String.class).equals(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                                && dataSnapshot.child("requesterId").getValue(String.class).equals(usersArrayList.get(holder.getAdapterPosition()).getUserId())
-                                && dataSnapshot.child("status").getValue(String.class).equals("pending")) {
-                            hasSentRequest = true;
-                            matchRequestId = dataSnapshot.getKey();
-                            break;
-                        }
-                    }
+            public void onSuccess(DataSnapshot dataSnapshot) {
+                Users currentUser = new Users(dataSnapshot.child("userId").getValue(String.class), dataSnapshot.child("userName").getValue(String.class),
+                        dataSnapshot.child("mail").getValue(String.class), dataSnapshot.child("password").getValue(String.class),
+                        dataSnapshot.child("profilepic").getValue(String.class), dataSnapshot.child("status").getValue(String.class),
+                        dataSnapshot.child("gender").getValue(String.class), dataSnapshot.child("dob").getValue(String.class),
+                        dataSnapshot.child("phone").getValue(String.class), dataSnapshot.child("location").getValue(String.class),
+                        dataSnapshot.child("sexual_orientation").getValue(String.class), dataSnapshot.child("height").getValue(String.class),
+                        dataSnapshot.child("age_range").getValue(String.class), dataSnapshot.child("gender_show").getValue(String.class),
+                        dataSnapshot.child("show_me").getValue(Boolean.class), new ArrayList<String>(),
+                        dataSnapshot.child("latitude").getValue(String.class), dataSnapshot.child("longitude").getValue(String.class),
+                        "", dataSnapshot.child("location_distance").getValue(String.class));
+                Object isOnline = dataSnapshot.child("isOnline").getValue(Object.class);
+                if (isOnline != null) {
+                    if (isOnline.equals("true"))
+                        currentUser.setIsOnline("true");
+                    else
+                        currentUser.setIsOnline(isOnline.toString());
                 }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                // Handle error here
+                // user location is in current user desired location distance
+                float[] distance = new float[1];
+                Location.distanceBetween(Double.valueOf(currentUser.getLatitude()), Double.valueOf(currentUser.getLongitude()),
+                        Double.valueOf(users.getLatitude()), Double.valueOf(users.getLongitude()), distance);
+                if (((int)distance[0])/1000 == 0)
+                    holder.distance.setText("1 km away (nearby)");
+                else
+                    holder.distance.setText(((int)distance[0])/1000 + " km away");
             }
         });
+
+        FirebaseDatabase.getInstance().getReference("MatchRequests").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        hasSentRequest = false;
+                        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                            if (dataSnapshot.child("status").getValue(String.class) != null && dataSnapshot.child("requesterId").getValue(String.class) != null
+                                    && dataSnapshot.child("recipientId").getValue(String.class) != null) {
+                                // if current user has received request from the user on RecyclerView already
+                                if (dataSnapshot.child("recipientId").getValue(String.class).equals(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                        && dataSnapshot.child("requesterId").getValue(String.class).equals(usersArrayList.get(holder.getAdapterPosition()).getUserId())
+                                        && dataSnapshot.child("status").getValue(String.class).equals("pending")) {
+                                    hasSentRequest = true;
+                                    matchRequestId = dataSnapshot.getKey();
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        // Handle error here
+                    }
+                });
         holder.left_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (currentIndex[0] > 0) {
                     // setting animation to swipe image from right to left
-                    holder.userimg.setInAnimation(mainActivity.getApplicationContext(), R.anim.from_left);
-                    holder.userimg.setOutAnimation(mainActivity.getApplicationContext(), R.anim.to_right);
+                    holder.userimg.setInAnimation(mainActivity.getApplicationContext(),R.anim.from_left);
+                    holder.userimg.setOutAnimation(mainActivity.getApplicationContext(),R.anim.to_right);
                     currentIndex[0]--;
 
                     holder.userimg.setImageUrl(imageList.get(currentIndex[0]));
@@ -125,7 +154,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.viewholder> {
                 if (currentIndex[0] < imageList.size() - 1) {
                     // setting animation to swipe image from left to right
                     holder.userimg.setInAnimation(mainActivity.getApplicationContext(), R.anim.from_right);
-                    holder.userimg.setOutAnimation(mainActivity.getApplicationContext(), R.anim.to_left);
+                    holder.userimg.setOutAnimation(mainActivity.getApplicationContext(),R.anim.to_left);
                     currentIndex[0]++;
 
                     holder.userimg.setImageUrl(imageList.get(currentIndex[0]));
@@ -145,7 +174,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.viewholder> {
                     matchRequestData.put("status", "accepted");
                     currentUserId = usersArrayList.get(holder.getAdapterPosition()).getUserId();
                     likedUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                } else {
+                }
+                else {
                     matchRequestData.put("status", "pending");
                     matchRequestId = reference.push().getKey();
                     currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -174,7 +204,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.viewholder> {
                             FirebaseDatabase.getInstance().getReference("Chats")
                                     .child(chatRoomId)
                                     .setValue("Chat started");
-                        } else
+                        }
+                        else
                             Toast.makeText(mainActivity, "Matching request sent to " + likedUserName, Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -191,7 +222,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.viewholder> {
                 if (temp_hasSentRequest) {
                     currentUserId = usersArrayList.get(holder.getAdapterPosition()).getUserId();
                     dislikedUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                } else {
+                }
+                else {
                     matchRequestId = reference.push().getKey();
                     currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
                     dislikedUserId = usersArrayList.get(holder.getAdapterPosition()).getUserId();
@@ -210,14 +242,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.viewholder> {
             }
         });
 
-        holder.profile_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(mainActivity, ViewAnotherProfile.class);
-                intent.putExtra("userId", users.getUserId());
-                mainActivity.startActivity(intent);
-            }
-        });
     }
 
     @Override
@@ -228,8 +252,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.viewholder> {
     public class viewholder extends RecyclerView.ViewHolder {
         MyImageSwitcher userimg;
         CircleImageView profile_pic;
-        TextView username, userstatus;
-        ImageButton likeButton, dislikeButton, left_button, right_button, profile_button;
+        TextView username, userstatus, distance;
+        ImageButton likeButton, dislikeButton, left_button, right_button;
 
         public viewholder(@NonNull View itemView) {
             super(itemView);
@@ -241,8 +265,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.viewholder> {
             dislikeButton = itemView.findViewById(R.id.dislike);
             left_button = itemView.findViewById(R.id.left_button);
             right_button = itemView.findViewById(R.id.right_button);
-            profile_button = itemView.findViewById(R.id.btn_another_info);
-
+            distance = itemView.findViewById(R.id.distance);
             userimg.setFactory(new ViewSwitcher.ViewFactory() {
                 public View makeView() {
                     ImageView myView = new ImageView(mainActivity.getApplicationContext());
