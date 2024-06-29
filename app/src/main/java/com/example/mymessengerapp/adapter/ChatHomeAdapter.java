@@ -22,6 +22,11 @@ import com.example.mymessengerapp.R;
 import com.example.mymessengerapp.model.ChatDetail;
 import com.example.mymessengerapp.model.VNCharacterUtils;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.squareup.picasso.Picasso;
 
@@ -70,11 +75,16 @@ public class ChatHomeAdapter extends ArrayAdapter<ChatDetail> {
             TextView tvChatName = convertView.findViewById(R.id.tv_chat_name);
             TextView chatMessage = convertView.findViewById(R.id.tv_chat_message);
             TextView chatTime = convertView.findViewById(R.id.tv_chat_time);
+            ImageView online_icon = convertView.findViewById(R.id.online_icon);
             ChatDetail chatDetail = getItem(position);
             if (chatDetail != null) {
                 if(chatDetail.getTimestamp()==0){
                     chatTime.setVisibility(View.INVISIBLE);
                 }
+                if (chatDetail.isOnline())
+                    online_icon.setVisibility(View.VISIBLE);
+                else
+                    online_icon.setVisibility(View.GONE);
                 tvChatName.setText(chatDetail.getUserName());
                 chatMessage.setText(chatDetail.getLastMessage());
                 Date date = new Date(chatDetail.getTimestamp());

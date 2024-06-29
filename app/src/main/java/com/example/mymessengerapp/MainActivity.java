@@ -1,6 +1,7 @@
 package com.example.mymessengerapp;
 
 import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,6 +31,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.zegocloud.uikit.prebuilt.call.ZegoUIKitPrebuiltCallService;
 import com.zegocloud.uikit.prebuilt.call.invite.ZegoUIKitPrebuiltCallInvitationConfig;
@@ -37,6 +39,7 @@ import com.zegocloud.uikit.prebuilt.call.invite.ZegoUIKitPrebuiltCallInvitationC
 public class MainActivity extends AppCompatActivity {
     FirebaseAuth auth;
     FirebaseDatabase database;
+    DatabaseReference onlineRef, userRef;
     FrameLayout home, user, message, notification;
     LinearLayout home_selected, user_selected, chat_selected, noti_selected;
     ImageView ic_home, ic_chat, ic_noti, ic_user;
@@ -93,6 +96,24 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
+            // check for online status
+            onlineRef = database.getReference().child(".info/connected");
+            userRef = database.getReference().child("user/" + auth.getCurrentUser().getUid() + "/isOnline");
+            onlineRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    Boolean connected = snapshot.getValue(Boolean.class);
+                    if (connected != null && connected) {
+                        userRef.onDisconnect().setValue(ServerValue.TIMESTAMP);
+                        userRef.setValue("true");
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
             // No authenticated user handler -> LOGIN
         } else {
             Toast.makeText(this, "No authenticated user", Toast.LENGTH_SHORT).show();
@@ -100,6 +121,10 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         }
+
+
+
+
 
         // Bottom navigation
         if (getIntent() == null || getIntent().getStringExtra("fragment") == null) {

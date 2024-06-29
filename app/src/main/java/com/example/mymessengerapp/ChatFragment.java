@@ -50,7 +50,7 @@ public class ChatFragment extends Fragment {
     List<String> chatRooms;
     List<ChatDetail> chatDetails;
     ValueEventListener valueEventListener;
-    DatabaseReference chatRoomReference, chatsReference;
+    DatabaseReference chatRoomReference, chatsReference, onlineRef;
     public ChatFragment() {
     }
 
@@ -66,6 +66,7 @@ public class ChatFragment extends Fragment {
         String currentUserId = auth.getCurrentUser().getUid();
         chatsReference = database.getReference("Chats");
         chatRoomReference = database.getReference("ChatRooms/" + currentUserId);
+        onlineRef = database.getReference("user/");
 
 
         // listen for value change in Database/Chats
@@ -112,7 +113,14 @@ public class ChatFragment extends Fragment {
                                                         String userId = dataSnapshot.child("userId").getValue(String.class);
                                                         String userName = dataSnapshot.child("userName").getValue(String.class);
                                                         String userImage = dataSnapshot.child("profilepic").getValue(String.class);
-                                                        ChatDetail chatDetail = new ChatDetail(userId, userName, userImage, finalLastMessage, timestamp);
+                                                        Object isOnline = dataSnapshot.child("isOnline").getValue(Object.class);
+
+                                                        ChatDetail chatDetail = new ChatDetail(userId, userName, userImage, finalLastMessage, timestamp, false);
+                                                        if (isOnline != null) {
+                                                            if (isOnline.equals(true))
+                                                                chatDetail.setOnline(true);
+                                                            Log.d("ChatFragment", isOnline.toString());
+                                                        }
                                                         chatDetails.add(chatDetail);
                                                         if (isAdded()) {
                                                             adapter.setArraylist(chatDetails);
@@ -132,7 +140,13 @@ public class ChatFragment extends Fragment {
                                                     String userId = dataSnapshot.child("userId").getValue(String.class);
                                                     String userName = dataSnapshot.child("userName").getValue(String.class);
                                                     String userImage = dataSnapshot.child("profilepic").getValue(String.class);
-                                                    ChatDetail chatDetail = new ChatDetail(userId, userName, userImage, "Send your first message", 0);
+                                                    Object isOnline = dataSnapshot.child("isOnline").getValue(Object.class);
+
+                                                    ChatDetail chatDetail = new ChatDetail(userId, userName, userImage, "Send your first message", 0, false);
+                                                    if (isOnline != null) {
+                                                        if (isOnline.equals(true))
+                                                            chatDetail.setOnline(true);
+                                                    }
                                                     chatDetails.add(chatDetail);
                                                     if (isAdded()) {
                                                         adapter.setArraylist(chatDetails);
@@ -156,6 +170,7 @@ public class ChatFragment extends Fragment {
 
             }
         });
+
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -223,5 +238,7 @@ public class ChatFragment extends Fragment {
         super.onDestroy();
         if (chatsReference != null && valueEventListener != null)
             chatsReference.removeEventListener(valueEventListener);
+        if (onlineRef != null && valueEventListener != null)
+            onlineRef.removeEventListener(valueEventListener);
     }
 }
