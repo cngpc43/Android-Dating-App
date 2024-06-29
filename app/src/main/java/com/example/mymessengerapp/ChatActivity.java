@@ -254,7 +254,7 @@ public class ChatActivity extends AppCompatActivity {
         });
 
         // Init PopupWindow
-        chatInput = findViewById(R.id.image_attachment);
+        chatInput = findViewById(R.id.icon_image);
         Log.d("ChatActivity", "Chat input: " + chatInput);
         chatInput.setOnClickListener(new View.OnClickListener() {
             @Override
