@@ -123,49 +123,45 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-
-
-
         // Bottom navigation
         if (getIntent() == null || getIntent().getStringExtra("fragment") == null) {
-            loadFragment(new MainFragment(), "Tindeo");
+            selectHome();
         } else {
             if (getIntent().getStringExtra("fragment").equals("user"))
-                loadFragment(new UserSettingFragment(), "Your profile");
+                selectUser();
             else if (getIntent().getStringExtra("fragment").equals("message"))
-                loadFragment(new ChatFragment(), "Chat");
+                selectChat();
             else if (getIntent().getStringExtra("fragment").equals("notification"))
-                loadFragment(new NotificationFragment(MainActivity.this), "Notifications");
+                selectNotification();
             else
-                loadFragment(new MainFragment(), "Tindeo");
+                selectHome();
         }
-
 
         user.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadFragment(new UserSettingFragment(), "Your profile");
+                selectUser();
             }
         });
 
         message.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadFragment(new ChatFragment(), "Chat");
+                selectChat();
             }
         });
 
         home.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadFragment(new MainFragment(), "Tindeo");
+                selectHome();
             }
         });
 
         notification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                loadFragment(new NotificationFragment(MainActivity.this), "Notifications");
+                selectNotification();
             }
         });
 
@@ -188,17 +184,83 @@ public class MainActivity extends AppCompatActivity {
                         }, 2000);
                     }
                 } else {
-                    loadFragment(new MainFragment(), "Tindeo");
+                    selectHome();
                 }
             }
         });
     }
 
-    private void loadFragment(Fragment fragment, String title) {
+    private boolean loadFragment(Fragment fragment, String title) {
         if (!this.title.getText().toString().equals(title)) {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.main_frame, fragment);
             transaction.commit();
+            return true;
+        }
+        return false;
+    }
+
+    private void selectHome() {
+        if (loadFragment(new MainFragment(), "Tindeo")) {
+            title.setText("Tindeo");
+
+            noti_selected.setBackground(null);
+            chat_selected.setBackground(null);
+            user_selected.setBackground(null);
+            home_selected.setBackground(ContextCompat.getDrawable(this, R.drawable.selected_nav_item));
+
+            ic_chat.setColorFilter(Color.BLACK);
+            ic_noti.setColorFilter(Color.BLACK);
+            ic_user.setColorFilter(Color.BLACK);
+            ic_home.setColorFilter(Color.rgb(236, 83, 131));
+        }
+    }
+
+    private void selectChat() {
+        if (loadFragment(new ChatFragment(), "Chat")) {
+            title.setText("Chat");
+
+            home_selected.setBackground(null);
+            noti_selected.setBackground(null);
+            user_selected.setBackground(null);
+            chat_selected.setBackground(ContextCompat.getDrawable(this, R.drawable.selected_nav_item));
+
+            ic_home.setColorFilter(Color.BLACK);
+            ic_noti.setColorFilter(Color.BLACK);
+            ic_user.setColorFilter(Color.BLACK);
+            ic_chat.setColorFilter(Color.rgb(236, 83, 131));
+        }
+    }
+
+    private void selectNotification() {
+        if (loadFragment(new NotificationFragment(this), "Notifications")) {
+            title.setText("Notifications");
+
+            home_selected.setBackground(null);
+            chat_selected.setBackground(null);
+            user_selected.setBackground(null);
+            noti_selected.setBackground(ContextCompat.getDrawable(this, R.drawable.selected_nav_item));
+
+            ic_home.setColorFilter(Color.BLACK);
+            ic_chat.setColorFilter(Color.BLACK);
+            ic_user.setColorFilter(Color.BLACK);
+            ic_noti.setColorFilter(Color.rgb(236, 83, 131));
+        }
+    }
+
+    private void selectUser() {
+        if (loadFragment(new UserSettingFragment(), "Your profile")) {
+            title.setText("Your profile");
+
+            home_selected.setBackground(null);
+            noti_selected.setBackground(null);
+            chat_selected.setBackground(null);
+            user_selected.setBackground(ContextCompat.getDrawable(this, R.drawable.selected_nav_item));
+
+            ic_home.setColorFilter(Color.BLACK);
+            ic_chat.setColorFilter(Color.BLACK);
+            ic_noti.setColorFilter(Color.BLACK);
+            ic_user.setColorFilter(Color.rgb(236, 83, 131));
         }
     }
 

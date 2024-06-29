@@ -32,8 +32,6 @@ public class NotificationFragment extends Fragment {
     FirebaseAuth auth;
     RelativeLayout matchingRequests, requestsSent;
     TextView badge, sent_badge, title;
-    LinearLayout home_selected, user_selected, chat_selected, noti_selected;
-    ImageView ic_home, ic_chat, ic_noti, ic_user;
     FirebaseDatabase database;
     Context context;
     String currentUserId;
@@ -63,25 +61,8 @@ public class NotificationFragment extends Fragment {
         matchingRequests = view.findViewById(R.id.matching_requests);
         requestsSent = view.findViewById(R.id.requests_sent);
         title = getActivity().findViewById(R.id.title);
-        home_selected = getActivity().findViewById(R.id.home_selected);
-        noti_selected = getActivity().findViewById(R.id.noti_selected);
-        chat_selected = getActivity().findViewById(R.id.chat_selected);
-        user_selected = getActivity().findViewById(R.id.user_selected);
-        ic_home = getActivity().findViewById(R.id.icon_home);
-        ic_chat = getActivity().findViewById(R.id.icon_chat);
-        ic_noti = getActivity().findViewById(R.id.icon_noti);
-        ic_user = getActivity().findViewById(R.id.icon_user);
 
         title.setText("Notifications");
-        home_selected.setBackground(null);
-        chat_selected.setBackground(null);
-        user_selected.setBackground(null);
-        noti_selected.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.selected_nav_item));
-
-        ic_home.setColorFilter(Color.BLACK);
-        ic_chat.setColorFilter(Color.BLACK);
-        ic_user.setColorFilter(Color.BLACK);
-        ic_noti.setColorFilter(Color.rgb(236, 83, 131));
 
         currentUserId = auth.getCurrentUser().getUid();
         reference = database.getReference("MatchRequests");

@@ -55,9 +55,6 @@ public class MainFragment extends Fragment {
     FirebaseAuth.AuthStateListener authStateListener;
     DatabaseReference reference;
     ArrayList<String> requestList;
-    ImageView ic_home, ic_chat, ic_noti, ic_user;
-    LinearLayout home_selected, user_selected, chat_selected, noti_selected;
-    TextView title;
 
     public MainFragment() {
     }
@@ -78,15 +75,6 @@ public class MainFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
 
         mainUserRecyclerView = view.findViewById(R.id.mainUserRecyclerView);
-        title = getActivity().findViewById(R.id.title);
-        home_selected = getActivity().findViewById(R.id.home_selected);
-        noti_selected = getActivity().findViewById(R.id.noti_selected);
-        chat_selected = getActivity().findViewById(R.id.chat_selected);
-        user_selected = getActivity().findViewById(R.id.user_selected);
-        ic_home = getActivity().findViewById(R.id.icon_home);
-        ic_chat = getActivity().findViewById(R.id.icon_chat);
-        ic_noti = getActivity().findViewById(R.id.icon_noti);
-        ic_user = getActivity().findViewById(R.id.icon_user);
 
         int spacingInPixels = getResources().getDimensionPixelSize(R.dimen._16sdp);
         mainUserRecyclerView.addItemDecoration(new SpaceItemDecoration(spacingInPixels));
@@ -100,17 +88,6 @@ public class MainFragment extends Fragment {
         snapHelper.attachToRecyclerView(mainUserRecyclerView);
         reference = database.getReference();
 
-        title.setText("Tindeo");
-
-        noti_selected.setBackground(null);
-        chat_selected.setBackground(null);
-        user_selected.setBackground(null);
-        home_selected.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.selected_nav_item));
-
-        ic_chat.setColorFilter(Color.BLACK);
-        ic_noti.setColorFilter(Color.BLACK);
-        ic_user.setColorFilter(Color.BLACK);
-        ic_home.setColorFilter(Color.rgb(236, 83, 131));
 
 
         auth.addAuthStateListener(authStateListener = new FirebaseAuth.AuthStateListener() {

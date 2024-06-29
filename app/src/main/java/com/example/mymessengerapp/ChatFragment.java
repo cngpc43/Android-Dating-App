@@ -43,9 +43,6 @@ public class ChatFragment extends Fragment {
     ChatHomeAdapter adapter;
     FirebaseDatabase database;
     EditText etSearch;
-    TextView title;
-    ImageView ic_home, ic_chat, ic_noti, ic_user;
-    LinearLayout home_selected, user_selected, chat_selected, noti_selected;
     ListView lv_list_chat;
     List<String> chatRooms;
     List<ChatDetail> chatDetails;
@@ -178,27 +175,7 @@ public class ChatFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_chat, container, false);
         etSearch = view.findViewById(R.id.etSearch);
         lv_list_chat = view.findViewById(R.id.lv_list_chat);
-        title = getActivity().findViewById(R.id.title);
-        home_selected = getActivity().findViewById(R.id.home_selected);
-        noti_selected = getActivity().findViewById(R.id.noti_selected);
-        chat_selected = getActivity().findViewById(R.id.chat_selected);
-        user_selected = getActivity().findViewById(R.id.user_selected);
-        ic_home = getActivity().findViewById(R.id.icon_home);
-        ic_chat = getActivity().findViewById(R.id.icon_chat);
-        ic_noti = getActivity().findViewById(R.id.icon_noti);
-        ic_user = getActivity().findViewById(R.id.icon_user);
 
-        title.setText("Chat");
-
-        home_selected.setBackground(null);
-        noti_selected.setBackground(null);
-        user_selected.setBackground(null);
-        chat_selected.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.selected_nav_item));
-
-        ic_home.setColorFilter(Color.BLACK);
-        ic_noti.setColorFilter(Color.BLACK);
-        ic_user.setColorFilter(Color.BLACK);
-        ic_chat.setColorFilter(Color.rgb(236, 83, 131));
 
         lv_list_chat.setAdapter(adapter);
 

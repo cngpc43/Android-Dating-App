@@ -70,16 +70,15 @@ public class UserSettingFragment extends Fragment {
     private ValueEventListener listener;
     RangeSlider age_range;
     Slider location_distance_slider;
-    LinearLayout account_settings, location, height, dob, add_photo, home_selected, user_selected, chat_selected, noti_selected;
+    LinearLayout account_settings, location, height, dob, add_photo;
     Spinner gender_spinner, sexual_spinner, gender_show_spinner;
-    TextView age_range_preview, location_preview, profile_username, profile_status, height_preview, dob_preview, photo_count, location_distance_preview, title;
+    TextView age_range_preview, location_preview, profile_username, profile_status, height_preview, dob_preview, photo_count, location_distance_preview;
     EditText et_username, et_status;
     CircleImageView profile_pic, profile_pic_button;
     ImageButton edit_button, save_button;
     MaterialSwitch show_me_switch;
     LinearLayout logout, delete_account;
     DatabaseReference reference;
-    ImageView ic_home, ic_chat, ic_noti, ic_user;
     int LAUNCH_SECOND_ACTIVITY = 1;
 
     // Uri indicates, where the image will be picked from
@@ -136,26 +135,7 @@ public class UserSettingFragment extends Fragment {
         add_photo = view.findViewById(R.id.add_photo);
         location_distance_preview = view.findViewById(R.id.location_distance_preview);
         location_distance_slider = view.findViewById(R.id.location_distance_slider);
-        title = getActivity().findViewById(R.id.title);
-        home_selected = getActivity().findViewById(R.id.home_selected);
-        noti_selected = getActivity().findViewById(R.id.noti_selected);
-        chat_selected = getActivity().findViewById(R.id.chat_selected);
-        user_selected = getActivity().findViewById(R.id.user_selected);
-        ic_home = getActivity().findViewById(R.id.icon_home);
-        ic_chat = getActivity().findViewById(R.id.icon_chat);
-        ic_noti = getActivity().findViewById(R.id.icon_noti);
-        ic_user = getActivity().findViewById(R.id.icon_user);
 
-        title.setText("Your profile");
-        home_selected.setBackground(null);
-        noti_selected.setBackground(null);
-        chat_selected.setBackground(null);
-        user_selected.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.selected_nav_item));
-
-        ic_home.setColorFilter(Color.BLACK);
-        ic_chat.setColorFilter(Color.BLACK);
-        ic_noti.setColorFilter(Color.BLACK);
-        ic_user.setColorFilter(Color.rgb(236, 83, 131));
 
         // for text marquee
         profile_username.setSelected(true);

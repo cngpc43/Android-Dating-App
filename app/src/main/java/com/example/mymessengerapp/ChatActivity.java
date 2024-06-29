@@ -125,7 +125,23 @@ public class ChatActivity extends AppCompatActivity {
                 usersArrayList.clear();
                 String currentUserId = auth.getCurrentUser().getUid();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    Users users = dataSnapshot.getValue(Users.class);
+                    Users users = new Users(dataSnapshot.child("userId").getValue(String.class), dataSnapshot.child("userName").getValue(String.class),
+                            dataSnapshot.child("mail").getValue(String.class), dataSnapshot.child("password").getValue(String.class),
+                            dataSnapshot.child("profilepic").getValue(String.class), dataSnapshot.child("status").getValue(String.class),
+                            dataSnapshot.child("gender").getValue(String.class), dataSnapshot.child("dob").getValue(String.class),
+                            dataSnapshot.child("phone").getValue(String.class), dataSnapshot.child("location").getValue(String.class),
+                            dataSnapshot.child("sexual_orientation").getValue(String.class), dataSnapshot.child("height").getValue(String.class),
+                            dataSnapshot.child("age_range").getValue(String.class), dataSnapshot.child("gender_show").getValue(String.class),
+                            dataSnapshot.child("show_me").getValue(Boolean.class), new ArrayList<String>(),
+                            dataSnapshot.child("latitude").getValue(String.class), dataSnapshot.child("longitude").getValue(String.class),
+                            "", dataSnapshot.child("location_distance").getValue(String.class));
+                    Object isOnline = dataSnapshot.child("isOnline").getValue(Object.class);
+                    if (isOnline != null) {
+                        if (isOnline.equals("true"))
+                            users.setIsOnline("true");
+                        else
+                            users.setIsOnline(isOnline.toString());
+                    }
                     if (users != null && !users.getUserId().equals(currentUserId)) {
                         usersArrayList.add(users);
                     }
