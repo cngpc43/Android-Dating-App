@@ -231,7 +231,6 @@ public class UserSettingFragment extends Fragment {
             }
         });
 
-
         edit_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

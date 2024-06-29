@@ -16,6 +16,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.mymessengerapp.adapter.AnotherUserPhotoAdapter;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -25,6 +26,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ViewAnotherProfile extends AppCompatActivity {
@@ -33,6 +37,8 @@ public class ViewAnotherProfile extends AppCompatActivity {
     GridView anotherPhotos;
     DatabaseReference reference;
     ImageButton back_btn;
+    ArrayList<String> photoList;
+    AnotherUserPhotoAdapter adapter;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -42,6 +48,9 @@ public class ViewAnotherProfile extends AppCompatActivity {
 
         // Get user
         reference = FirebaseDatabase.getInstance().getReference("user/" + getIntent().getStringExtra("userId"));
+
+        photoList = new ArrayList<>();
+        adapter = new AnotherUserPhotoAdapter(this, photoList);
 
         // Get UI element
         back_btn = findViewById(R.id.back_icon);
@@ -53,29 +62,35 @@ public class ViewAnotherProfile extends AppCompatActivity {
         anotherDob = findViewById(R.id.another_dob);
         anotherPhotos = findViewById(R.id.another_photos);
 
+        anotherPhotos.setAdapter(adapter);
+
         // Get another user info from firebase
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                // Clear photo list, avoid stack image
+                photoList.clear();
+
                 // Set data to UI
                 anotherName.setText(snapshot.child("userName").getValue(String.class));
                 String profileUri = snapshot.child("profilepic").getValue(String.class);
-                if (profileUri == null) {
-                    FirebaseStorage.getInstance().getReference().child("default.png").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                        @Override
-                        public void onSuccess(Uri uri) {
-                            Picasso.get().load(uri).into(anotherAvt);
-                        }
-                    });
-                } else {
+                if (profileUri == null)
+                    Picasso.get().load(R.drawable.default_profile_pic).into(anotherAvt);
+                else
                     Picasso.get().load(profileUri).into(anotherAvt);
-                }
                 anotherStt.setText(snapshot.child("status").getValue(String.class));
                 anotherDob.setText(snapshot.child("dob").getValue(String.class));
                 anotherGender.setText(snapshot.child("gender").getValue(String.class));
                 if (snapshot.child("gender").getValue(String.class).equals("Female"))
                     anotherGender.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.female_svgrepo_com, 0, 0, 0);
                 anotherLocation.setText(snapshot.child("location").getValue(String.class));
+
+                // Set image into grid view
+                for (DataSnapshot dataSnapshot : snapshot.child("photos").getChildren()) {
+                    photoList.add(dataSnapshot.getValue(String.class));
+                }
+
+                adapter.notifyDataSetChanged();
             }
 
             @Override
