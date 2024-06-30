@@ -39,6 +39,7 @@ import android.widget.TextView;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class ChatFragment extends Fragment {
     FirebaseAuth auth;
@@ -49,8 +50,8 @@ public class ChatFragment extends Fragment {
     List<String> chatRooms;
     List<ChatDetail> chatDetails;
     ValueEventListener valueEventListener;
-    DatabaseReference chatRoomReference, chatsReference, onlineRef;
-
+    DatabaseReference chatRoomReference, chatsReference;
+    boolean listenerAdded = false;
     public ChatFragment() {
     }
 
@@ -66,16 +67,15 @@ public class ChatFragment extends Fragment {
         String currentUserId = auth.getCurrentUser().getUid();
         chatsReference = database.getReference("Chats");
         chatRoomReference = database.getReference("ChatRooms/" + currentUserId);
-        onlineRef = database.getReference("user/");
 
 
         // listen for value change in Database/Chats
-        chatsReference.addValueEventListener(valueEventListener = new ValueEventListener() {
+        valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                // get current user chat rooms
                 chatRooms.clear();
                 chatDetails.clear();
+                // get current user chat rooms
                 chatRoomReference.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
                     @Override
                     public void onSuccess(DataSnapshot dataSnapshot) {
@@ -84,7 +84,6 @@ public class ChatFragment extends Fragment {
                                 chatRooms.add(snapshot.getKey());
                             }
                         }
-
                         // if current user has chat rooms, get latest message of each room and timestamp of it
                         if (chatRooms.size() > 0) {
                             for (String room : chatRooms) {
@@ -94,19 +93,28 @@ public class ChatFragment extends Fragment {
                                 if (userId.equals(currentUserId))
                                     userId = secondUserId;
                                 String finalUserId = userId;
+
                                 chatsReference.child(room).orderByKey().limitToLast(1).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
                                     @Override
                                     public void onSuccess(DataSnapshot dataSnapshot) {
+
                                         if (dataSnapshot.hasChildren()) {
                                             for (DataSnapshot messageSnapshot : dataSnapshot.getChildren()) {
                                                 String lastMessage = messageSnapshot.child("text").getValue(String.class);
-                                                if (messageSnapshot.child("senderId").getValue(String.class).equals(currentUserId))
+                                                boolean have_not_read = true;
+                                                if (messageSnapshot.child("status").getValue(String.class).equals("seen"))
+                                                    have_not_read = false;
+                                                if (messageSnapshot.child("senderId").getValue(String.class).equals(currentUserId)) {
                                                     lastMessage = "You: " + lastMessage;
+                                                    have_not_read = false;
+                                                }
+                                                String messageStatus = messageSnapshot.child("status").getValue(String.class);
                                                 Log.d("ChatFragment", "Last message: " + lastMessage);
                                                 long timestamp = messageSnapshot.child("timestamp").getValue(Long.class);
                                                 // Get the username and user image
                                                 DatabaseReference userRef = database.getReference("user").child(finalUserId);
                                                 String finalLastMessage = lastMessage;
+                                                boolean finalHave_not_read = have_not_read;
                                                 userRef.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
                                                     @Override
                                                     public void onSuccess(DataSnapshot dataSnapshot) {
@@ -115,7 +123,7 @@ public class ChatFragment extends Fragment {
                                                         String userImage = dataSnapshot.child("profilepic").getValue(String.class);
                                                         Object isOnline = dataSnapshot.child("isOnline").getValue(Object.class);
 
-                                                        ChatDetail chatDetail = new ChatDetail(userId, userName, userImage, finalLastMessage, timestamp, false, room);
+                                                        ChatDetail chatDetail = new ChatDetail(userId, userName, userImage, finalLastMessage, timestamp, false, room, finalHave_not_read);
                                                         if (isOnline != null) {
                                                             if (isOnline.equals("true"))
                                                                 chatDetail.setOnline(true);
@@ -142,7 +150,7 @@ public class ChatFragment extends Fragment {
                                                     String userImage = dataSnapshot.child("profilepic").getValue(String.class);
                                                     Object isOnline = dataSnapshot.child("isOnline").getValue(Object.class);
 
-                                                    ChatDetail chatDetail = new ChatDetail(userId, userName, userImage, "Send your first message", 0, false, room);
+                                                    ChatDetail chatDetail = new ChatDetail(userId, userName, userImage, "Send your first message", 0, false, room, true);
                                                     if (isOnline != null) {
                                                         if (isOnline.equals("true"))
                                                             chatDetail.setOnline(true);
@@ -169,7 +177,7 @@ public class ChatFragment extends Fragment {
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
-        });
+        };
 
     }
 
@@ -193,6 +201,7 @@ public class ChatFragment extends Fragment {
                 intent.putExtra("userImage", chatDetails.get(position).getUserImage());
                 intent.putExtra("roomId", chatDetails.get(position).getChatRoom());
                 startActivity(intent);
+                getActivity().finish();
             }
         });
 
@@ -216,11 +225,30 @@ public class ChatFragment extends Fragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        if (!listenerAdded) {
+            chatsReference.addValueEventListener(valueEventListener);
+            listenerAdded = true;
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (listenerAdded) {
+            chatsReference.removeEventListener(valueEventListener);
+            listenerAdded = false;
+        }
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
-        if (chatsReference != null && valueEventListener != null)
+        if (listenerAdded) {
             chatsReference.removeEventListener(valueEventListener);
-        if (onlineRef != null && valueEventListener != null)
-            onlineRef.removeEventListener(valueEventListener);
+            listenerAdded = false;
+        }
     }
+
 }
