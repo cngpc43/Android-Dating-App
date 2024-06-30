@@ -21,13 +21,19 @@ public class SendNotifications {
     private final String userFcmToken;
     private final String title;
     private final String body;
+    private final String notiType;
+    private final String chatId;
+    private final String userId;
     private final Context context;
     private final String postUrl = "https://fcm.googleapis.com/v1/projects/messenger-app-b4fed/messages:send";
 
-    public SendNotifications(String userFcmToken, String title, String body, Context context) {
+    public SendNotifications(String userFcmToken, String title, String body, String notiType, String chatId, String userId, Context context) {
         this.userFcmToken = userFcmToken;
         this.title = title;
         this.body = body;
+        this.notiType = notiType;
+        this.chatId = chatId;
+        this.userId = userId;
         this.context = context;
     }
 
@@ -37,12 +43,18 @@ public class SendNotifications {
         try {
             JSONObject messageObject = new JSONObject();
             JSONObject notificationObject = new JSONObject();
+            JSONObject dataObject = new JSONObject();
 
             notificationObject.put("title", title);
             notificationObject.put("body", body);
 
+            dataObject.put("type", notiType);
+            dataObject.put("chatId", chatId);
+            dataObject.put("userId", userId);
+
             messageObject.put("token", userFcmToken);
             messageObject.put("notification", notificationObject);
+            messageObject.put("data", dataObject);
 
             mainObj.put("message", messageObject);
 
@@ -58,8 +70,8 @@ public class SendNotifications {
                     AccessTokenForNotifications accessToken = new AccessTokenForNotifications();
                     String accessKey = accessToken.getAccessToken();
                     Map<String, String> header = new HashMap<>();
-                    header.put("content-type", "application/json");
-                    header.put("authorization", "Bearer " + accessKey);
+                    header.put("Content-Type", "application/json");
+                    header.put("Authorization", "Bearer " + accessKey);
                     return header;
                 }
             };

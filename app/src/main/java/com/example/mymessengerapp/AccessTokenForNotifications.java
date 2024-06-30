@@ -8,6 +8,7 @@ import com.google.auth.oauth2.GoogleCredentials;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -32,11 +33,8 @@ public class AccessTokenForNotifications {
 
             InputStream stream = new ByteArrayInputStream(jsonString.getBytes(StandardCharsets.UTF_8));
 
-            List<String> list = new LinkedList<String>();
-            list.add(firebaseMessagingScope);
-
             GoogleCredentials googleCredentials = GoogleCredentials.fromStream(stream)
-                    .createScoped(list);
+                    .createScoped(Arrays.asList(firebaseMessagingScope));
 
             googleCredentials.refresh();
 

@@ -9,6 +9,7 @@
     <string name="enter_phone">Enter your phone number</string>
     <string name="enter_pass">Enter your password</string>
     <string name="resend_code"><u>Resend verification code</u></string>
+    <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
     <string-array name="gender_array">
         <item>none</item>
         <item>Male</item>

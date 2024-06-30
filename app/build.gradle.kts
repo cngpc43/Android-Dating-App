@@ -78,4 +78,6 @@ dependencies {
 
 
     implementation("com.google.auth:google-auth-library-oauth2-http:1.19.0")
+    implementation("com.google.firebase:firebase-messaging:23.1.0")
+    implementation("com.google.firebase:firebase-analytics:21.0.0")
 }
