@@ -23,6 +23,7 @@
             android:textSize="7pt" />
 
         <FrameLayout
+            android:id="@+id/frame_receive_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/rounded_message_receive"

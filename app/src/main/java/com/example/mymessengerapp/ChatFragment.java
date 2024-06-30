@@ -115,7 +115,7 @@ public class ChatFragment extends Fragment {
                                                         String userImage = dataSnapshot.child("profilepic").getValue(String.class);
                                                         Object isOnline = dataSnapshot.child("isOnline").getValue(Object.class);
 
-                                                        ChatDetail chatDetail = new ChatDetail(userId, userName, userImage, finalLastMessage, timestamp, false);
+                                                        ChatDetail chatDetail = new ChatDetail(userId, userName, userImage, finalLastMessage, timestamp, false, room);
                                                         if (isOnline != null) {
                                                             if (isOnline.equals("true"))
                                                                 chatDetail.setOnline(true);
@@ -142,9 +142,9 @@ public class ChatFragment extends Fragment {
                                                     String userImage = dataSnapshot.child("profilepic").getValue(String.class);
                                                     Object isOnline = dataSnapshot.child("isOnline").getValue(Object.class);
 
-                                                    ChatDetail chatDetail = new ChatDetail(userId, userName, userImage, "Send your first message", 0, false);
+                                                    ChatDetail chatDetail = new ChatDetail(userId, userName, userImage, "Send your first message", 0, false, room);
                                                     if (isOnline != null) {
-                                                        if (isOnline.equals(true))
+                                                        if (isOnline.equals("true"))
                                                             chatDetail.setOnline(true);
                                                     }
                                                     chatDetails.add(chatDetail);
@@ -191,6 +191,7 @@ public class ChatFragment extends Fragment {
                 intent.putExtra("userId", chatDetails.get(position).getUserId());
                 intent.putExtra("userName", chatDetails.get(position).getUserName());
                 intent.putExtra("userImage", chatDetails.get(position).getUserImage());
+                intent.putExtra("roomId", chatDetails.get(position).getChatRoom());
                 startActivity(intent);
             }
         });

@@ -5,16 +5,18 @@ public class ChatDetail {
     private String userName;
     private String userImage;
     private String lastMessage;
+    private String chatRoom;
     private long timestamp;
     boolean isOnline;
 
-    public ChatDetail(String userId, String userName, String userImage, String lastMessage, long timestamp, boolean isOnline) {
+    public ChatDetail(String userId, String userName, String userImage, String lastMessage, long timestamp, boolean isOnline, String chatRoom) {
         this.userId = userId;
         this.userName = userName;
         this.userImage = userImage;
         this.lastMessage = lastMessage;
         this.timestamp = timestamp;
         this.isOnline = isOnline;
+        this.chatRoom = chatRoom;
     }
 
     @Override
@@ -73,5 +75,13 @@ public class ChatDetail {
 
     public void setOnline(boolean online) {
         isOnline = online;
+    }
+
+    public String getChatRoom() {
+        return chatRoom;
+    }
+
+    public void setChatRoom(String chatRoom) {
+        this.chatRoom = chatRoom;
     }
 }

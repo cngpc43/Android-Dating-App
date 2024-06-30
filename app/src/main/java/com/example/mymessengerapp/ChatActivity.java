@@ -14,6 +14,7 @@ import android.graphics.drawable.Drawable;
 import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Gravity;
@@ -95,7 +96,7 @@ public class ChatActivity extends AppCompatActivity {
     boolean isRecordingStarted = false;
     private ArrayList<Uri> selectedMediaUris = new ArrayList<>();
     private static final int PICK_MEDIA_REQUEST = 1;
-
+    private String receiverToken, senderName, chatRoomId;
     @SuppressLint({"MissingInflatedId", "ClickableViewAccessibility", "ResourceAsColor", "WrongViewCast"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,14 +105,36 @@ public class ChatActivity extends AppCompatActivity {
         storageReference = FirebaseStorage.getInstance().getReference();
         String senderId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         String receiverId = getIntent().getStringExtra("userId");
-        String chatRoomId = senderId + "_" + receiverId;
+        chatRoomId = getIntent().getStringExtra("roomId");
 
-        // Create chat room id from sender and receiver
-        if (senderId.compareTo(receiverId) < 0) {
-            chatRoomId = senderId + "_" + receiverId;
-        } else {
-            chatRoomId = receiverId + "_" + senderId;
-        }
+
+        // Get receiver token for sending notification
+        FirebaseDatabase.getInstance().getReference().child("user/" + receiverId + "/FCM_token").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.getValue(String.class) != null)
+                    receiverToken = snapshot.getValue(String.class);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        // Get sender name for sending notification
+        FirebaseDatabase.getInstance().getReference().child("user/" + senderId + "/userName").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.getValue(String.class) != null)
+                    senderName = snapshot.getValue(String.class);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
         DatabaseReference chatRoomRef = FirebaseDatabase.getInstance().getReference("Chats").child(chatRoomId);
         chatRoomRef.addValueEventListener(new ValueEventListener() {
@@ -251,6 +274,7 @@ public class ChatActivity extends AppCompatActivity {
             if (chatAdapter.getItemCount() > 0) {
                 mainChat.scrollToPosition(chatAdapter.getItemCount() - 1);
             }
+
         });
 
         // Init PopupWindow
@@ -408,13 +432,7 @@ public class ChatActivity extends AppCompatActivity {
             attachmentType) {
         String senderId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        // Concatenate the user IDs to form a unique chat room ID
-        String chatRoomId = senderId + "_" + receiverId;
-        if (senderId.compareTo(receiverId) < 0) {
-            chatRoomId = senderId + "_" + receiverId;
-        } else {
-            chatRoomId = receiverId + "_" + senderId;
-        }
+
         // Get the current timestamp
         long timestamp = System.currentTimeMillis();
 
@@ -434,6 +452,8 @@ public class ChatActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         // Message sent successfully
                         Log.d("ChatActivity", "Message sent.");
+                        // Push notification to receiver
+                        sendNotification(message);
                     } else {
                         // Failed to send the message
                         Log.w("ChatActivity", "Failed to send message.", task.getException());
@@ -557,6 +577,18 @@ public class ChatActivity extends AppCompatActivity {
                 Toast.makeText(ChatActivity.this, "Failed to upload file", Toast.LENGTH_SHORT).show();
             });
         }
+    }
+
+    public void sendNotification(String message) {
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                SendNotifications notificationSender = new SendNotifications(receiverToken, senderName, message, ChatActivity.this);
+
+                notificationSender.Send();
+            }
+        }, 300);
     }
 }
 

@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -21,6 +22,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -30,6 +33,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.zegocloud.uikit.prebuilt.call.ZegoUIKitPrebuiltCallService;
 import com.zegocloud.uikit.prebuilt.call.invite.ZegoUIKitPrebuiltCallInvitationConfig;
 
@@ -42,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     ImageView ic_home, ic_chat, ic_noti, ic_user;
     MaterialTextView title;
     Boolean doubleBackToExitPressedOnce = false;
+    ValueEventListener onlineValueListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +58,9 @@ public class MainActivity extends AppCompatActivity {
 
         database = FirebaseDatabase.getInstance();
         auth = FirebaseAuth.getInstance();
+
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
 
         long appId = Long.parseLong(getString(R.string.app_id));
         String appSign = getString(R.string.app_sign);
@@ -96,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
             // check for online status
             onlineRef = database.getReference().child(".info/connected");
             userRef = database.getReference().child("user/" + auth.getCurrentUser().getUid() + "/isOnline");
-            onlineRef.addValueEventListener(new ValueEventListener() {
+            onlineRef.addValueEventListener(onlineValueListener = new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     Boolean connected = snapshot.getValue(Boolean.class);
@@ -111,8 +119,21 @@ public class MainActivity extends AppCompatActivity {
 
                 }
             });
-            // No authenticated user handler -> LOGIN
+
+            // Get Firebase Cloud Messaging token for sending notifications
+            FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+                @Override
+                public void onComplete(@NonNull Task<String> task) {
+                    if (task.isSuccessful()) {
+                        FirebaseDatabase.getInstance().getReference().child("user/" + auth.getCurrentUser().getUid() + "/FCM_token").setValue(task.getResult());
+                    } else {
+                        Log.d("MainActivity", "FCM_token get failed: " + task.getException().getMessage());
+                    }
+                }
+            });
+
         } else {
+            // No authenticated user handler -> LOGIN
             Toast.makeText(this, "No authenticated user", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(MainActivity.this, login.class);
             startActivity(intent);
@@ -259,6 +280,13 @@ public class MainActivity extends AppCompatActivity {
             ic_noti.setColorFilter(Color.BLACK);
             ic_user.setColorFilter(Color.rgb(236, 83, 131));
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (onlineRef != null && onlineValueListener != null)
+            onlineRef.removeEventListener(onlineValueListener);
     }
 
 }

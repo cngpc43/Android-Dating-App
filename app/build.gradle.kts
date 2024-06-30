@@ -7,6 +7,10 @@ android {
     namespace = "com.example.mymessengerapp"
     compileSdk = 34
 
+    packagingOptions {
+        exclude("META-INF/DEPENDENCIES")
+    }
+
     defaultConfig {
         applicationId = "com.example.mymessengerapp"
         minSdk = 24
@@ -55,6 +59,7 @@ dependencies {
     implementation("com.squareup.picasso:picasso:2.71828")
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
     implementation("androidx.activity:activity:1.8.0")
+    implementation("com.android.volley:volley:1.2.1")
     testImplementation("junit:junit:4.13.2")
     implementation("de.hdodenhof:circleimageview:3.1.0")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
@@ -67,4 +72,6 @@ dependencies {
     implementation("pub.devrel:easypermissions:3.0.0")
     implementation("com.google.android.gms:play-services-location:21.3.0")
     implementation("com.github.chrisbanes:PhotoView:2.3.0")
+
+    implementation("com.google.auth:google-auth-library-oauth2-http:1.19.0")
 }

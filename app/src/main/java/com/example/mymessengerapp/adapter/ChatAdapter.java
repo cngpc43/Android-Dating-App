@@ -97,11 +97,29 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
                 holder.sendMessage.setText(chatMessage.getMessage());
                 holder.sendMessageTime.setText(chatMessage.getTime());
                 holder.sendMessageTime.setVisibility(View.GONE);
+                holder.frame_send_message.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (holder.sendMessageTime.getVisibility() == View.GONE)
+                            holder.sendMessageTime.setVisibility(View.VISIBLE);
+                        else if (holder.sendMessageTime.getVisibility() == View.VISIBLE)
+                            holder.sendMessageTime.setVisibility(View.GONE);
+                    }
+                });
                 break;
             case VIEW_TYPE_MESSAGE_RECEIVED:
                 holder.receiveMessage.setText(chatMessage.getMessage());
                 holder.receiveMessageTime.setText(chatMessage.getTime());
                 holder.receiveMessageTime.setVisibility(View.GONE);
+                holder.frame_receive_message.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (holder.receiveMessageTime.getVisibility() == View.GONE)
+                            holder.receiveMessageTime.setVisibility(View.VISIBLE);
+                        else if (holder.receiveMessageTime.getVisibility() == View.VISIBLE)
+                            holder.receiveMessageTime.setVisibility(View.GONE);
+                    }
+                });
                 break;
             case VIEW_TYPE_MEDIA_SENT:
                 ((MediaSentViewHolder)holder).bind(chatMessage);
@@ -116,15 +134,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
                 break;
         }
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (holder.sendMessageTime.getVisibility() == View.GONE)
-                    holder.sendMessageTime.setVisibility(View.VISIBLE);
-                else if (holder.sendMessageTime.getVisibility() == View.VISIBLE)
-                    holder.sendMessageTime.setVisibility(View.GONE);
-            }
-        });
+
     }
 
     @Override
@@ -136,12 +146,15 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
     }
     public static class ChatViewHolder extends RecyclerView.ViewHolder {
         TextView sendMessage, receiveMessage, sendMessageTime, receiveMessageTime;
+        FrameLayout frame_send_message, frame_receive_message;
         public ChatViewHolder(@NonNull View itemView) {
             super(itemView);
             sendMessage = itemView.findViewById(R.id.send_message);
             receiveMessage = itemView.findViewById(R.id.receive_message);
             sendMessageTime = itemView.findViewById(R.id.send_message_time);
             receiveMessageTime = itemView.findViewById(R.id.receive_message_time);
+            frame_send_message = itemView.findViewById(R.id.frame_send_message);
+            frame_receive_message = itemView.findViewById(R.id.frame_receive_message);
         }
     }
     public class MediaSentViewHolder extends ChatViewHolder {
@@ -160,7 +173,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
             mediaMessageTime.setText(chatMessage.getTime());
             mediaMessageTime.setVisibility(View.GONE);
             Picasso.get().load(chatMessage.getAttachmentUrl()).into(SendmediaImageView);
-            SendmediaImageView.setOnClickListener(new View.OnClickListener() {
+            SentMediaFrameLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(v.getContext(), ImageViewerActivity.class);
@@ -210,6 +223,14 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
             mediaMessageTime.setText(chatMessage.getTime());
             mediaMessageTime.setVisibility(View.GONE);
             Picasso.get().load(chatMessage.getAttachmentUrl()).into(mediaImageView);
+            MediaFrameLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(v.getContext(), ImageViewerActivity.class);
+                    intent.putExtra("imageUrl", chatMessage.getAttachmentUrl());
+                    v.getContext().startActivity(intent);
+                }
+            });
         }
     }
     public class AudioSentViewHolder extends ChatViewHolder {

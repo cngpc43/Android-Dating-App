@@ -25,6 +25,7 @@
             android:textSize="7pt" />
 
         <FrameLayout
+            android:id="@+id/frame_send_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/rounded_message_send"
