@@ -2,6 +2,7 @@ package com.example.mymessengerapp.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -22,6 +23,7 @@ import com.example.mymessengerapp.R;
 import com.example.mymessengerapp.model.ChatDetail;
 import com.example.mymessengerapp.model.VNCharacterUtils;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -86,6 +88,14 @@ public class ChatHomeAdapter extends ArrayAdapter<ChatDetail> {
                     online_icon.setVisibility(View.GONE);
                 tvChatName.setText(chatDetail.getUserName());
                 chatMessage.setText(chatDetail.getLastMessage());
+                if (chatDetail.isHave_not_read()) {
+                    chatMessage.setTypeface(chatMessage.getTypeface(), Typeface.BOLD);
+                    chatMessage.setTextColor(Color.BLACK);
+                    tvChatName.setTypeface(tvChatName.getTypeface(), Typeface.BOLD);
+                    tvChatName.setTextColor(Color.BLACK);
+                    chatTime.setTypeface(chatTime.getTypeface(), Typeface.BOLD);
+                    chatTime.setTextColor(Color.BLACK);
+                }
                 Date date = new Date(chatDetail.getTimestamp());
                 SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a", Locale.getDefault());
                 String formattedTime = sdf.format(date);
