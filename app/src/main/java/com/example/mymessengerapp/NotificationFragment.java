@@ -1,5 +1,7 @@
 package com.example.mymessengerapp;
 
+import static android.content.Intent.getIntent;
+
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -41,6 +43,7 @@ public class NotificationFragment extends Fragment {
     String currentUserId;
     ValueEventListener valueEventListener;
     DatabaseReference reference;
+    boolean listenerAdded = false;
     int matching_request_count = 0, request_sent_count = 0;
 
     public NotificationFragment(Context context) {
@@ -71,8 +74,7 @@ public class NotificationFragment extends Fragment {
         currentUserId = auth.getCurrentUser().getUid();
         reference = database.getReference("MatchRequests");
 
-
-        reference.addValueEventListener(valueEventListener = new ValueEventListener() {
+        valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 matching_request_count = 0;
@@ -97,7 +99,7 @@ public class NotificationFragment extends Fragment {
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
-        });
+        };
 
         matchingRequests.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,11 +117,29 @@ public class NotificationFragment extends Fragment {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-
-        if (reference != null && valueEventListener != null)
-            reference.removeEventListener(valueEventListener);
+    public void onStart() {
+        super.onStart();
+        if (!listenerAdded) {
+            reference.addValueEventListener(valueEventListener);
+            listenerAdded = true;
+        }
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (listenerAdded) {
+            reference.removeEventListener(valueEventListener);
+            listenerAdded = false;
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (listenerAdded) {
+            reference.removeEventListener(valueEventListener);
+            listenerAdded = false;
+        }
+    }
 }

@@ -52,6 +52,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -69,6 +70,7 @@ public class UserSettingFragment extends Fragment {
     private FirebaseDatabase database;
     private FirebaseStorage storage;
     private ValueEventListener listener;
+    boolean listenerAdded = false;
     RangeSlider age_range;
     Slider location_distance_slider;
     LinearLayout account_settings, location, height, dob, add_photo;
@@ -155,7 +157,7 @@ public class UserSettingFragment extends Fragment {
         gender_show_spinner.setAdapter(adapter2);
 
         // update values from database
-        reference.addValueEventListener(listener = new ValueEventListener() {
+        listener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 // location
@@ -229,7 +231,7 @@ public class UserSettingFragment extends Fragment {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
             }
-        });
+        };
 
         edit_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -288,11 +290,23 @@ public class UserSettingFragment extends Fragment {
                         userRef.setValue(ServerValue.TIMESTAMP).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
-                                FirebaseAuth.getInstance().signOut();
+                                // remove account noti token from device
+                                FirebaseMessaging.getInstance().deleteToken().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            // log out
+                                            FirebaseAuth.getInstance().signOut();
 
-                                Intent intent = new Intent(getContext(), login.class);
-                                startActivity(intent);
-                                getActivity().finish();
+                                            Intent intent = new Intent(getContext(), login.class);
+                                            startActivity(intent);
+                                            getActivity().finish();
+                                        } else {
+                                            Toast.makeText(getActivity(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
+
                             }
                         });
                     }
@@ -618,10 +632,29 @@ public class UserSettingFragment extends Fragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        if (!listenerAdded) {
+            reference.addValueEventListener(listener);
+            listenerAdded = true;
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (listenerAdded) {
+            reference.removeEventListener(listener);
+            listenerAdded = false;
+        }
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
-        if (reference != null && listener != null) {
+        if (listenerAdded) {
             reference.removeEventListener(listener);
+            listenerAdded = false;
         }
     }
 }

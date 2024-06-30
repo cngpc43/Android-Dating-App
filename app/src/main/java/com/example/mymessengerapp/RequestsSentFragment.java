@@ -37,6 +37,7 @@ public class RequestsSentFragment extends Fragment {
     ArrayList<HashMap<String, Object>> matchingItems;
     ValueEventListener valueEventListener;
     DatabaseReference reference;
+    boolean listenerAdded = false;
     public RequestsSentFragment() {
 
     }
@@ -69,7 +70,7 @@ public class RequestsSentFragment extends Fragment {
 
         reference = FirebaseDatabase.getInstance().getReference().child("MatchRequests");
 
-        reference.addValueEventListener(valueEventListener = new ValueEventListener() {
+        valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 matchingItems.clear();
@@ -93,7 +94,7 @@ public class RequestsSentFragment extends Fragment {
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
-        });
+        };
 
         requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
             @Override
@@ -106,10 +107,29 @@ public class RequestsSentFragment extends Fragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        if (!listenerAdded) {
+            reference.addValueEventListener(valueEventListener);
+            listenerAdded = true;
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (listenerAdded) {
+            reference.removeEventListener(valueEventListener);
+            listenerAdded = false;
+        }
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
-        if (reference != null && valueEventListener != null) {
+        if (listenerAdded) {
             reference.removeEventListener(valueEventListener);
+            listenerAdded = false;
         }
     }
 }
