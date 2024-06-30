@@ -60,7 +60,6 @@ public class ChatHomeAdapter extends ArrayAdapter<ChatDetail> {
     @Override
     public int getCount() {
         int size = chatDetails.size();
-        Log.d("ChatHomeAdapter", "getCount: " + size);
         return size;
     }
     @NonNull

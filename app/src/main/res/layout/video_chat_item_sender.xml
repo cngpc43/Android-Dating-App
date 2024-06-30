@@ -12,11 +12,10 @@
         android:layout_marginStart="80dp"
         android:layout_marginEnd="6dp"
         android:orientation="vertical"
-        android:maxHeight="100dp"
         android:padding="2dp">
 
         <TextView
-            android:id="@+id/attachment_message_sent_time"
+            android:id="@+id/video_message_sent_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
@@ -25,21 +24,19 @@
             android:textSize="7pt" />
 
         <FrameLayout
-            android:id="@+id/attachment_frame_sent"
+            android:id="@+id/video_frame_sent"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:background="@drawable/rounded_message_send"
             android:backgroundTint="@color/message_sent"
             android:layout_gravity="end"
-            android:padding="10dp"
-            android:maxHeight="100dp">
+            android:padding="10dp">
 
-            <VideoView
+            <androidx.media3.ui.PlayerView
                 android:id="@+id/attachment_video_send"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:maxWidth="100dp"
-                />
+                android:layout_height="200dp"
+                android:layout_gravity="center" />
         </FrameLayout>
     </LinearLayout>
 </RelativeLayout>

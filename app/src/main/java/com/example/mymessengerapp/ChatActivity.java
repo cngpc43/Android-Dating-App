@@ -10,6 +10,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.ClipData;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.media.MediaRecorder;
 import android.net.Uri;
@@ -232,7 +233,7 @@ public class ChatActivity extends AppCompatActivity {
         chatMessages = new ArrayList<ChatMessage>();
 
         // Send message into the recycle view to display
-        chatAdapter = new ChatAdapter(chatMessages);
+        chatAdapter = new ChatAdapter(chatMessages, this);
         mainChat.setAdapter(chatAdapter);
         mainChat.setLayoutManager(new LinearLayoutManager(this));
         ((LinearLayoutManager) mainChat.getLayoutManager()).setStackFromEnd(true);
@@ -256,7 +257,6 @@ public class ChatActivity extends AppCompatActivity {
 
         sendMessBtn.setOnClickListener(v -> {
             String message = messageInput.getText().toString().trim();
-
             // Don't proceed if the message is empty
             if (message.isEmpty())
                 return;
@@ -277,7 +277,6 @@ public class ChatActivity extends AppCompatActivity {
             if (chatAdapter.getItemCount() > 0) {
                 mainChat.scrollToPosition(chatAdapter.getItemCount() - 1);
             }
-
         });
 
         // Init PopupWindow
@@ -323,6 +322,7 @@ public class ChatActivity extends AppCompatActivity {
                 if (isRecordingStarted == false) {
                     startRecording();
                     isRecordingStarted = true;
+                    Toast.makeText(ChatActivity.this, "Press on voice recorder again to stop", Toast.LENGTH_SHORT).show();
                 } else {
                     stopRecording();
                     isRecordingStarted = false;
@@ -359,17 +359,44 @@ public class ChatActivity extends AppCompatActivity {
                 ClipData clipData = data.getClipData();
                 for (int i = 0; i < clipData.getItemCount(); i++) {
                     Uri mediaUri = clipData.getItemAt(i).getUri();
-                    // Add this URI to a list of selected media
                     selectedMediaUris.add(mediaUri);
                 }
+                uploadFilesToFirebase(selectedMediaUris);
             } else if (data.getData() != null) {
                 Uri mediaUri = data.getData();
-                // Add this URI to a list of selected media
                 selectedMediaUris.add(mediaUri);
+                // Show preview for single selected item
+                if (selectedMediaUris.size() == 1) {
+                    showImagePreviewDialog(mediaUri);
+                } else {
+                    uploadFilesToFirebase(selectedMediaUris);
+                    selectedMediaUris.clear();
+                }
             }
-            // Now open the confirmation dialog/activity, passing the list of selected media
-            showImagePreviewDialog(selectedMediaUris);
         }
+    }
+
+    private void uploadFilesToFirebase(ArrayList<Uri> selectedMediaUris) {
+        for (Uri mediaUri : selectedMediaUris) {
+            String mimeType = getContentResolver().getType(mediaUri);
+            StorageReference fileRef = storageReference.child("files/" + mediaUri.getLastPathSegment());
+            UploadTask uploadTask = fileRef.putFile(mediaUri);
+
+            uploadTask.addOnSuccessListener(taskSnapshot -> {
+                fileRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                    String fileUrl = uri.toString();
+                    String receiverId = getIntent().getStringExtra("userId");
+                    if (mimeType.startsWith("image/")) {
+                        handleSendMessage("Image", receiverId, fileUrl, "media");
+                    } else if (mimeType.startsWith("video/")) {
+                        handleSendMessage("Video", receiverId, fileUrl, "video");
+                    }
+                });
+            }).addOnFailureListener(e -> {
+                Toast.makeText(ChatActivity.this, "Failed to upload file", Toast.LENGTH_SHORT).show();
+            });
+        }
+        selectedMediaUris.clear();
     }
 
     @Override
@@ -388,42 +415,51 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     // Xu ly chuc nang gui tin nhan
-    public void showImagePreviewDialog(ArrayList<Uri> selectedMediaUris) {
+    public void showImagePreviewDialog(Uri selectedMediaUri) {
         // Create a dialog
         Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.dialog_image_preview);
 
         // Find the ViewPager and Buttons in the layout
-        ViewPager imagePreviewPager = dialog.findViewById(R.id.image_preview_pager);
+        ViewPager mediaPreviewPager = dialog.findViewById(R.id.image_preview_pager);
         Button confirmButton = dialog.findViewById(R.id.confirm_button);
         Button cancelButton = dialog.findViewById(R.id.cancel_button);
 
+        // Create an ArrayList and add the single Uri to it
+        ArrayList<Uri> mediaUris = new ArrayList<>();
+        mediaUris.add(selectedMediaUri);
+
         // Set the adapter for the ViewPager
-        imagePreviewPager.setAdapter(new ImagePagerAdapter(this, selectedMediaUris));
+        mediaPreviewPager.setAdapter(new MediaPagerAdapter(this, mediaUris));
 
         confirmButton.setOnClickListener(v -> {
             // Handle the confirmation action here
-            for (Uri mediaUri : selectedMediaUris) {
-                StorageReference fileRef = storageReference.child("files/" + mediaUri.getLastPathSegment());
-                UploadTask uploadTask = fileRef.putFile(mediaUri);
+            String mimeType = getContentResolver().getType(selectedMediaUri);
+            StorageReference fileRef = storageReference.child("files/" + selectedMediaUri.getLastPathSegment());
+            UploadTask uploadTask = fileRef.putFile(selectedMediaUri);
 
-                uploadTask.addOnSuccessListener(taskSnapshot -> {
-                    fileRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                        String fileUrl = uri.toString();
-                        String receiverId = getIntent().getStringExtra("userId");
+            uploadTask.addOnSuccessListener(taskSnapshot -> {
+                fileRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                    String fileUrl = uri.toString();
+                    String receiverId = getIntent().getStringExtra("userId");
+                    if (mimeType.startsWith("image/")) {
                         handleSendMessage("Image", receiverId, fileUrl, "media");
-                    });
-                }).addOnFailureListener(e -> {
-                    Toast.makeText(ChatActivity.this, "Failed to upload file", Toast.LENGTH_SHORT).show();
+                    } else if (mimeType.startsWith("video/")) {
+                        handleSendMessage("Video", receiverId, fileUrl, "video");
+                    }
+                    // Dismiss the dialog
+                    dialog.dismiss();
+                    selectedMediaUris.clear();
                 });
-            }
-            // Clear the selected images and dismiss the dialog
-            selectedMediaUris.clear();
+            }).addOnFailureListener(e -> {
+                Toast.makeText(ChatActivity.this, "Failed to upload file", Toast.LENGTH_SHORT).show();
+            });
+
+            // Dismiss the dialog
             dialog.dismiss();
         });
         cancelButton.setOnClickListener(v -> {
-            // Clear the selected images and dismiss the dialog
-            selectedMediaUris.clear();
+            mediaUris.clear();
             dialog.dismiss();
         });
 
@@ -478,9 +514,7 @@ public class ChatActivity extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.search_msg: {
-                        // Find the searchBarMsg view
                         RelativeLayout searchBarMsg = findViewById(R.id.searchBarMsg);
-                        // Set its visibility to VISIBLE
                         searchBarMsg.setVisibility(View.VISIBLE);
                         return true;
                     }
@@ -492,24 +526,6 @@ public class ChatActivity extends AppCompatActivity {
 
         // Show popup menu
         optPopupMenu.show();
-    }
-
-    public void showConfirmationDialog(ArrayList<Uri> selectedMediaUris) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Confirm Selection");
-        builder.setMessage("You have selected " + selectedMediaUris.size() + " items. Do you want to proceed?");
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-
-            }
-        });
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                selectedMediaUris.clear();
-            }
-        });
-        AlertDialog dialog = builder.create();
-        dialog.show();
     }
 
     private void startRecording() {
@@ -555,31 +571,12 @@ public class ChatActivity extends AppCompatActivity {
             audioRef.getDownloadUrl().addOnSuccessListener(uri -> {
                 String audioUrl = uri.toString();
                 String receiverId = getIntent().getStringExtra("userId");
-                handleSendMessage(null, receiverId, audioUrl, "audio");
+                handleSendMessage("Voice", receiverId, audioUrl, "audio");
             });
         }).addOnFailureListener(e -> {
             Toast.makeText(ChatActivity.this, "Failed to upload audio file", Toast.LENGTH_SHORT).show();
         });
 
-    }
-
-    private void uploadFiles() {
-        for (Uri fileUri : selectedMediaUris) {
-            StorageReference fileRef = storageReference.child("files/" + fileUri.getLastPathSegment());
-            UploadTask uploadTask = fileRef.putFile(fileUri);
-
-            uploadTask.addOnSuccessListener(taskSnapshot -> {
-                fileRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                    String fileUrl = uri.toString();
-                    // Save the download URL in the Firebase Database
-                    DatabaseReference filesRef = database.getReference("files");
-                    String fileId = filesRef.push().getKey();
-                    filesRef.child(fileId).setValue(fileUrl);
-                });
-            }).addOnFailureListener(e -> {
-                Toast.makeText(ChatActivity.this, "Failed to upload file", Toast.LENGTH_SHORT).show();
-            });
-        }
     }
 
     public void sendNotification(String message) {
@@ -588,7 +585,6 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void run() {
                 SendNotifications notificationSender = new SendNotifications(receiverToken, senderName, message, ChatActivity.this);
-
                 notificationSender.Send();
             }
         }, 300);

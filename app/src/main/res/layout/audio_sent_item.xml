@@ -1,42 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:padding="2dp">
+    android:layout_margin="5dp"
+    android:layout_gravity="end"
+    app:cardCornerRadius="10dp">
 
-    <LinearLayout
-        android:id="@+id/audio_sent_layout"
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="80dp"
-        android:layout_marginEnd="6dp"
-        android:orientation="vertical"
-        android:padding="2dp">
+        android:padding="10dp">
+
+        <ImageButton
+            android:id="@+id/play_audio_icon_sent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_play_icon" />
 
         <TextView
-            android:id="@+id/audio_sent_message_time"
+            android:id="@+id/audio_duration"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:text="11:00 PM"
-            android:textColor="@color/secondary2"
-            android:textSize="7pt" />
+            android:layout_toEndOf="@id/play_audio_icon_sent"
+            android:text="00:00"
 
-        <FrameLayout
-            android:id="@+id/audio_sent_frame"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/rounded_message_send"
-            android:backgroundTint="@color/message_sent"
-            android:layout_gravity="end"
-            android:padding="10dp">
+            android:textSize="14sp" />
 
-            <Button
-                android:id="@+id/play_audio_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Play" />
-        </FrameLayout>
-    </LinearLayout>
-</RelativeLayout>
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>

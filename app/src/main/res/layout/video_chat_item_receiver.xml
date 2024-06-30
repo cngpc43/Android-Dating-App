@@ -29,12 +29,11 @@
             android:background="@drawable/rounded_message_receive"
             android:backgroundTint="@color/message_receive">
 
-            <VideoView
-                android:id="@+id/attachment_image_receive"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:maxWidth="200dp"
-                />
+            <androidx.media3.ui.PlayerView
+                android:id="@+id/attachment_video_receive"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_gravity="center" />
         </FrameLayout>
     </LinearLayout>
 </RelativeLayout>

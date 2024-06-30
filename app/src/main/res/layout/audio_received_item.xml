@@ -30,12 +30,22 @@
             android:backgroundTint="@color/message_receive"
             android:padding="10dp">
 
-            <Button
+            <ImageButton
                 android:id="@+id/received_play_audio_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/message_receive"
-                android:text="Play" />
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_play_icon" />
+
+            <TextView
+                android:id="@+id/received_audio_duration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/received_play_audio_button"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="8dp"
+                android:text="00:00"
+                android:textColor="@android:color/black" />
 
         </FrameLayout>
     </LinearLayout>

@@ -68,10 +68,14 @@ dependencies {
     implementation("com.mesibo.api:webrtc:1.0.5")
     implementation("com.github.ZEGOCLOUD:zego_uikit_prebuilt_call_android:+")
     implementation("com.github.ZEGOCLOUD:zego_uikit_signaling_plugin_android:+")
-
+    implementation("com.google.android.exoplayer:exoplayer:2.19.1")
     implementation("pub.devrel:easypermissions:3.0.0")
     implementation("com.google.android.gms:play-services-location:21.3.0")
     implementation("com.github.chrisbanes:PhotoView:2.3.0")
+    implementation("androidx.media3:media3-exoplayer:1.3.1")
+    implementation("androidx.media3:media3-exoplayer-dash:1.3.1")
+    implementation("androidx.media3:media3-ui:1.3.1")
+
 
     implementation("com.google.auth:google-auth-library-oauth2-http:1.19.0")
 }

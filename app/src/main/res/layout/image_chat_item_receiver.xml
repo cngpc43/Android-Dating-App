@@ -28,7 +28,12 @@
             android:layout_height="wrap_content"
             android:background="@drawable/rounded_message_receive"
             android:backgroundTint="@color/message_receive">
-
+            <ProgressBar
+                android:id="@+id/image_loading_progress_receive"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="gone" />
             <ImageView
                 android:id="@+id/attachment_image_receive"
                 android:layout_width="244dp"
