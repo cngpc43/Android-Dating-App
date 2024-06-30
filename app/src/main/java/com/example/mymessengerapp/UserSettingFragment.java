@@ -165,65 +165,65 @@ public class UserSettingFragment extends Fragment {
                 if (snapshot.child("gender_show").getValue(String.class) != null) {
                     int gender_show_position = adapter2.getPosition(snapshot.child("gender_show").getValue(String.class));
                     gender_show_spinner.setSelection(gender_show_position);
-
-                    // gender
-                    if (snapshot.child("gender").getValue(String.class) != null) {
-                        int gender_position = adapter.getPosition(snapshot.child("gender").getValue(String.class));
-                        gender_spinner.setSelection(gender_position);
-                        // sexual_orientation
-                        if (snapshot.child("sexual_orientation").getValue(String.class) != null) {
-                            int sexual_position = adapter1.getPosition(snapshot.child("sexual_orientation").getValue(String.class));
-                            sexual_spinner.setSelection(sexual_position);
-                        }
-                        // age_range
-                        if (snapshot.child("age_range").getValue(String.class) == null) {
-                            age_range.setValues(18f, 24f);
-                        } else {
-                            if (age_range_initial) {
-                                String age_range_string = snapshot.child("age_range").getValue(String.class);
-                                float age_valueFrom = Float.valueOf(age_range_string.substring(0, age_range_string.indexOf('-')));
-                                float age_valueTo = Float.valueOf(age_range_string.substring(age_range_string.indexOf('-') + 1, age_range_string.length()));
-                                age_range.setValues(age_valueFrom, age_valueTo);
-                            }
-                        }
-                        // username
-                        if (snapshot.child("userName").getValue(String.class) != null)
-                            profile_username.setText(snapshot.child("userName").getValue(String.class));
-                        // status
-                        if (snapshot.child("status").getValue(String.class) != null)
-                            profile_status.setText(snapshot.child("status").getValue(String.class));
-                        // show me
-                        if (snapshot.child("show_me").getValue(boolean.class) != null)
-                            show_me_switch.setChecked(snapshot.child("show_me").getValue(boolean.class));
-                        // height
-                        if (snapshot.child("height").getValue(String.class) != null) {
-                            height_preview.setText(snapshot.child("height").getValue(String.class) + "cm");
-                        }
-                        // dob
-                        if (snapshot.child("dob").getValue(String.class) != null) {
-                            dob_preview.setText(snapshot.child("dob").getValue(String.class));
-                        }
-                        if (snapshot.child("photos").hasChildren()) {
-                            photo_count.setText(String.valueOf((int) snapshot.child("photos").getChildrenCount()));
-                        }
-                        // profile_picture
-                        if (snapshot.child("profilepic").getValue(String.class) == null) {
-                            Picasso.get().load(R.drawable.default_profile_pic).into(profile_pic);
-                            Picasso.get().load(R.drawable.default_profile_pic).into(profile_pic_button);
-                            reference.child("profilepic").setValue("https://firebasestorage.googleapis.com/v0/b/messenger-app-b4fed.appspot.com/o/default.png?alt=media&token=0a199e05-7e3a-42cd-8a5a-bfb7d3f617");
-                        } else {
-                            Picasso.get().load(snapshot.child("profilepic").getValue(String.class)).into(profile_pic);
-                            Picasso.get().load(snapshot.child("profilepic").getValue(String.class)).into(profile_pic_button);
-                        }
-                        // location_distance
-                        if (snapshot.child("location_distance").getValue(String.class) == null) {
-                            location_distance_slider.setValue(30);
-                        } else {
-                            if (location_distance_initial)
-                                location_distance_slider.setValue(Float.valueOf(snapshot.child("location_distance").getValue(String.class)));
-                        }
+                }
+                // gender
+                if (snapshot.child("gender").getValue(String.class) != null) {
+                    int gender_position = adapter.getPosition(snapshot.child("gender").getValue(String.class));
+                    gender_spinner.setSelection(gender_position);
+                }
+                // sexual_orientation
+                if (snapshot.child("sexual_orientation").getValue(String.class) != null) {
+                    int sexual_position = adapter1.getPosition(snapshot.child("sexual_orientation").getValue(String.class));
+                    sexual_spinner.setSelection(sexual_position);
+                }
+                // age_range
+                if (snapshot.child("age_range").getValue(String.class) == null) {
+                    age_range.setValues(18f, 24f);
+                } else {
+                    if (age_range_initial) {
+                        String age_range_string = snapshot.child("age_range").getValue(String.class);
+                        float age_valueFrom = Float.valueOf(age_range_string.substring(0, age_range_string.indexOf('-')));
+                        float age_valueTo = Float.valueOf(age_range_string.substring(age_range_string.indexOf('-') + 1, age_range_string.length()));
+                        age_range.setValues(age_valueFrom, age_valueTo);
                     }
                 }
+                // username
+                if (snapshot.child("userName").getValue(String.class) != null)
+                    profile_username.setText(snapshot.child("userName").getValue(String.class));
+                // status
+                if (snapshot.child("status").getValue(String.class) != null)
+                    profile_status.setText(snapshot.child("status").getValue(String.class));
+                // show me
+                if (snapshot.child("show_me").getValue(boolean.class) != null)
+                    show_me_switch.setChecked(snapshot.child("show_me").getValue(boolean.class));
+                // height
+                if (snapshot.child("height").getValue(String.class) != null) {
+                    height_preview.setText(snapshot.child("height").getValue(String.class) + "cm");
+                }
+                // dob
+                if (snapshot.child("dob").getValue(String.class) != null) {
+                    dob_preview.setText(snapshot.child("dob").getValue(String.class));
+                }
+                if (snapshot.child("photos").hasChildren()) {
+                    photo_count.setText(String.valueOf((int) snapshot.child("photos").getChildrenCount()));
+                }
+                // profile_picture
+                if (snapshot.child("profilepic").getValue(String.class) == null) {
+                    Picasso.get().load(R.drawable.default_profile_pic).into(profile_pic);
+                    Picasso.get().load(R.drawable.default_profile_pic).into(profile_pic_button);
+                    reference.child("profilepic").setValue("https://firebasestorage.googleapis.com/v0/b/messenger-app-b4fed.appspot.com/o/default.png?alt=media&token=0a199e05-7e3a-42cd-8a5a-bfb7d3f617");
+                } else {
+                    Picasso.get().load(snapshot.child("profilepic").getValue(String.class)).into(profile_pic);
+                    Picasso.get().load(snapshot.child("profilepic").getValue(String.class)).into(profile_pic_button);
+                }
+                // location_distance
+                if (snapshot.child("location_distance").getValue(String.class) == null) {
+                    location_distance_slider.setValue(30);
+                } else {
+                    if (location_distance_initial)
+                        location_distance_slider.setValue(Float.valueOf(snapshot.child("location_distance").getValue(String.class)));
+                }
+
             }
 
             @Override
