@@ -43,8 +43,9 @@
                     android:layout_height="wrap_content"
                     android:singleLine="true"
                     android:text="Chi Cuong"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:textSize="17sp"
+                    android:textColor="@color/black"
+                    />
 
                 <ImageView
                     android:id="@+id/online_icon"
@@ -56,14 +57,14 @@
 
             </LinearLayout>
 
-
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_chat_message"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:singleLine="true"
                 android:text="What are you doing ?"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:textColor="#585a59"/>
         </LinearLayout>
 
         <TextView
