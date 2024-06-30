@@ -1,13 +1,13 @@
 package com.example.mymessengerapp.adapter;
 
+import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -18,10 +18,9 @@ import androidx.annotation.NonNull;
 import androidx.media3.common.Player;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.mymessengerapp.AudioPlayerActivity;
-import com.example.mymessengerapp.ImageViewerActivity;
 import com.example.mymessengerapp.R;
 import com.example.mymessengerapp.model.ChatMessage;
+import com.github.chrisbanes.photoview.PhotoView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -46,13 +45,14 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
     private List<ChatMessage> chatMessages;
     private String currentUserId;
     private ExoPlayer exoPlayer;
+    private Context context;
 
 
     public ChatAdapter(List<ChatMessage> chatMessages, Context context) {
         this.chatMessages = chatMessages;
         this.currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         exoPlayer = new ExoPlayer.Builder(context).build();
-
+        this.context = context;
     }
 
     @Override
@@ -129,11 +129,43 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
                 holder.sendMessage.setText(chatMessage.getMessage());
                 holder.sendMessageTime.setText(chatMessage.getTime());
                 holder.sendMessageTime.setVisibility(View.GONE);
+                holder.sender_isSeen.setText(chatMessage.getStatus());
+                holder.sender_isSeen.setVisibility(View.GONE);
+                // handle on text message click
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (holder.sendMessageTime.getVisibility() == View.GONE) {
+                            holder.sendMessageTime.setVisibility(View.VISIBLE);
+                            holder.sender_isSeen.setVisibility(View.VISIBLE);
+                        }
+                        else if (holder.sendMessageTime.getVisibility() == View.VISIBLE) {
+                            holder.sendMessageTime.setVisibility(View.GONE);
+                            holder.sender_isSeen.setVisibility(View.GONE);
+                        }
+                    }
+                });
                 break;
             case VIEW_TYPE_MESSAGE_RECEIVED:
                 holder.receiveMessage.setText(chatMessage.getMessage());
                 holder.receiveMessageTime.setText(chatMessage.getTime());
                 holder.receiveMessageTime.setVisibility(View.GONE);
+                holder.receiver_isSeen.setText(chatMessage.getStatus());
+                holder.receiver_isSeen.setVisibility(View.GONE);
+                // handle on text message click
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (holder.receiveMessageTime.getVisibility() == View.GONE) {
+                            holder.receiveMessageTime.setVisibility(View.VISIBLE);
+                            holder.receiver_isSeen.setVisibility(View.VISIBLE);
+                        }
+                        else if (holder.receiveMessageTime.getVisibility() == View.VISIBLE) {
+                            holder.receiveMessageTime.setVisibility(View.GONE);
+                            holder.receiver_isSeen.setVisibility(View.GONE);
+                        }
+                    }
+                });
                 break;
             case VIEW_TYPE_MEDIA_SENT:
                 ((MediaSentViewHolder) holder).bind(chatMessage);
@@ -155,17 +187,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
                 break;
         }
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (holder.sendMessageTime != null) {
-                    if (holder.sendMessageTime.getVisibility() == View.GONE)
-                        holder.sendMessageTime.setVisibility(View.VISIBLE);
-                    else if (holder.sendMessageTime.getVisibility() == View.VISIBLE)
-                        holder.sendMessageTime.setVisibility(View.GONE);
-                }
-            }
-        });
     }
 
     @Override
@@ -174,7 +195,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
     }
 
     public static class ChatViewHolder extends RecyclerView.ViewHolder {
-        TextView sendMessage, receiveMessage, sendMessageTime, receiveMessageTime;
+        TextView sendMessage, receiveMessage, sendMessageTime, receiveMessageTime, sender_isSeen, receiver_isSeen;
 
         public ChatViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -182,6 +203,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
             receiveMessage = itemView.findViewById(R.id.receive_message);
             sendMessageTime = itemView.findViewById(R.id.send_message_time);
             receiveMessageTime = itemView.findViewById(R.id.receive_message_time);
+            sender_isSeen = itemView.findViewById(R.id.sender_isSeen);
+            receiver_isSeen = itemView.findViewById(R.id.receiver_isSeen);
         }
     }
 
@@ -218,9 +241,12 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
             SendmediaImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(v.getContext(), ImageViewerActivity.class);
-                    intent.putExtra("imageUrl", chatMessage.getAttachmentUrl());
-                    v.getContext().startActivity(intent);
+                    Log.d("ChatAdapter", "Image clicked");
+                    Dialog dialog = new Dialog(context, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
+                    dialog.setContentView(R.layout.dialog_full_image);
+                    PhotoView photoView = dialog.findViewById(R.id.full_image);
+                    Picasso.get().load(chatMessage.getAttachmentUrl()).into(photoView);
+                    dialog.show();
                 }
             });
         }
@@ -310,6 +336,18 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
                 @Override
                 public void onError(Exception e) {
                     imageLoadingProgress.setVisibility(View.GONE);
+                }
+            });
+
+            MediaFrameLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.d("ChatAdapter", "Image clicked");
+                    Dialog dialog = new Dialog(context, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
+                    dialog.setContentView(R.layout.dialog_full_image);
+                    PhotoView photoView = dialog.findViewById(R.id.full_image);
+                    Picasso.get().load(chatMessage.getAttachmentUrl()).into(photoView);
+                    dialog.show();
                 }
             });
         }
