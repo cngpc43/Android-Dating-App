@@ -214,6 +214,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.viewholder> {
 
                         // Remove user from list
                         usersArrayList.remove(position);
+                        notifyDataSetChanged();
                     }
                 });
 
@@ -248,6 +249,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.viewholder> {
 
                 // remove user from list
                 usersArrayList.remove(position);
+                notifyDataSetChanged();
             }
         });
 
