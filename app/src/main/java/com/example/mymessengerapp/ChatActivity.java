@@ -89,10 +89,10 @@ public class ChatActivity extends AppCompatActivity {
     ArrayList<Users> usersArrayList;
     ChatAdapter chatAdapter;
     List<ChatMessage> chatMessages;
-    LinearLayout llSendChat, attachmentPopup;
+    LinearLayout llSendChat;
+    RelativeLayout rlUserInfo;
     FirebaseDatabase database;
     FirebaseAuth auth;
-    ImageButton chatInput;
     private MediaRecorder recorder;
     private StorageReference storageReference;
     private String audioFilePath;
@@ -241,6 +241,7 @@ public class ChatActivity extends AppCompatActivity {
         llSendChat = findViewById(R.id.send_chat);
         optMore = findViewById(R.id.option_more);
         voiceAttach = findViewById(R.id.voice_attach);
+        rlUserInfo = findViewById(R.id.infor_chat);
 
         // username marquee
         userName.setSelected(true);
@@ -344,6 +345,8 @@ public class ChatActivity extends AppCompatActivity {
         // Handle option more button
         optMore.setOnClickListener(v -> showPopupMenu());
 
+        // Handle view user info when click the name and avt
+        rlUserInfo.setOnClickListener(v -> showUserInfo(receiverId));
     }
 
     @Override
@@ -518,6 +521,13 @@ public class ChatActivity extends AppCompatActivity {
 
         // Show popup menu
         optPopupMenu.show();
+    }
+
+    // Handle view user info when click the name and avt
+    private void showUserInfo(String userId) {
+        Intent intent = new Intent(this, ViewAnotherProfile.class);
+        intent.putExtra("userId", userId);
+        this.startActivity(intent);
     }
 
     private void startRecording() {
