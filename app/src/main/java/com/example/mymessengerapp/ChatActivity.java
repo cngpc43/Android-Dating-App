@@ -38,6 +38,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
@@ -74,7 +75,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 import android.content.DialogInterface;
 import android.app.AlertDialog;
-
+//import Manifest
+import android.Manifest;
 public class ChatActivity extends AppCompatActivity {
     ImageButton voiceAttach;
     private static final int GALLERY_REQUEST_CODE = 123;
@@ -98,17 +100,30 @@ public class ChatActivity extends AppCompatActivity {
     private ArrayList<Uri> selectedMediaUris = new ArrayList<>();
     private static final int PICK_MEDIA_REQUEST = 1;
     private String receiverToken, senderName, chatRoomId;
+    private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
+    private boolean permissionToRecordAccepted = false;
+    private String [] permissions = {Manifest.permission.RECORD_AUDIO};
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case REQUEST_RECORD_AUDIO_PERMISSION:
+                permissionToRecordAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                break;
+        }
+        if (!permissionToRecordAccepted) finish();
+    }
     @SuppressLint({"MissingInflatedId", "ClickableViewAccessibility", "ResourceAsColor", "WrongViewCast"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+        ActivityCompat.requestPermissions(this, permissions, REQUEST_RECORD_AUDIO_PERMISSION);
         storageReference = FirebaseStorage.getInstance().getReference();
         String senderId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         String receiverId = getIntent().getStringExtra("userId");
         chatRoomId = getIntent().getStringExtra("roomId");
-
-
         // Get receiver token for sending notification
         FirebaseDatabase.getInstance().getReference().child("user/" + receiverId + "/FCM_token").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -319,18 +334,14 @@ public class ChatActivity extends AppCompatActivity {
 
         voiceAttach.setOnTouchListener((v, event) -> {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                if (isRecordingStarted == false) {
+                if (!isRecording) {
                     startRecording();
-                    isRecordingStarted = true;
-                    Toast.makeText(ChatActivity.this, "Press on voice recorder again to stop", Toast.LENGTH_SHORT).show();
                 } else {
                     stopRecording();
-                    isRecordingStarted = false;
                 }
             }
             return false;
         });
-
 
         // Zego call listener
         ZegoSendCallInvitationButton newVideoCall = findViewById(R.id.new_video_call);
@@ -469,8 +480,6 @@ public class ChatActivity extends AppCompatActivity {
     void handleSendMessage(String message, String receiverId, String attachmentUrl, String
             attachmentType) {
         String senderId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
-
         // Get the current timestamp
         long timestamp = System.currentTimeMillis();
 
@@ -534,30 +543,29 @@ public class ChatActivity extends AppCompatActivity {
         recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
         recorder.setOutputFile(audioFilePath);
         recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-
         try {
             recorder.prepare();
+            recorder.start();
+            isRecording = true;
         } catch (IOException e) {
-
             Toast.makeText(ChatActivity.this, "Failed to start recording", Toast.LENGTH_SHORT).show();
-
+        } catch (IllegalStateException e) {
+            Toast.makeText(ChatActivity.this, "Recorder is not properly prepared", Toast.LENGTH_SHORT).show();
         }
-        recorder.start();
-        isRecording = true;
     }
-
     private void stopRecording() {
         if (isRecording && recorder != null) {
             try {
                 recorder.stop();
+                recorder.release();
+                recorder = null;
+                isRecording = false;
+                Toast.makeText(this, "Recording stopped", Toast.LENGTH_SHORT).show();
+                uploadAudioFile();
             } catch (RuntimeException e) {
-
-                Toast.makeText(ChatActivity.this, "Failed to stop recording", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Failed to stop recording", Toast.LENGTH_SHORT).show();
+                Log.e(LOG_TAG, "stopRecording: ", e);
             }
-            recorder.release();
-            recorder = null;
-            isRecording = false;
-            uploadAudioFile();
         }
     }
 
@@ -565,7 +573,6 @@ public class ChatActivity extends AppCompatActivity {
         Uri audioFileUri = Uri.fromFile(new File(audioFilePath));
         StorageReference audioRef = storageReference.child("audio/" + audioFileUri.getLastPathSegment());
         UploadTask uploadTask = audioRef.putFile(audioFileUri);
-
         uploadTask.addOnSuccessListener(taskSnapshot -> {
             audioRef.getDownloadUrl().addOnSuccessListener(uri -> {
                 String audioUrl = uri.toString();
@@ -575,7 +582,6 @@ public class ChatActivity extends AppCompatActivity {
         }).addOnFailureListener(e -> {
             Toast.makeText(ChatActivity.this, "Failed to upload audio file", Toast.LENGTH_SHORT).show();
         });
-
     }
 
     public void sendNotification(String message) {
