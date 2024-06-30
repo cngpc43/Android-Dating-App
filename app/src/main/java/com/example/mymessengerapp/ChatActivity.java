@@ -77,6 +77,7 @@ import android.content.DialogInterface;
 import android.app.AlertDialog;
 //import Manifest
 import android.Manifest;
+
 public class ChatActivity extends AppCompatActivity {
     ImageButton voiceAttach;
     private static final int GALLERY_REQUEST_CODE = 123;
@@ -102,7 +103,7 @@ public class ChatActivity extends AppCompatActivity {
     private String receiverToken, senderName, chatRoomId;
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
     private boolean permissionToRecordAccepted = false;
-    private String [] permissions = {Manifest.permission.RECORD_AUDIO};
+    private String[] permissions = {Manifest.permission.RECORD_AUDIO};
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -114,6 +115,7 @@ public class ChatActivity extends AppCompatActivity {
         }
         if (!permissionToRecordAccepted) finish();
     }
+
     @SuppressLint({"MissingInflatedId", "ClickableViewAccessibility", "ResourceAsColor", "WrongViewCast"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -239,7 +241,6 @@ public class ChatActivity extends AppCompatActivity {
         llSendChat = findViewById(R.id.send_chat);
         optMore = findViewById(R.id.option_more);
         voiceAttach = findViewById(R.id.voice_attach);
-        attachmentPopup = findViewById(R.id.attachment_popup);
 
         // username marquee
         userName.setSelected(true);
@@ -294,37 +295,20 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
-        // Init PopupWindow
-        chatInput = findViewById(R.id.icon_image);
-        Log.d("ChatActivity", "Chat input: " + chatInput);
-        chatInput.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-                intent.addCategory(Intent.CATEGORY_OPENABLE);
-                intent.setType("*/*");
-                String[] mimetypes = {"image/*", "video/*"};
-                intent.putExtra(Intent.EXTRA_MIME_TYPES, mimetypes);
-                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-                startActivityForResult(intent, PICK_MEDIA_REQUEST);
-            }
-        });
-
-        // Handle chat attachment icon in chat input field
+        // Handle image attachment icon in chat input field
         messageInput.setOnTouchListener((v, event) -> {
             final int DRAWABLE_RIGHT = 2;
 
             if (event.getAction() == MotionEvent.ACTION_UP) {
                 if (event.getRawX() >= (messageInput.getRight() - messageInput.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
-                    // Check popup window is showing are not
-                    if (attachmentPopup.getVisibility() == View.VISIBLE) {
-                        // Dismiss if the popup is showing
-                        attachmentPopup.setVisibility(View.GONE);
-                        return true;
-                    }
+                    Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                    intent.addCategory(Intent.CATEGORY_OPENABLE);
+                    intent.setType("*/*");
+                    String[] mimetypes = {"image/*", "video/*"};
+                    intent.putExtra(Intent.EXTRA_MIME_TYPES, mimetypes);
+                    intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+                    startActivityForResult(intent, PICK_MEDIA_REQUEST);
 
-                    // Display it if it is not showing
-                    attachmentPopup.setVisibility(View.VISIBLE);
                     return true;
                 }
             }
@@ -553,6 +537,7 @@ public class ChatActivity extends AppCompatActivity {
             Toast.makeText(ChatActivity.this, "Recorder is not properly prepared", Toast.LENGTH_SHORT).show();
         }
     }
+
     private void stopRecording() {
         if (isRecording && recorder != null) {
             try {
