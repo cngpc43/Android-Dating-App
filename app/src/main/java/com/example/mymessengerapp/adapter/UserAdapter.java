@@ -211,6 +211,9 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.viewholder> {
                         }
                         else
                             Toast.makeText(mainActivity, "Matching request sent to " + likedUserName, Toast.LENGTH_SHORT).show();
+
+                        // Remove user from list
+                        usersArrayList.remove(position);
                     }
                 });
 
@@ -243,6 +246,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.viewholder> {
                     }
                 });
 
+                // remove user from list
+                usersArrayList.remove(position);
             }
         });
 

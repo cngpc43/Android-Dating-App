@@ -84,7 +84,7 @@ public class MainFragment extends Fragment {
         mainUserRecyclerView.setAdapter(adapter);
         PagerSnapHelper snapHelper = new PagerSnapHelper();
         snapHelper.attachToRecyclerView(mainUserRecyclerView);
-        reference = database.getReference();
+        reference = database.getReference().child("user/");
 
 
         auth.addAuthStateListener(authStateListener = new FirebaseAuth.AuthStateListener() {
@@ -163,7 +163,7 @@ public class MainFragment extends Fragment {
                                         }
                                     }
                                     // get all users from Firebase Database/user
-                                    for (DataSnapshot dataSnapshot2 : snapshot.child("user").getChildren()) {
+                                    for (DataSnapshot dataSnapshot2 : snapshot.getChildren()) {
                                         Users users = new Users(dataSnapshot2.child("userId").getValue(String.class), dataSnapshot2.child("userName").getValue(String.class),
                                                 dataSnapshot2.child("mail").getValue(String.class), dataSnapshot2.child("password").getValue(String.class),
                                                 dataSnapshot2.child("profilepic").getValue(String.class), dataSnapshot2.child("status").getValue(String.class),
