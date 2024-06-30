@@ -2,6 +2,7 @@ package com.example.mymessengerapp.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,10 +12,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mymessengerapp.R;
+import com.example.mymessengerapp.ViewAnotherProfile;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
@@ -31,9 +34,10 @@ import java.util.concurrent.TimeUnit;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class RequestSentAdapter extends RecyclerView.Adapter<RequestSentAdapter.viewholder>{
+public class RequestSentAdapter extends RecyclerView.Adapter<RequestSentAdapter.viewholder> {
     Context context;
     ArrayList<HashMap<String, Object>> requestSent;
+
     public RequestSentAdapter(Context context, ArrayList<HashMap<String, Object>> requestSent) {
         this.context = context;
         this.requestSent = requestSent;
@@ -92,6 +96,16 @@ public class RequestSentAdapter extends RecyclerView.Adapter<RequestSentAdapter.
             }
         });
 
+        // Handle view profile user when click whole the item
+        holder.request_item.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, ViewAnotherProfile.class);
+                intent.putExtra("userId", userId);
+
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -104,6 +118,8 @@ public class RequestSentAdapter extends RecyclerView.Adapter<RequestSentAdapter.
         CircleImageView user_icon;
         TextView time_sent, noti_context;
         MaterialButton undo_button, decline_button;
+        ConstraintLayout request_item;
+
         public viewholder(@NonNull View itemView) {
             super(itemView);
             user_name = itemView.findViewById(R.id.user_name);
@@ -113,9 +129,11 @@ public class RequestSentAdapter extends RecyclerView.Adapter<RequestSentAdapter.
             undo_button = itemView.findViewById(R.id.accept_button);
             decline_button = itemView.findViewById(R.id.decline_button);
             decline_button.setVisibility(View.GONE);
-            undo_button.setBackgroundTintList(ContextCompat.getColorStateList(context, R.color.secondary1));
-            undo_button.setText("Undo");
+            undo_button.setBackgroundTintList(ContextCompat.getColorStateList(context, R.color.undo_cancel));
+            undo_button.setText("CANCEL");
             noti_context.setText("Request sent");
+
+            request_item = itemView.findViewById(R.id.notification_item);
         }
     }
 }

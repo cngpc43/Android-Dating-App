@@ -2,6 +2,7 @@ package com.example.mymessengerapp.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,9 +12,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mymessengerapp.R;
+import com.example.mymessengerapp.ViewAnotherProfile;
 import com.example.mymessengerapp.model.Users;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -34,9 +37,10 @@ import java.util.concurrent.TimeUnit;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class MatchingRequestAdapter extends RecyclerView.Adapter<MatchingRequestAdapter.viewholder>{
+public class MatchingRequestAdapter extends RecyclerView.Adapter<MatchingRequestAdapter.viewholder> {
     Context context;
     ArrayList<HashMap<String, Object>> matchingRequests;
+
     public MatchingRequestAdapter(Context context, ArrayList<HashMap<String, Object>> matchingRequests) {
         this.context = context;
         this.matchingRequests = matchingRequests;
@@ -57,6 +61,7 @@ public class MatchingRequestAdapter extends RecyclerView.Adapter<MatchingRequest
         SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy HH:mm:ss");
         Date currentDate = new Date();
         Long difference = currentDate.getTime() - date.getTime();
+
         if (TimeUnit.MILLISECONDS.toSeconds(difference) < 60)
             holder.time_sent.setText("Just now");
         else if (TimeUnit.MILLISECONDS.toMinutes(difference) >= 1 && TimeUnit.MILLISECONDS.toMinutes(difference) < 60)
@@ -69,6 +74,7 @@ public class MatchingRequestAdapter extends RecyclerView.Adapter<MatchingRequest
         Log.d("MatchingRequestAdapter", "Date: " + sdf.format(date));
         String userId = matchingRequests.get(position).get("requesterId").toString();
         Log.d("MatchingRequestAdapter", "Binding user ID: " + userId);
+
         FirebaseDatabase.getInstance().getReference().child("user/" + userId).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@androidx.annotation.NonNull Task<DataSnapshot> task) {
@@ -87,6 +93,8 @@ public class MatchingRequestAdapter extends RecyclerView.Adapter<MatchingRequest
                 }
             }
         });
+
+        // Handle ACCEPT button
         holder.accept_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -112,11 +120,15 @@ public class MatchingRequestAdapter extends RecyclerView.Adapter<MatchingRequest
                         matchingRequests.get(position).get("requestId") + "/status").setValue("accepted");
                 FirebaseDatabase.getInstance().getReference().child("MatchRequests/" +
                         matchingRequests.get(position).get("requestId") + "/timestamp").setValue(ServerValue.TIMESTAMP);
+
                 Toast.makeText(context, "Request Accepted", Toast.LENGTH_SHORT).show();
+
                 // Remove the request from the list
                 matchingRequests.remove(position);
             }
         });
+
+        // Handle DECLINE button
         holder.decline_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -128,6 +140,17 @@ public class MatchingRequestAdapter extends RecyclerView.Adapter<MatchingRequest
                 Toast.makeText(context, "Request Declined", Toast.LENGTH_SHORT).show();
             }
         });
+
+        // Handle view profile user when click whole the item
+        holder.request_item.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, ViewAnotherProfile.class);
+                intent.putExtra("userId", userId);
+
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -135,11 +158,14 @@ public class MatchingRequestAdapter extends RecyclerView.Adapter<MatchingRequest
         return matchingRequests.size();
     }
 
+    // Get view holder to get the UI element in the item
     public class viewholder extends RecyclerView.ViewHolder {
         TextView user_name;
         CircleImageView user_icon;
         TextView time_sent;
         MaterialButton accept_button, decline_button;
+        ConstraintLayout request_item;
+
         public viewholder(@NonNull View itemView) {
             super(itemView);
             user_name = itemView.findViewById(R.id.user_name);
@@ -147,6 +173,8 @@ public class MatchingRequestAdapter extends RecyclerView.Adapter<MatchingRequest
             time_sent = itemView.findViewById(R.id.time);
             accept_button = itemView.findViewById(R.id.accept_button);
             decline_button = itemView.findViewById(R.id.decline_button);
+
+            request_item = itemView.findViewById(R.id.notification_item);
         }
     }
 }
