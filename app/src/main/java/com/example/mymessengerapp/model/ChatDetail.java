@@ -8,8 +8,9 @@ public class ChatDetail {
     private String chatRoom;
     private long timestamp;
     boolean isOnline;
+    boolean have_not_read;
 
-    public ChatDetail(String userId, String userName, String userImage, String lastMessage, long timestamp, boolean isOnline, String chatRoom) {
+    public ChatDetail(String userId, String userName, String userImage, String lastMessage, long timestamp, boolean isOnline, String chatRoom, boolean have_not_read) {
         this.userId = userId;
         this.userName = userName;
         this.userImage = userImage;
@@ -17,6 +18,7 @@ public class ChatDetail {
         this.timestamp = timestamp;
         this.isOnline = isOnline;
         this.chatRoom = chatRoom;
+        this.have_not_read = have_not_read;
     }
 
     @Override
@@ -83,5 +85,13 @@ public class ChatDetail {
 
     public void setChatRoom(String chatRoom) {
         this.chatRoom = chatRoom;
+    }
+
+    public boolean isHave_not_read() {
+        return have_not_read;
+    }
+
+    public void setHave_not_read(boolean have_not_read) {
+        this.have_not_read = have_not_read;
     }
 }

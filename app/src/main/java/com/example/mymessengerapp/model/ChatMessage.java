@@ -19,18 +19,20 @@ public class ChatMessage {
     boolean isLastMessage;
     private String attachmentUrl;
     private String attachmentType;
+    private String status;
 
     public ChatMessage() {
 
     }
 
-    public ChatMessage(String message, long timeStamp, String senderId, boolean isLastMessage, String attachmentUrl, String attachmentType) {
+    public ChatMessage(String message, long timeStamp, String senderId, boolean isLastMessage, String attachmentUrl, String attachmentType, String status) {
         this.message = message;
         this.senderId = senderId;
         this.timeStamp = timeStamp;
         this.isLastMessage = true;
         this.attachmentUrl = attachmentUrl;
         this.attachmentType = attachmentType;
+        this.status = status;
     }
 
     public String getMessage() {
@@ -125,5 +127,45 @@ public class ChatMessage {
         else {
             return hourMin;
         }
+    }
+
+    public void setSenderId(String senderId) {
+        this.senderId = senderId;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public void setSent(boolean sent) {
+        isSent = sent;
+    }
+
+    public ChatRoom getChatRoom() {
+        return chatRoom;
+    }
+
+    public void setChatRoom(ChatRoom chatRoom) {
+        this.chatRoom = chatRoom;
+    }
+
+    public void setTimeStamp(long timeStamp) {
+        this.timeStamp = timeStamp;
+    }
+
+    public boolean isLastMessage() {
+        return isLastMessage;
+    }
+
+    public void setLastMessage(boolean lastMessage) {
+        isLastMessage = lastMessage;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }
