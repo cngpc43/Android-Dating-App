@@ -114,6 +114,9 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
             case VIEW_TYPE_VIDEO_SENT:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.video_chat_item_sender, parent, false);
                 return new VideoSentViewHolder(view);
+            case VIEW_TYPE_VIDEO_RECEIVED:
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.video_chat_item_receiver, parent, false);
+                return new VideoReceivedViewHolder(view);
             default:
                 throw new IllegalArgumentException("Invalid view type");
         }
