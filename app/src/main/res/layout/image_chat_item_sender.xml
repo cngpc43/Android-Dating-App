@@ -11,8 +11,8 @@
         android:layout_alignParentEnd="true"
         android:layout_marginStart="80dp"
         android:layout_marginEnd="6dp"
-        android:orientation="vertical"
         android:maxHeight="100dp"
+        android:orientation="vertical"
         android:padding="2dp">
 
         <TextView
@@ -27,19 +27,16 @@
         <FrameLayout
             android:id="@+id/attachment_frame_sent"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:background="@drawable/rounded_message_send"
-            android:backgroundTint="@color/message_sent"
+            android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:padding="10dp"
-            android:maxHeight="100dp">
+            android:background="@drawable/rounded_message_send"
+            android:backgroundTint="@color/message_sent">
 
             <ImageView
                 android:id="@+id/attachment_image_send"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:maxWidth="100dp"
-                />
+                android:layout_width="244dp"
+                android:layout_height="244dp"
+                android:scaleType="centerCrop" />
         </FrameLayout>
     </LinearLayout>
 </RelativeLayout>

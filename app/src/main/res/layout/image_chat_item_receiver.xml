@@ -9,8 +9,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_marginEnd="80dp"
         android:layout_marginStart="6dp"
+        android:layout_marginEnd="80dp"
         android:orientation="vertical"
         android:padding="2dp">
 
@@ -31,10 +31,9 @@
 
             <ImageView
                 android:id="@+id/attachment_image_receive"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:maxWidth="200dp"
-                />
+                android:layout_width="244dp"
+                android:layout_height="244dp"
+                android:scaleType="centerCrop" />
         </FrameLayout>
     </LinearLayout>
 </RelativeLayout>
