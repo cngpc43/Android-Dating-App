@@ -2,46 +2,53 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="2dp"
-    >
+    android:padding="2dp">
+
+    <TextView
+        android:id="@+id/send_message_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="11:00 PM"
+        android:textColor="@color/secondary2"
+        android:textSize="7pt" />
 
     <LinearLayout
         android:id="@+id/send_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@id/send_message_time"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="80dp"
         android:layout_marginEnd="6dp"
         android:orientation="vertical"
         android:padding="2dp">
 
-        <TextView
-            android:id="@+id/send_message_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:text="11:00 PM"
-            android:textColor="@color/secondary2"
-            android:textSize="7pt" />
-
         <FrameLayout
             android:id="@+id/frame_send_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="end"
             android:background="@drawable/rounded_message_send"
             android:backgroundTint="@color/message_sent"
-            android:layout_gravity="end"
             android:padding="10dp">
 
             <TextView
                 android:id="@+id/send_message"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="8pt"
                 android:text="Test mesage"
-                android:textColor="@color/secondary3" />
+                android:textColor="@color/secondary3"
+                android:textSize="8pt" />
         </FrameLayout>
+
+        <TextView
+            android:id="@+id/sender_isSeen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:text="Sent"
+            android:textColor="@color/secondary2"
+            android:textSize="6pt" />
     </LinearLayout>
-
-
 </RelativeLayout>

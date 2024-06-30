@@ -4,23 +4,25 @@
     android:layout_height="wrap_content"
     android:padding="2dp">
 
+    <TextView
+        android:id="@+id/receive_message_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="11:00 PM"
+        android:textColor="@color/secondary2"
+        android:textSize="7pt" />
+
     <LinearLayout
         android:id="@+id/receive_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@id/receive_message_time"
         android:layout_centerVertical="true"
-        android:layout_marginEnd="80dp"
         android:layout_marginStart="6dp"
+        android:layout_marginEnd="80dp"
         android:orientation="vertical"
         android:padding="2dp">
-
-        <TextView
-            android:id="@+id/receive_message_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="11:00 PM"
-            android:textColor="@color/secondary2"
-            android:textSize="7pt" />
 
         <FrameLayout
             android:id="@+id/frame_receive_message"
@@ -33,12 +35,18 @@
             <TextView
                 android:id="@+id/receive_message"
                 android:layout_width="wrap_content"
-                android:textSize="8pt"
                 android:layout_height="wrap_content"
                 android:text="Hello, how are you ?"
-                android:textColor="@color/secondary3" />
+                android:textColor="@color/secondary3"
+                android:textSize="8pt" />
         </FrameLayout>
+
+        <TextView
+            android:id="@+id/receive_isSeen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sent"
+            android:textColor="@color/secondary2"
+            android:textSize="6pt" />
     </LinearLayout>
-
-
 </RelativeLayout>
