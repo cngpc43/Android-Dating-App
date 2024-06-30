@@ -115,29 +115,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.viewholder> {
             }
         });
 
-        FirebaseDatabase.getInstance().getReference("MatchRequests").addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        hasSentRequest = false;
-                        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                            if (dataSnapshot.child("status").getValue(String.class) != null && dataSnapshot.child("requesterId").getValue(String.class) != null
-                                    && dataSnapshot.child("recipientId").getValue(String.class) != null) {
-                                // if current user has received request from the user on RecyclerView already
-                                if (dataSnapshot.child("recipientId").getValue(String.class).equals(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                                        && dataSnapshot.child("requesterId").getValue(String.class).equals(usersArrayList.get(holder.getAdapterPosition()).getUserId())
-                                        && dataSnapshot.child("status").getValue(String.class).equals("pending")) {
-                                    hasSentRequest = true;
-                                    matchRequestId = dataSnapshot.getKey();
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        // Handle error here
-                    }
-                });
+
         holder.left_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -169,52 +147,76 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.viewholder> {
         holder.likeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String currentUserId;
-                String likedUserId;
-                String likedUserName = usersArrayList.get(holder.getAdapterPosition()).getUserName();
-                Boolean temp_hasSentRequest = hasSentRequest;
-                Map<String, Object> matchRequestData = new HashMap<>();
-                if (temp_hasSentRequest) {
-                    matchRequestData.put("status", "accepted");
-                    currentUserId = usersArrayList.get(holder.getAdapterPosition()).getUserId();
-                    likedUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                }
-                else {
-                    matchRequestData.put("status", "pending");
-                    matchRequestId = reference.push().getKey();
-                    currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                    likedUserId = usersArrayList.get(holder.getAdapterPosition()).getUserId();
-                }
-                matchRequestData.put("requesterId", currentUserId);
-                matchRequestData.put("recipientId", likedUserId);
-                matchRequestData.put("timestamp", ServerValue.TIMESTAMP); // Use server timestamp
-
-                reference.child(matchRequestId).setValue(matchRequestData).addOnSuccessListener(new OnSuccessListener<Void>() {
+                FirebaseDatabase.getInstance().getReference("MatchRequests").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                     @Override
-                    public void onSuccess(Void unused) {
-                        if (temp_hasSentRequest) {
-                            Toast.makeText(mainActivity, "You and " + likedUserName + " are now matched", Toast.LENGTH_SHORT).show();
-                            // insert code for creating chat room here
-                            String chatRoomId = currentUserId + "_" + likedUserId;
-                            FirebaseDatabase.getInstance().getReference("ChatRooms")
-                                    .child(currentUserId)
-                                    .child(chatRoomId)
-                                    .setValue(true);
-                            FirebaseDatabase.getInstance().getReference("ChatRooms")
-                                    .child(likedUserId)
-                                    .child(chatRoomId)
-                                    .setValue(true);
-                            // Add chatroomId into Chats
-                            FirebaseDatabase.getInstance().getReference("Chats")
-                                    .child(chatRoomId)
-                                    .setValue("Chat started");
-                        }
-                        else
-                            Toast.makeText(mainActivity, "Matching request sent to " + likedUserName, Toast.LENGTH_SHORT).show();
+                    public void onComplete(@NonNull Task<DataSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            hasSentRequest = false;
+                            for (DataSnapshot dataSnapshot : task.getResult().getChildren()) {
+                                if (dataSnapshot.child("status").getValue(String.class) != null && dataSnapshot.child("requesterId").getValue(String.class) != null
+                                        && dataSnapshot.child("recipientId").getValue(String.class) != null) {
+                                    // if current user has received request from the user on RecyclerView already
+                                    if (dataSnapshot.child("recipientId").getValue(String.class).equals(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                            && dataSnapshot.child("requesterId").getValue(String.class).equals(usersArrayList.get(holder.getAdapterPosition()).getUserId())
+                                            && dataSnapshot.child("status").getValue(String.class).equals("pending")) {
+                                        hasSentRequest = true;
+                                        matchRequestId = dataSnapshot.getKey();
+                                        break;
+                                    }
+                                }
+                            }
+                            String currentUserId;
+                            String likedUserId;
+                            String likedUserName = usersArrayList.get(holder.getAdapterPosition()).getUserName();
+                            Boolean temp_hasSentRequest = hasSentRequest;
+                            Map<String, Object> matchRequestData = new HashMap<>();
+                            if (temp_hasSentRequest) {
+                                matchRequestData.put("status", "accepted");
+                                currentUserId = usersArrayList.get(holder.getAdapterPosition()).getUserId();
+                                likedUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                            }
+                            else {
+                                matchRequestData.put("status", "pending");
+                                matchRequestId = reference.push().getKey();
+                                currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                                likedUserId = usersArrayList.get(holder.getAdapterPosition()).getUserId();
+                            }
+                            matchRequestData.put("requesterId", currentUserId);
+                            matchRequestData.put("recipientId", likedUserId);
+                            matchRequestData.put("timestamp", ServerValue.TIMESTAMP); // Use server timestamp
 
-                        // Remove user from list
-                        usersArrayList.remove(position);
-                        notifyDataSetChanged();
+                            reference.child(matchRequestId).setValue(matchRequestData).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void unused) {
+                                    if (temp_hasSentRequest) {
+                                        Toast.makeText(mainActivity, "You and " + likedUserName + " are now matched", Toast.LENGTH_SHORT).show();
+                                        // insert code for creating chat room here
+                                        String chatRoomId = currentUserId + "_" + likedUserId;
+                                        FirebaseDatabase.getInstance().getReference("ChatRooms")
+                                                .child(currentUserId)
+                                                .child(chatRoomId)
+                                                .setValue(true);
+                                        FirebaseDatabase.getInstance().getReference("ChatRooms")
+                                                .child(likedUserId)
+                                                .child(chatRoomId)
+                                                .setValue(true);
+                                        // Add chatroomId into Chats
+                                        FirebaseDatabase.getInstance().getReference("Chats")
+                                                .child(chatRoomId)
+                                                .setValue("Chat started");
+                                    }
+                                    else
+                                        Toast.makeText(mainActivity, "Matching request sent to " + likedUserName, Toast.LENGTH_SHORT).show();
+
+                                    // Remove user from list
+                                    usersArrayList.remove(position);
+                                    notifyDataSetChanged();
+                                }
+                            });
+                        }
+                        else {
+                            Toast.makeText(mainActivity, "Fail to connect to database: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
 

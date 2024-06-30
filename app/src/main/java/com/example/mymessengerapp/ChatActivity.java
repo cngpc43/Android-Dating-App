@@ -225,6 +225,9 @@ public class ChatActivity extends AppCompatActivity {
         voiceAttach = findViewById(R.id.voice_attach);
         attachmentPopup = findViewById(R.id.attachment_popup);
 
+        // username marquee
+        userName.setSelected(true);
+
         // Init chat message model
         chatMessages = new ArrayList<ChatMessage>();
 

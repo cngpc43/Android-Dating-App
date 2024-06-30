@@ -49,8 +49,6 @@ public class MainFragment extends Fragment {
     UserAdapter adapter;
     FirebaseDatabase database;
     ArrayList<Users> usersArrayList;
-    ValueEventListener valueEventListener;
-    FirebaseAuth.AuthStateListener authStateListener;
     DatabaseReference reference;
     ArrayList<String> requestList;
 
@@ -86,18 +84,7 @@ public class MainFragment extends Fragment {
         snapHelper.attachToRecyclerView(mainUserRecyclerView);
         reference = database.getReference().child("user/");
 
-
-        auth.addAuthStateListener(authStateListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                if (firebaseAuth.getCurrentUser() == null) {
-                    if (reference != null && valueEventListener != null) {
-                        reference.removeEventListener(valueEventListener);
-                    }
-                }
-            }
-        });
-        reference.addValueEventListener(valueEventListener = new ValueEventListener() {
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 usersArrayList.clear();
@@ -257,15 +244,6 @@ public class MainFragment extends Fragment {
                 user.getLatitude().equals("") || user.getLongitude() == null || user.getLongitude().equals(""))
             return false;
         return true;
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (auth != null && authStateListener != null)
-            auth.removeAuthStateListener(authStateListener);
-        if (reference != null && valueEventListener != null)
-            reference.removeEventListener(valueEventListener);
     }
 
 }

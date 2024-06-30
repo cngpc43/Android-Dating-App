@@ -31,7 +31,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/chat_back_button">
+            android:layout_marginRight="10dp"
+            android:layout_toRightOf="@+id/chat_back_button"
+            android:layout_toLeftOf="@id/options_chat">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/user_icon_chat"
@@ -48,17 +50,21 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="4dp"
-                android:layout_toEndOf="@+id/user_icon_chat">
+                android:layout_toEndOf="@+id/user_icon_chat"
+                >
 
                 <TextView
                     android:id="@+id/user_name_chat"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:singleLine="true"
                     android:text="Chi Cuong"
                     android:textColor="@color/secondary3"
                     android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:ellipsize="marquee"
+                    android:scrollHorizontally="true"
+                    android:marqueeRepeatLimit="marquee_forever"/>
 
                 <TextView
                     android:id="@+id/user_status_chat"
