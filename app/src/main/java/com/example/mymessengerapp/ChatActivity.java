@@ -381,7 +381,6 @@ public class ChatActivity extends AppCompatActivity {
             String mimeType = getContentResolver().getType(mediaUri);
             StorageReference fileRef = storageReference.child("files/" + mediaUri.getLastPathSegment());
             UploadTask uploadTask = fileRef.putFile(mediaUri);
-
             uploadTask.addOnSuccessListener(taskSnapshot -> {
                 fileRef.getDownloadUrl().addOnSuccessListener(uri -> {
                     String fileUrl = uri.toString();
@@ -391,6 +390,7 @@ public class ChatActivity extends AppCompatActivity {
                     } else if (mimeType.startsWith("video/")) {
                         handleSendMessage("Video", receiverId, fileUrl, "video");
                     }
+                    selectedMediaUris.clear();
                 });
             }).addOnFailureListener(e -> {
                 Toast.makeText(ChatActivity.this, "Failed to upload file", Toast.LENGTH_SHORT).show();
@@ -433,7 +433,6 @@ public class ChatActivity extends AppCompatActivity {
         mediaPreviewPager.setAdapter(new MediaPagerAdapter(this, mediaUris));
 
         confirmButton.setOnClickListener(v -> {
-            // Handle the confirmation action here
             String mimeType = getContentResolver().getType(selectedMediaUri);
             StorageReference fileRef = storageReference.child("files/" + selectedMediaUri.getLastPathSegment());
             UploadTask uploadTask = fileRef.putFile(selectedMediaUri);
