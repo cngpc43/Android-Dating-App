@@ -78,16 +78,17 @@
 
                             <TextView
                                 android:id="@+id/username"
-                                android:layout_width="wrap_content"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
+                                android:layout_weight="1"
+                                android:ellipsize="marquee"
+                                android:marqueeRepeatLimit="marquee_forever"
+                                android:singleLine="true"
                                 android:text="Dao Minh Huy"
                                 android:textColor="@color/white"
                                 android:textSize="13pt"
-                                android:textStyle="bold"
-                                android:singleLine="true"
-                                android:ellipsize="marquee"
-                                android:marqueeRepeatLimit="marquee_forever"/>
+                                android:textStyle="bold" />
 
                             <TextView
                                 android:id="@+id/userAge"
@@ -105,8 +106,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins_regular"
-                            android:text="Status: I'm very happy"
                             android:singleLine="true"
+                            android:text="Status: I'm very happy"
                             android:textColor="@color/white"
                             android:textSize="7pt" />
 
@@ -116,10 +117,10 @@
                             android:layout_height="wrap_content"
                             android:drawablePadding="4dp"
                             android:drawableTint="@color/white"
+                            android:singleLine="true"
                             android:text="2 kilomets away"
                             android:textColor="@color/white"
                             android:textSize="7pt"
-                            android:singleLine="true"
                             app:drawableStartCompat="@drawable/map_tag_svgrepo_com" />
                     </LinearLayout>
 

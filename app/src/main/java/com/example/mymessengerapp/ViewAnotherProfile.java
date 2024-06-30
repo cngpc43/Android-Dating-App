@@ -79,14 +79,18 @@ public class ViewAnotherProfile extends AppCompatActivity {
                 // Set data to UI
                 anotherName.setText(snapshot.child("userName").getValue(String.class));
                 String profileUri = snapshot.child("profilepic").getValue(String.class);
+
                 if (profileUri == null)
                     Picasso.get().load(R.drawable.default_profile_pic).into(anotherAvt);
                 else
                     Picasso.get().load(profileUri).into(anotherAvt);
+
                 anotherStt.setText(snapshot.child("status").getValue(String.class));
                 anotherDob.setText(snapshot.child("dob").getValue(String.class));
-                anotherGender.setText(snapshot.child("gender").getValue(String.class));
-                if (snapshot.child("gender").getValue(String.class).equals("Female"))
+                String gender = snapshot.child("gender").getValue(String.class);
+                anotherGender.setText(gender);
+
+                if (gender.equals("Female"))
                     anotherGender.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.female_svgrepo_com, 0, 0, 0);
                 anotherLocation.setText(snapshot.child("location").getValue(String.class));
 
