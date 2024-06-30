@@ -3,6 +3,7 @@ package com.example.mymessengerapp.adapter;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,10 +16,13 @@ import android.widget.Toast;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.mymessengerapp.ChatActivity;
 import com.example.mymessengerapp.R;
+import com.example.mymessengerapp.SendNotifications;
 import com.example.mymessengerapp.ViewAnotherProfile;
 import com.example.mymessengerapp.model.Users;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -121,6 +125,19 @@ public class MatchingRequestAdapter extends RecyclerView.Adapter<MatchingRequest
                 FirebaseDatabase.getInstance().getReference().child("MatchRequests/" +
                         matchingRequests.get(position).get("requestId") + "/timestamp").setValue(ServerValue.TIMESTAMP);
 
+                // push notification to request sender
+                // get receiver token
+                FirebaseDatabase.getInstance().getReference().child("user/").get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+                    @Override
+                    public void onSuccess(DataSnapshot dataSnapshot) {
+                        String currentUserName = dataSnapshot.child(currentUserId + "/userName").getValue(String.class);
+                        String requestSenderToken = dataSnapshot.child(matchedUserId + "/FCM_token").getValue(String.class);
+                        sendNotification(currentUserName, currentUserId, requestSenderToken, chatRoomId);
+                    }
+                });
+
+
+
                 Toast.makeText(context, "Request Accepted", Toast.LENGTH_SHORT).show();
 
                 // Remove the request from the list
@@ -151,6 +168,20 @@ public class MatchingRequestAdapter extends RecyclerView.Adapter<MatchingRequest
                 context.startActivity(intent);
             }
         });
+    }
+
+    public void sendNotification(String currentUserName, String currentUserId, String requestSenderToken, String chatRoomId) {
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                SendNotifications notificationSender = new SendNotifications(requestSenderToken, "Tindeo",
+                        currentUserName + " has accepted your match request. Say hello now!", "request_accept",
+                        chatRoomId, currentUserId, context);
+
+                notificationSender.Send();
+            }
+        }, 300);
     }
 
     @Override
