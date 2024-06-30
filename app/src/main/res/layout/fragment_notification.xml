@@ -96,7 +96,9 @@
             android:layout_height="wrap_content"
             android:layout_above="@+id/btn_more_noti"
             android:layout_below="@+id/requests_sent"
-            android:layout_marginTop="4dp" />
+            android:divider="@android:color/transparent"
+            android:dividerHeight="10.0sp"
+            android:layout_marginTop="20dp" />
 
         <Button
             android:id="@+id/btn_more_noti"
