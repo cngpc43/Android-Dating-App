@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.net.Uri;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 
 import com.example.mymessengerapp.MainActivity;
 import com.example.mymessengerapp.R;
+import com.example.mymessengerapp.SendNotifications;
 import com.example.mymessengerapp.ViewAnotherProfile;
 import com.example.mymessengerapp.model.ChatRoom;
 import com.example.mymessengerapp.model.MyImageSwitcher;
@@ -188,29 +190,44 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.viewholder> {
                             reference.child(matchRequestId).setValue(matchRequestData).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void unused) {
-                                    if (temp_hasSentRequest) {
-                                        Toast.makeText(mainActivity, "You and " + likedUserName + " are now matched", Toast.LENGTH_SHORT).show();
-                                        // insert code for creating chat room here
-                                        String chatRoomId = currentUserId + "_" + likedUserId;
-                                        FirebaseDatabase.getInstance().getReference("ChatRooms")
-                                                .child(currentUserId)
-                                                .child(chatRoomId)
-                                                .setValue(true);
-                                        FirebaseDatabase.getInstance().getReference("ChatRooms")
-                                                .child(likedUserId)
-                                                .child(chatRoomId)
-                                                .setValue(true);
-                                        // Add chatroomId into Chats
-                                        FirebaseDatabase.getInstance().getReference("Chats")
-                                                .child(chatRoomId)
-                                                .setValue("Chat started");
-                                    }
-                                    else
-                                        Toast.makeText(mainActivity, "Matching request sent to " + likedUserName, Toast.LENGTH_SHORT).show();
-
-                                    // Remove user from list
-                                    usersArrayList.remove(position);
-                                    notifyDataSetChanged();
+                                    FirebaseDatabase.getInstance().getReference().child("user/").get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+                                        @Override
+                                        public void onSuccess(DataSnapshot dataSnapshot) {
+                                            String currentUserName;
+                                            String requestSenderToken;
+                                            if (temp_hasSentRequest) {
+                                                currentUserName = dataSnapshot.child(likedUserId + "/userName").getValue(String.class);
+                                                requestSenderToken = dataSnapshot.child(currentUserId + "/FCM_token").getValue(String.class);
+                                                Toast.makeText(mainActivity, "You and " + likedUserName + " are now matched", Toast.LENGTH_SHORT).show();
+                                                // insert code for creating chat room here
+                                                String chatRoomId = currentUserId + "_" + likedUserId;
+                                                FirebaseDatabase.getInstance().getReference("ChatRooms")
+                                                        .child(currentUserId)
+                                                        .child(chatRoomId)
+                                                        .setValue(true);
+                                                FirebaseDatabase.getInstance().getReference("ChatRooms")
+                                                        .child(likedUserId)
+                                                        .child(chatRoomId)
+                                                        .setValue(true);
+                                                // Add chatroomId into Chats
+                                                FirebaseDatabase.getInstance().getReference("Chats")
+                                                        .child(chatRoomId)
+                                                        .setValue("Chat started");
+                                                // push notification to request sender
+                                                sendAcceptNotification(currentUserName, likedUserId, requestSenderToken, chatRoomId);
+                                            } else {
+                                                currentUserName = dataSnapshot.child(currentUserId + "/userName").getValue(String.class);
+                                                requestSenderToken = dataSnapshot.child(likedUserId + "/FCM_token").getValue(String.class);
+                                                Toast.makeText(mainActivity, "Matching request sent to " + likedUserName, Toast.LENGTH_SHORT).show();
+                                                // push notification to request receiver
+                                                // get receiver token
+                                                sendRequestNotification(requestSenderToken, currentUserName, currentUserId);
+                                            }
+                                            // Remove user from list
+                                            usersArrayList.remove(position);
+                                            notifyDataSetChanged();
+                                        }
+                                    });
                                 }
                             });
                         }
@@ -264,6 +281,34 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.viewholder> {
             }
         });
 
+    }
+
+    public void sendAcceptNotification(String currentUserName, String currentUserId, String requestSenderToken, String chatRoomId) {
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                SendNotifications notificationSender = new SendNotifications(requestSenderToken, "Tindeo",
+                        currentUserName + " has accepted your match request. Say hello now!", "request_accept",
+                        chatRoomId, currentUserId, mainActivity);
+
+                notificationSender.Send();
+            }
+        }, 300);
+    }
+
+    public void sendRequestNotification(String requestSenderToken, String currentUserName, String currentUserId) {
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                SendNotifications notificationSender = new SendNotifications(requestSenderToken, "Tindeo",
+                        currentUserName + " has sent you a match request.", "request_send",
+                        null, currentUserId, mainActivity);
+
+                notificationSender.Send();
+            }
+        }, 300);
     }
 
     @Override
