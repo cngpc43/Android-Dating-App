@@ -167,7 +167,7 @@ public class registration extends AppCompatActivity {
                                     });
                                 } else {
                                     String status = "Hey I'm Using This Application";
-                                    imageuri = "";
+                                    imageuri = "https://firebasestorage.googleapis.com/v0/b/messenger-app-b4fed.appspot.com/o/default.png?alt=media&token=0a199e05-7e3a-42cd-8a5a-bfb7d3f617";
                                     Users users = new Users(id, name, email, Password, imageuri, status, gender, dob, phone, location, sexual_orientation, height, age_range, gender_show, show_me, photos, "", "", "", "30");
                                     reference.setValue(users).addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
