@@ -333,12 +333,7 @@ public class ChatActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (chatRoomRef != null && valueEventListener != null)
-            chatRoomRef.removeEventListener(valueEventListener);
-    }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -567,6 +562,12 @@ public class ChatActivity extends AppCompatActivity {
                 notificationSender.Send();
             }
         }, 300);
+    }
+    @Override
+    public void onDestroy() {
+        if (chatRoomRef != null && valueEventListener != null)
+            chatRoomRef.removeEventListener(valueEventListener);
+        super.onDestroy();
     }
 }
 
