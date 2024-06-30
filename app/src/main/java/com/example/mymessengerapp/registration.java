@@ -90,12 +90,12 @@ public class registration extends AppCompatActivity {
                 String Password = rg_password.getText().toString();
                 String cPassword = rg_repassword.getText().toString();
                 String status = "I am happy now !!";
-                String gender = "";
-                String dob = "";
-                String phone = "";
-                String location = "";
-                String sexual_orientation = "";
-                String height = "";
+                String gender = null;
+                String dob = null;
+                String phone = null;
+                String location = null;
+                String sexual_orientation = null;
+                String height = null;
                 String age_range = "18-24";
                 String gender_show = "Everyone";
 
@@ -140,7 +140,7 @@ public class registration extends AppCompatActivity {
                                                     public void onSuccess(Uri uri) {
                                                         imageuri = uri.toString();
 
-                                                        Users users = new Users(id, name, email, Password, imageuri, status, gender, dob, phone, location, sexual_orientation, height, age_range, gender_show, show_me, photos, "", "", "", "30");
+                                                        Users users = new Users(id, name, email, Password, imageuri, status, gender, dob, phone, location, sexual_orientation, height, age_range, gender_show, show_me, photos, null, null, null, "30");
                                                         reference.setValue(users).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                             @Override
                                                             public void onComplete(@NonNull Task<Void> task) {
@@ -167,7 +167,7 @@ public class registration extends AppCompatActivity {
                                     });
                                 } else {
                                     imageuri = "https://firebasestorage.googleapis.com/v0/b/messenger-app-b4fed.appspot.com/o/default.png?alt=media&token=0a199e05-7e3a-42cd-8a5a-bfb7d3f617";
-                                    Users users = new Users(id, name, email, Password, imageuri, status, gender, dob, phone, location, sexual_orientation, height, age_range, gender_show, show_me, photos, "", "", "", "30");
+                                    Users users = new Users(id, name, email, Password, imageuri, status, gender, dob, phone, location, sexual_orientation, height, age_range, gender_show, show_me, photos, null, null, null, "30");
                                     reference.setValue(users).addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
