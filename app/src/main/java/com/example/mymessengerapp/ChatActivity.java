@@ -93,7 +93,7 @@ public class ChatActivity extends AppCompatActivity {
     boolean isRecordingStarted = false;
     private ArrayList<Uri> selectedMediaUris = new ArrayList<>();
     private static final int PICK_MEDIA_REQUEST = 1;
-    private String receiverToken, senderName, chatRoomId, receiverId;
+    private String receiverToken, senderName, chatRoomId, receiverId, senderId;
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
     private boolean permissionToRecordAccepted = false;
     private String[] permissions = {Manifest.permission.RECORD_AUDIO};
@@ -117,7 +117,7 @@ public class ChatActivity extends AppCompatActivity {
         ActivityCompat.requestPermissions(this, permissions, REQUEST_RECORD_AUDIO_PERMISSION);
         storageReference = FirebaseStorage.getInstance().getReference();
         auth = FirebaseAuth.getInstance();
-        String senderId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        senderId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         receiverId = getIntent().getStringExtra("userId");
         chatRoomId = getIntent().getStringExtra("roomId");
         // Get receiver token for sending notification
@@ -379,6 +379,7 @@ public class ChatActivity extends AppCompatActivity {
 
 
 
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -392,9 +393,9 @@ public class ChatActivity extends AppCompatActivity {
                 uploadFilesToFirebase(selectedMediaUris);
             } else if (data.getData() != null) {
                 Uri mediaUri = data.getData();
+                String mimeType = getContentResolver().getType(mediaUri);
                 selectedMediaUris.add(mediaUri);
-                // Show preview for single selected item
-                if (selectedMediaUris.size() == 1) {
+                if (selectedMediaUris.size() == 1 && mimeType.startsWith("image/")) {
                     showImagePreviewDialog(mediaUri);
                 } else {
                     uploadFilesToFirebase(selectedMediaUris);
@@ -641,7 +642,7 @@ public class ChatActivity extends AppCompatActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                SendNotifications notificationSender = new SendNotifications(receiverToken, "Tindeo", senderName + " has sent you a message.", "chat", chatRoomId, receiverId, ChatActivity.this);
+                SendNotifications notificationSender = new SendNotifications(receiverToken, "Tindeo", senderName + " has sent you a message.", "chat", chatRoomId, senderId, ChatActivity.this);
                 notificationSender.Send();
             }
         }, 300);
