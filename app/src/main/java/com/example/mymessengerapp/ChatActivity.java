@@ -7,6 +7,7 @@ import java.io.IOException;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.ClipData;
 import android.content.Intent;
@@ -528,6 +529,45 @@ public class ChatActivity extends AppCompatActivity {
                         RelativeLayout searchBarMsg = findViewById(R.id.searchBarMsg);
                         searchBarMsg.setVisibility(View.VISIBLE);
                         return true;
+                    }
+                    case R.id.unmatch_user: {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(ChatActivity.this);
+                        builder.setMessage("Do you want to unmatch this user? This action cannot be undone.")
+                                .setPositiveButton("Yes", (dialog, id) -> {
+                                    // User clicked Yes button
+                                    // delete chat room
+                                    FirebaseDatabase.getInstance().getReference().child("Chats/" + chatRoomId).removeValue();
+                                    FirebaseDatabase.getInstance().getReference().child("ChatRooms/" + receiverId + "/" + chatRoomId).removeValue();
+                                    FirebaseDatabase.getInstance().getReference().child("ChatRooms/" + auth.getCurrentUser().getUid() + "/" + chatRoomId).removeValue();
+                                    FirebaseDatabase.getInstance().getReference().child("MatchRequests").get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+                                        @Override
+                                        public void onSuccess(DataSnapshot dataSnapshot) {
+                                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                                if (snapshot.hasChildren()) {
+                                                    if (snapshot.child("recipientId").getValue(String.class).equals(receiverId) && snapshot.child("requesterId").getValue(String.class).equals(auth.getCurrentUser().getUid())
+                                                            || snapshot.child("recipientId").getValue(String.class).equals(auth.getCurrentUser().getUid()) && snapshot.child("requesterId").getValue(String.class).equals(receiverId)) {
+                                                        FirebaseDatabase.getInstance().getReference().child("MatchRequests/" + snapshot.getKey() + "/status").setValue("declined").addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                            @Override
+                                                            public void onSuccess(Void unused) {
+                                                                Toast.makeText(ChatActivity.this, "Unmatched successfully", Toast.LENGTH_SHORT).show();
+                                                                Intent intent = new Intent(ChatActivity.this, MainActivity.class);
+                                                                intent.putExtra("fragment", "message");
+                                                                startActivity(intent);
+                                                                finish();
+                                                            }
+                                                        });
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    });
+                                })
+                                .setNegativeButton("No", (dialog, id) -> {
+                                    // User clicked No button
+                                });
+
+                        AlertDialog dialog = builder.create();
+                        dialog.show();
                     }
                     default:
                         return true;
