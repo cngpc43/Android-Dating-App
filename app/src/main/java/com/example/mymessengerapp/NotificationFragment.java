@@ -27,6 +27,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -106,7 +107,9 @@ public class NotificationFragment extends Fragment {
                                     String dob = dataSnapshot1.child("dob").getValue(String.class);
                                     // another user age
                                     int userAge = Calendar.getInstance().get(Calendar.YEAR) - Integer.valueOf(dob.substring(dob.indexOf(",") + 2, dob.length()));
-                                    NotificationModel notificationModel = new NotificationModel(dataSnapshot1.child("requesterId").getValue(String.class),
+                                    NotificationModel notificationModel = new NotificationModel(dataSnapshot.getKey(),
+                                            dataSnapshot.child("recipient_status").getValue(String.class),
+                                            dataSnapshot.child("requesterId").getValue(String.class),
                                             dataSnapshot1.child("userName").getValue(String.class), String.valueOf(userAge),
                                             dataSnapshot1.child("profilepic").getValue(String.class), "request_send",
                                             dataSnapshot.child("timestamp").getValue(Long.class));
@@ -118,19 +121,23 @@ public class NotificationFragment extends Fragment {
                         }
                         if (dataSnapshot.child("status").getValue(String.class).equals("accepted")) {
                             String userId = dataSnapshot.child("recipientId").getValue(String.class);
-                            if (userId.equals(auth.getCurrentUser().getUid()))
+                            String status = dataSnapshot.child("recipient_status").getValue(String.class);
+                            if (userId.equals(auth.getCurrentUser().getUid())) {
                                 userId = dataSnapshot.child("requesterId").getValue(String.class);
+                                status = dataSnapshot.child("requester_status").getValue(String.class);
+                            }
                             String finalUserId = userId;
+                            String finalStatus = status;
                             FirebaseDatabase.getInstance().getReference().child("user/" + userId).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
                                 @Override
                                 public void onSuccess(DataSnapshot dataSnapshot1) {
                                     String dob = dataSnapshot1.child("dob").getValue(String.class);
                                     // another user age
                                     int userAge = Calendar.getInstance().get(Calendar.YEAR) - Integer.valueOf(dob.substring(dob.indexOf(",") + 2, dob.length()));
-                                    NotificationModel notificationModel = new NotificationModel(finalUserId,
-                                            dataSnapshot1.child("userName").getValue(String.class), String.valueOf(userAge),
-                                            dataSnapshot1.child("profilepic").getValue(String.class), "request_accept",
-                                            dataSnapshot.child("timestamp").getValue(Long.class));
+                                    NotificationModel notificationModel = new NotificationModel(dataSnapshot.getKey(),
+                                            finalStatus, finalUserId, dataSnapshot1.child("userName").getValue(String.class),
+                                            String.valueOf(userAge), dataSnapshot1.child("profilepic").getValue(String.class),
+                                            "request_accept", dataSnapshot.child("timestamp").getValue(Long.class));
                                     if (notificationModel != null)
                                         notificationsList.add(notificationModel);
                                     adapter.notifyDataSetChanged();

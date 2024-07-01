@@ -1,16 +1,34 @@
 package com.example.mymessengerapp.model;
 
 public class NotificationModel {
-    private String userId, userName, age, profileImg, type; // type = {"request_send", "request_accept"}
+    private String matchRequestId, status, userId, userName, age, profileImg, type; // type = {"request_send", "request_accept"}
     private Long timestamp;
 
-    public NotificationModel(String userId, String userName, String age, String profileImg, String type, Long timestamp) {
+    public NotificationModel(String matchRequestId, String status, String userId, String userName, String age, String profileImg, String type, Long timestamp) {
+        this.matchRequestId = matchRequestId;
+        this.status = status;
         this.userId = userId;
         this.userName = userName;
         this.age = age;
         this.profileImg = profileImg;
         this.type = type;
         this.timestamp = timestamp;
+    }
+
+    public String getMatchRequestId() {
+        return matchRequestId;
+    }
+
+    public void setMatchRequestId(String matchRequestId) {
+        this.matchRequestId = matchRequestId;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getUserId() {

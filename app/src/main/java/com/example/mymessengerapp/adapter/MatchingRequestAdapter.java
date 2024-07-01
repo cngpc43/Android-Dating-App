@@ -124,6 +124,11 @@ public class MatchingRequestAdapter extends RecyclerView.Adapter<MatchingRequest
                         matchingRequests.get(position).get("requestId") + "/status").setValue("accepted");
                 FirebaseDatabase.getInstance().getReference().child("MatchRequests/" +
                         matchingRequests.get(position).get("requestId") + "/timestamp").setValue(ServerValue.TIMESTAMP);
+                FirebaseDatabase.getInstance().getReference().child("MatchRequests/" +
+                        matchingRequests.get(position).get("requestId") + "/requester_status").setValue("sent");
+                FirebaseDatabase.getInstance().getReference().child("MatchRequests/" +
+                        matchingRequests.get(position).get("requestId") + "/recipient_status").setValue("sent");
+
 
                 // push notification to request sender
                 // get receiver token

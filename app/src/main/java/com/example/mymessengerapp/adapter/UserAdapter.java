@@ -186,6 +186,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.viewholder> {
                             matchRequestData.put("requesterId", currentUserId);
                             matchRequestData.put("recipientId", likedUserId);
                             matchRequestData.put("timestamp", ServerValue.TIMESTAMP); // Use server timestamp
+                            matchRequestData.put("requester_status", "sent");
+                            matchRequestData.put("recipient_status", "sent");
 
                             reference.child(matchRequestId).setValue(matchRequestData).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
