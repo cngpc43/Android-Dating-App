@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/notification_item"
     android:layout_width="match_parent"
-    android:layout_height="50dp"
+    android:layout_height="70dp"
     android:paddingStart="10dp"
     android:paddingEnd="10dp"
     android:background="@drawable/rectangle_box">
@@ -25,6 +25,7 @@
         android:text="Chi Cuong, 18"
         android:textSize="16sp"
         android:textStyle="bold"
+        android:layout_marginTop="5dp"
         app:layout_constraintLeft_toRightOf="@id/user_icon"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -36,6 +37,7 @@
         android:text="Has sent you a message"
         android:textColor="#A1A7B5"
         android:textSize="12sp"
+        android:layout_marginBottom="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@id/user_icon" />
 

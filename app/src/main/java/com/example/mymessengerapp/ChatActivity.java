@@ -11,6 +11,7 @@ import android.app.Dialog;
 import android.content.ClipData;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Bundle;
@@ -53,10 +54,13 @@ import com.squareup.picasso.Picasso;
 import com.zegocloud.uikit.prebuilt.call.invite.widget.ZegoSendCallInvitationButton;
 import com.zegocloud.uikit.service.defines.ZegoUIKitUser;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -79,8 +83,8 @@ public class ChatActivity extends AppCompatActivity {
     LinearLayout llSendChat;
     RelativeLayout rlUserInfo;
     FirebaseAuth auth;
-    ValueEventListener valueEventListener;
-    DatabaseReference chatRoomRef;
+    ValueEventListener valueEventListener, onlineListener;
+    DatabaseReference chatRoomRef, onlineRef;
     private MediaRecorder recorder;
     private StorageReference storageReference;
     private String audioFilePath;
@@ -187,6 +191,8 @@ public class ChatActivity extends AppCompatActivity {
         });
 
 
+
+
         // Get UI from xml
         userName = findViewById(R.id.user_name_chat);
         userStatus = findViewById(R.id.user_status_chat);
@@ -199,6 +205,43 @@ public class ChatActivity extends AppCompatActivity {
         optMore = findViewById(R.id.option_more);
         voiceAttach = findViewById(R.id.voice_attach);
         rlUserInfo = findViewById(R.id.infor_chat);
+
+        // User online status listener
+        onlineRef = FirebaseDatabase.getInstance().getReference().child("user/" + receiverId + "/isOnline");
+        onlineRef.addValueEventListener(onlineListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.getValue(Object.class) != null) {
+                    if (snapshot.getValue(Object.class).toString().equals("true")) {
+                        userStatus.setText("Active Now");
+                        userStatus.setTextColor(Color.GREEN);
+                    } else {
+                        // Handle timestamp get from firebase
+                        Long timestamp = Long.valueOf(snapshot.getValue(Object.class).toString());
+                        Date date = new Date(timestamp);
+                        Date currentDate = new Date();
+                        Long difference = currentDate.getTime() - date.getTime();
+
+                        if (TimeUnit.MILLISECONDS.toSeconds(difference) < 60) {
+                            userStatus.setText("Recently Active");
+                            userStatus.setTextColor(Color.LTGRAY);
+                        }
+                        else if (TimeUnit.MILLISECONDS.toMinutes(difference) >= 1 && TimeUnit.MILLISECONDS.toMinutes(difference) < 60) {
+                            userStatus.setText("Active " + TimeUnit.MILLISECONDS.toMinutes(difference) + "m ago");
+                            userStatus.setTextColor(Color.LTGRAY);
+                        } else {
+                            userStatus.setText("Offline");
+                            userStatus.setTextColor(Color.LTGRAY);
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
         // username marquee
         userName.setSelected(true);
@@ -567,6 +610,8 @@ public class ChatActivity extends AppCompatActivity {
     public void onDestroy() {
         if (chatRoomRef != null && valueEventListener != null)
             chatRoomRef.removeEventListener(valueEventListener);
+        if (onlineRef != null && onlineListener != null)
+            onlineRef.removeEventListener(onlineListener);
         super.onDestroy();
     }
 }
