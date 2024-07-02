@@ -1,5 +1,7 @@
 package com.example.mymessengerapp;
 
+import static java.security.AccessController.getContext;
+
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -9,21 +11,14 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.telephony.SmsManager;
-import android.util.Pair;
-import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
-import android.widget.TextView;
+
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.FirebaseDatabase;
+
 
 public class splash extends AppCompatActivity {
-    ImageView logo;
-    TextView name, own1, own2;
-    Animation topAnim, bottomAnim;
-
-
-
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,25 +28,103 @@ public class splash extends AppCompatActivity {
             getSupportActionBar().hide();
         }
 
-        logo = findViewById(R.id.logoimg);
-        own1 = findViewById(R.id.from);
-        own2 = findViewById(R.id.group_name);
+        // handle user click on notifications from outside of the app
+        if (FirebaseAuth.getInstance().getCurrentUser() != null && getIntent().getExtras() != null) {
+            if (getIntent().getStringExtra("type") != null) {
+                // first put Main Activity into stack
+                Intent mainIntent = new Intent(this, MainActivity.class);
+                mainIntent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 
-//        topAnim = AnimationUtils.loadAnimation(this,R.anim.top_animation);
-//        bottomAnim = AnimationUtils.loadAnimation(this,R.anim.bottom_animation);
+                // if chat notification
+                if (getIntent().getStringExtra("type").equals("chat")) {
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            // get userName and userImage for Chat Activity
+                            FirebaseDatabase.getInstance().getReference().child("user/" + getIntent().getStringExtra("userId")).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+                                @Override
+                                public void onSuccess(DataSnapshot dataSnapshot) {
+                                    // go to Chat Fragment
+                                    mainIntent.putExtra("fragment", "message");
+                                    startActivity(mainIntent);
 
-//        logo.setAnimation(topAnim);
-//        name.setAnimation(bottomAnim);
-//        own1.setAnimation(bottomAnim);
-//        own2.setAnimation(bottomAnim);
+                                    // go to the Chat Room
+                                    Intent intent = new Intent(splash.this, ChatActivity.class);
+                                    intent.putExtra("userId", getIntent().getStringExtra("userId"));
+                                    intent.putExtra("userName", dataSnapshot.child("userName").getValue(String.class));
+                                    intent.putExtra("userImage", dataSnapshot.child("profilepic").getValue(String.class));
+                                    intent.putExtra("roomId", getIntent().getStringExtra("chatId"));
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    startActivity(intent);
+                                    finish();
+                                }
+                            });
+                        }
+                    }, 1000);
+                }
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Intent intent = new Intent(splash.this,MainActivity.class);
-                startActivity(intent);
-                finish();
+                // if send request notification
+                else if (getIntent().getStringExtra("type").equals("request_send")) {
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            // get userName and userImage for Chat Activity
+                            FirebaseDatabase.getInstance().getReference().child("user/" + getIntent().getStringExtra("userId")).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+                                @Override
+                                public void onSuccess(DataSnapshot dataSnapshot) {
+                                    // go to Matching Requests Fragment
+                                    mainIntent.putExtra("fragment", "matching_requests");
+                                    startActivity(mainIntent);
+
+                                    // go to Request Sender Profile
+                                    Intent intent = new Intent(splash.this, ViewAnotherProfile.class);
+                                    intent.putExtra("userId", getIntent().getStringExtra("userId"));
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    startActivity(intent);
+                                    finish();
+                                }
+                            });
+                        }
+                    }, 1000);
+                }
+
+                // if accept request notification
+                if (getIntent().getStringExtra("type").equals("request_accept")) {
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            // get userName and userImage for Chat Activity
+                            FirebaseDatabase.getInstance().getReference().child("user/" + getIntent().getStringExtra("userId")).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+                                @Override
+                                public void onSuccess(DataSnapshot dataSnapshot) {
+                                    // go to Chat Fragment
+                                    mainIntent.putExtra("fragment", "message");
+                                    startActivity(mainIntent);
+
+                                    // go to the Chat Room
+                                    Intent intent = new Intent(splash.this, ChatActivity.class);
+                                    intent.putExtra("userId", getIntent().getStringExtra("userId"));
+                                    intent.putExtra("userName", dataSnapshot.child("userName").getValue(String.class));
+                                    intent.putExtra("userImage", dataSnapshot.child("profilepic").getValue(String.class));
+                                    intent.putExtra("roomId", getIntent().getStringExtra("chatId"));
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    startActivity(intent);
+                                    finish();
+                                }
+                            });
+                        }
+                    }, 1000);
+                }
             }
-        },1000);
+        } else {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Intent intent = new Intent(splash.this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            }, 1000);
+        }
     }
 }

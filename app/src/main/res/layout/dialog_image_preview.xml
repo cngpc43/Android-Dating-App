@@ -1,0 +1,38 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/image_preview_pager"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:maxHeight="200dp"
+        android:minHeight="100dp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/confirm_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="6dp"
+        android:paddingVertical="8dp"
+        android:text="CONFIRM"
+        android:textSize="7pt"
+        android:textStyle="bold"
+        app:cornerRadius="10dp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/cancel_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/undo_cancel"
+        android:paddingVertical="8dp"
+        android:text="CANCEL"
+        android:textSize="7pt"
+        android:textStyle="bold"
+        app:cornerRadius="10dp" />
+
+</LinearLayout>

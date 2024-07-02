@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_constraintTop_toBottomOf="@id/ll_header"
+    tools:context=".NotificationFragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="16dp">
+
+        <RelativeLayout
+            android:id="@+id/matching_requests"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/rectangle_box"
+            android:padding="12dp">
+
+            <TextView
+                android:id="@+id/matching_requests_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="Matching requests"
+                android:textSize="@dimen/_16sdp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/badge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@id/matching_requests_text"
+                android:gravity="center"
+                android:paddingLeft="5dp"
+                android:text="(0)"
+                android:textColor="@android:color/holo_red_dark"
+                android:textSize="@dimen/_16sdp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_chevron_right_grey" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/requests_sent"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_below="@+id/matching_requests"
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/rectangle_box"
+            android:padding="12dp">
+
+            <TextView
+                android:id="@+id/request_sent_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="Requests sent"
+                android:textSize="@dimen/_16sdp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/sent_badge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@+id/request_sent_text"
+                android:gravity="center"
+                android:paddingLeft="5dp"
+                android:text="(0)"
+                android:textColor="@android:color/holo_red_dark"
+                android:textSize="@dimen/_16sdp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_chevron_right_grey" />
+        </RelativeLayout>
+
+        <ListView
+            android:id="@+id/lv_noti"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/btn_more_noti"
+            android:layout_below="@+id/requests_sent"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="10.0sp"
+            android:layout_marginTop="20dp" />
+
+        <Button
+            android:id="@+id/btn_more_noti"
+            android:layout_width="380dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="2dp"
+            android:background="@drawable/rectangle_box"
+            android:gravity="center"
+            android:text="See more notifications"
+            android:textSize="7pt" />
+    </RelativeLayout>
+</FrameLayout>

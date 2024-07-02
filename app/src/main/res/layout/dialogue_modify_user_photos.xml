@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_gravity="center|bottom"
+    android:background="@drawable/dialogue_shape"
+    android:padding="@dimen/_20sdp"
+    android:layout_margin="10dp"
+    android:layout_alignParentBottom="true" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:id="@+id/replace_photo">
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="30dp"
+            android:id="@+id/replace_photo_icon"
+            android:src="@drawable/ic_pink_gallery"
+            android:scaleType="fitXY" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Replace photo"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@id/replace_photo_icon"
+            android:layout_marginTop="4dp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:id="@+id/delete_photo"
+        android:layout_marginTop="15dp">
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="30dp"
+            android:id="@+id/delete_photo_icon"
+            android:src="@drawable/ic_red_cross"
+            android:scaleType="centerInside" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Delete photo"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@id/delete_photo_icon"
+            android:layout_marginTop="4dp" />
+    </RelativeLayout>
+
+</LinearLayout>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="2dp">
+
+    <LinearLayout
+        android:id="@+id/attachment_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="80dp"
+        android:layout_marginEnd="6dp"
+        android:maxHeight="100dp"
+        android:orientation="vertical"
+        android:padding="2dp">
+
+        <TextView
+            android:id="@+id/attachment_message_sent_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:text="11:00 PM"
+            android:textColor="@color/secondary2"
+            android:textSize="7pt" />
+
+        <FrameLayout
+            android:id="@+id/attachment_frame_sent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:background="@drawable/rounded_message_send"
+            android:backgroundTint="@color/message_sent">
+            <ProgressBar
+                android:id="@+id/image_loading_progress_send"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/attachment_image_send"
+                android:layout_width="244dp"
+                android:layout_height="244dp"
+                android:scaleType="centerCrop" />
+        </FrameLayout>
+    </LinearLayout>
+</RelativeLayout>
