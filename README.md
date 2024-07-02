@@ -36,7 +36,7 @@ To get a local copy up and running, follow these simple steps:
 4. **Run the app**
   - Connect an Android device or start an emulator.
   - Click on the "Run" button in Android Studio.
-5. **Usage**
+## Usage
   - Sign Up/Login: Create a new account or log in with your existing credentials.
   - Profile Setup: Customize your profile with photos and personal details.
   - Discover Matches: Browse through profiles and find compatible matches.
