@@ -44,9 +44,9 @@ To get a local copy up and running, follow these simple steps:
   - Stay Connected: Receive notifications for new messages, matches, and calls.
 ## Screenshots
 <div style="display: flex; flex-wrap: wrap;">
-  <img src="https://imgur.com/TuyKicB.jpg" alt="Screenshot 1" style="width: 25%; height: auto; margin-right: 2px;"/>
-  <img src="https://imgur.com/t6Kh5xZ.jpg" alt="Screenshot 2" style="width: 25%; height: auto; margin-right: 2px;"/>
-  <img src="https://imgur.com/TcudzKX.jpg" alt="Screenshot 3" style="width: 25%; height: auto; margin-right: 2px;"/>
-  <img src="https://imgur.com/Btp2HpJ.jpg" alt="Screenshot 4" style="width: 25%; height: auto; margin-right: 2px;"/>
+  <img src="https://imgur.com/TuyKicB.jpg" alt="Screenshot 1" style="width: 24%; height: auto; margin-right: 2px;"/>
+  <img src="https://imgur.com/t6Kh5xZ.jpg" alt="Screenshot 2" style="width: 24%; height: auto; margin-right: 2px;"/>
+  <img src="https://imgur.com/TcudzKX.jpg" alt="Screenshot 3" style="width: 24%; height: auto; margin-right: 2px;"/>
+  <img src="https://imgur.com/Btp2HpJ.jpg" alt="Screenshot 4" style="width: 24%; height: auto; margin-right: 2px;"/>
 </div>
 ```
