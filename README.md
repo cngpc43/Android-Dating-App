@@ -43,11 +43,10 @@ To get a local copy up and running, follow these simple steps:
   - Start a Conversation: Send messages or initiate video/audio calls with your matches
   - Stay Connected: Receive notifications for new messages, matches, and calls.
 ## Screenshots
-
 <div style="display: flex; flex-wrap: wrap;">
-  <img src="https://imgur.com/TuyKicB.jpg" alt="Screenshot 1" style="width: 27%; margin-right: 5px;"/>
-  <img src="https://imgur.com/t6Kh5xZ.jpg" alt="Screenshot 2" style="width: 27%; margin-right: 5px;"/>
-  <img src="https://imgur.com/TcudzKX.jpg" alt="Screenshot 3" style="width: 27%; margin-right: 5px;"/>
-  <img src="https://imgur.com/Btp2HpJ.jpg" alt="Screenshot 4" style="width: 27%; margin-right: 5px;"/>
+  <img src="https://imgur.com/TuyKicB.jpg" alt="Screenshot 1" style="width: 27%; margin-right: 3px;"/>
+  <img src="https://imgur.com/t6Kh5xZ.jpg" alt="Screenshot 2" style="width: 27%; margin-right: 3px;"/>
+  <img src="https://imgur.com/TcudzKX.jpg" alt="Screenshot 3" style="width: 27%; margin-right: 3px;"/>
+  <img src="https://imgur.com/Btp2HpJ.jpg" alt="Screenshot 4" style="width: 27%; margin-right: 3px;"/>
 </div>
 ```
