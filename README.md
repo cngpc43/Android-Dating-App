@@ -43,7 +43,7 @@ To get a local copy up and running, follow these simple steps:
   - Start a Conversation: Send messages or initiate video/audio calls with your matches
   - Stay Connected: Receive notifications for new messages, matches, and calls.
 ## Screenshots
-![](https://imgur.com/TuyKicB)
-![](https://imgur.com/t6Kh5xZ)
-![](https://imgur.com/TcudzKX)
-![](https://imgur.com/Btp2HpJ)
+![Imgur Image](https://imgur.com/TuyKicB.jpg)
+![Imgur Image](https://imgur.com/t6Kh5xZ.jpg)
+![Imgur Image](https://imgur.com/TcudzKX.jpg)
+![Imgur Image](https://imgur.com/Btp2HpJ.jpg)
