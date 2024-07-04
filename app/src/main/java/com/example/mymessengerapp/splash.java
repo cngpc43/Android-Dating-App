@@ -71,17 +71,30 @@ public class splash extends AppCompatActivity {
                             // get userName and userImage for Chat Activity
                             FirebaseDatabase.getInstance().getReference().child("user/" + getIntent().getStringExtra("userId")).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
                                 @Override
-                                public void onSuccess(DataSnapshot dataSnapshot) {
-                                    // go to Matching Requests Fragment
-                                    mainIntent.putExtra("fragment", "matching_requests");
-                                    startActivity(mainIntent);
+                                public void onSuccess(DataSnapshot dataSnapshot1) {
+                                    // set the status of notification to seen if user press on the notification
+                                    FirebaseDatabase.getInstance().getReference().child("MatchRequests").get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+                                        @Override
+                                        public void onSuccess(DataSnapshot dataSnapshot) {
+                                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                                if (snapshot.child("requesterId").getValue(String.class).equals(getIntent().getStringExtra("userId"))
+                                                    && snapshot.child("recipientId").getValue(String.class).equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+                                                    FirebaseDatabase.getInstance().getReference("MatchRequests/" + snapshot.getKey() + "/recipient_status").setValue("seen");
+                                                    break;
+                                                }
+                                            }
+                                            // go to Matching Requests Fragment
+                                            mainIntent.putExtra("fragment", "matching_requests");
+                                            startActivity(mainIntent);
 
-                                    // go to Request Sender Profile
-                                    Intent intent = new Intent(splash.this, ViewAnotherProfile.class);
-                                    intent.putExtra("userId", getIntent().getStringExtra("userId"));
-                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                    startActivity(intent);
-                                    finish();
+                                            // go to Request Sender Profile
+                                            Intent intent = new Intent(splash.this, ViewAnotherProfile.class);
+                                            intent.putExtra("userId", getIntent().getStringExtra("userId"));
+                                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                            startActivity(intent);
+                                            finish();
+                                        }
+                                    });
                                 }
                             });
                         }
@@ -96,20 +109,38 @@ public class splash extends AppCompatActivity {
                             // get userName and userImage for Chat Activity
                             FirebaseDatabase.getInstance().getReference().child("user/" + getIntent().getStringExtra("userId")).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
                                 @Override
-                                public void onSuccess(DataSnapshot dataSnapshot) {
-                                    // go to Chat Fragment
-                                    mainIntent.putExtra("fragment", "message");
-                                    startActivity(mainIntent);
+                                public void onSuccess(DataSnapshot dataSnapshot1) {
+                                    // set the status of notification to seen if user press on the notification
+                                    FirebaseDatabase.getInstance().getReference().child("MatchRequests").get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+                                        @Override
+                                        public void onSuccess(DataSnapshot dataSnapshot) {
+                                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                                if (snapshot.child("requesterId").getValue(String.class).equals(getIntent().getStringExtra("userId"))
+                                                        && snapshot.child("recipientId").getValue(String.class).equals(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                                        || snapshot.child("requesterId").getValue(String.class).equals(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                                        && snapshot.child("recipientId").getValue(String.class).equals(getIntent().getStringExtra("userId"))) {
+                                                    if (snapshot.child("recipientId").getValue(String.class).equals(FirebaseAuth.getInstance().getCurrentUser().getUid()))
+                                                        FirebaseDatabase.getInstance().getReference("MatchRequests/" + snapshot.getKey() + "/requester_status").setValue("seen");
+                                                    else
+                                                        FirebaseDatabase.getInstance().getReference("MatchRequests/" + snapshot.getKey() + "/recipient_status").setValue("seen");
+                                                    break;
+                                                }
+                                            }
+                                            // go to Chat Fragment
+                                            mainIntent.putExtra("fragment", "message");
+                                            startActivity(mainIntent);
 
-                                    // go to the Chat Room
-                                    Intent intent = new Intent(splash.this, ChatActivity.class);
-                                    intent.putExtra("userId", getIntent().getStringExtra("userId"));
-                                    intent.putExtra("userName", dataSnapshot.child("userName").getValue(String.class));
-                                    intent.putExtra("userImage", dataSnapshot.child("profilepic").getValue(String.class));
-                                    intent.putExtra("roomId", getIntent().getStringExtra("chatId"));
-                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                    startActivity(intent);
-                                    finish();
+                                            // go to the Chat Room
+                                            Intent intent = new Intent(splash.this, ChatActivity.class);
+                                            intent.putExtra("userId", getIntent().getStringExtra("userId"));
+                                            intent.putExtra("userName", dataSnapshot1.child("userName").getValue(String.class));
+                                            intent.putExtra("userImage", dataSnapshot1.child("profilepic").getValue(String.class));
+                                            intent.putExtra("roomId", getIntent().getStringExtra("chatId"));
+                                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                            startActivity(intent);
+                                            finish();
+                                        }
+                                    });
                                 }
                             });
                         }
