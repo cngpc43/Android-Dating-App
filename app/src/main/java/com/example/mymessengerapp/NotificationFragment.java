@@ -16,6 +16,7 @@ import com.example.mymessengerapp.RequestsSentFragment;
 import com.example.mymessengerapp.adapter.NotificationsAdapter;
 import com.example.mymessengerapp.adapter.UserAdapter;
 import com.example.mymessengerapp.model.NotificationModel;
+import com.example.mymessengerapp.model.NotificationTimeComparator;
 import com.example.mymessengerapp.model.Users;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Firebase;
@@ -26,6 +27,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.core.utilities.Utilities;
 
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -40,6 +42,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -144,9 +148,13 @@ public class NotificationFragment extends Fragment {
                                 else if (dataSnapshot.child("requesterId").getValue(String.class).equals(currentUserId) && dataSnapshot.child("status").getValue(String.class).equals("pending")) {
                                     request_sent_count++;
                                 }
-                                adapter.notifyDataSetChanged();
+                                //adapter.notifyDataSetChanged();
                             }
                         }
+                        if (notificationsList.size() > 1) {
+                            Collections.sort(notificationsList, new NotificationTimeComparator());
+                        }
+                        adapter.notifyDataSetChanged();
                         badge.setText("(" + matching_request_count + ")");
                         sent_badge.setText("(" + request_sent_count + ")");
                     }
