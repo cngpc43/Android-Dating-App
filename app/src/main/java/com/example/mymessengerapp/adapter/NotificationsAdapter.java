@@ -141,7 +141,7 @@ public class NotificationsAdapter extends BaseAdapter {
                                                 notificationsList.get(position).getMatchRequestId() + "/recipient_status").setValue("seen");
                                     } else {
                                         FirebaseDatabase.getInstance().getReference().child("MatchRequests/" +
-                                                notificationsList.get(position).getMatchRequestId() + "/recipient_status").setValue("seen");
+                                                notificationsList.get(position).getMatchRequestId() + "/requester_status").setValue("seen");
                                     }
                                 }
                             });

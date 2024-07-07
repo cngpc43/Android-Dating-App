@@ -16,6 +16,7 @@ import com.example.mymessengerapp.RequestsSentFragment;
 import com.example.mymessengerapp.adapter.NotificationsAdapter;
 import com.example.mymessengerapp.adapter.UserAdapter;
 import com.example.mymessengerapp.model.NotificationModel;
+import com.example.mymessengerapp.model.NotificationTimeComparator;
 import com.example.mymessengerapp.model.Users;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Firebase;
@@ -24,7 +25,9 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.core.utilities.Utilities;
 
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -39,6 +42,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -92,65 +97,68 @@ public class NotificationFragment extends Fragment {
         valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                notificationsList.clear();
-                matching_request_count = 0;
-                request_sent_count = 0;
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    if (dataSnapshot.child("recipientId").getValue(String.class) != null
-                            && dataSnapshot.child("requesterId").getValue(String.class) != null
-                            && dataSnapshot.child("status").getValue(String.class) != null) {
-                        if (dataSnapshot.child("recipientId").getValue(String.class).equals(currentUserId) && dataSnapshot.child("status").getValue(String.class).equals("pending")) {
-                            matching_request_count++;
-                            FirebaseDatabase.getInstance().getReference().child("user/" + dataSnapshot.child("requesterId").getValue(String.class)).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
-                                @Override
-                                public void onSuccess(DataSnapshot dataSnapshot1) {
-                                    String dob = dataSnapshot1.child("dob").getValue(String.class);
+                FirebaseDatabase.getInstance().getReference("user").get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+                    @Override
+                    public void onSuccess(DataSnapshot dataSnapshot1) {
+                        notificationsList.clear();
+                        matching_request_count = 0;
+                        request_sent_count = 0;
+                        GenericTypeIndicator<HashMap<String, HashMap<String, Object>>> to = new GenericTypeIndicator<HashMap<String, HashMap<String, Object>>>() {
+                        };
+                        HashMap<String, HashMap<String, Object>> userHashMap = dataSnapshot1.getValue(to);
+                        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                            if (dataSnapshot.child("recipientId").getValue(String.class) != null
+                                    && dataSnapshot.child("requesterId").getValue(String.class) != null
+                                    && dataSnapshot.child("status").getValue(String.class) != null) {
+                                if (dataSnapshot.child("recipientId").getValue(String.class).equals(currentUserId) && dataSnapshot.child("status").getValue(String.class).equals("pending")) {
+                                    matching_request_count++;
+                                    String dob = (String) userHashMap.get(dataSnapshot.child("requesterId").getValue(String.class)).get("dob");
+                                    String userName = (String) userHashMap.get(dataSnapshot.child("requesterId").getValue(String.class)).get("userName");
+                                    String profilepic = (String) userHashMap.get(dataSnapshot.child("requesterId").getValue(String.class)).get("profilepic");
                                     // another user age
                                     int userAge = Calendar.getInstance().get(Calendar.YEAR) - Integer.valueOf(dob.substring(dob.indexOf(",") + 2, dob.length()));
                                     NotificationModel notificationModel = new NotificationModel(dataSnapshot.getKey(),
                                             dataSnapshot.child("recipient_status").getValue(String.class),
                                             dataSnapshot.child("requesterId").getValue(String.class),
-                                            dataSnapshot1.child("userName").getValue(String.class), String.valueOf(userAge),
-                                            dataSnapshot1.child("profilepic").getValue(String.class), "request_send",
+                                            userName, String.valueOf(userAge), profilepic, "request_send",
                                             dataSnapshot.child("timestamp").getValue(Long.class));
                                     if (notificationModel != null)
                                         notificationsList.add(notificationModel);
-                                    adapter.notifyDataSetChanged();
                                 }
-                            });
-                        }
-                        if (dataSnapshot.child("status").getValue(String.class).equals("accepted")) {
-                            String userId = dataSnapshot.child("recipientId").getValue(String.class);
-                            String status = dataSnapshot.child("recipient_status").getValue(String.class);
-                            if (userId.equals(auth.getCurrentUser().getUid())) {
-                                userId = dataSnapshot.child("requesterId").getValue(String.class);
-                                status = dataSnapshot.child("requester_status").getValue(String.class);
-                            }
-                            String finalUserId = userId;
-                            String finalStatus = status;
-                            FirebaseDatabase.getInstance().getReference().child("user/" + userId).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
-                                @Override
-                                public void onSuccess(DataSnapshot dataSnapshot1) {
-                                    String dob = dataSnapshot1.child("dob").getValue(String.class);
+                                else if (dataSnapshot.child("status").getValue(String.class).equals("accepted")
+                                        && (dataSnapshot.child("recipientId").getValue(String.class).equals(currentUserId)
+                                        || dataSnapshot.child("requesterId").getValue(String.class).equals(currentUserId))) {
+                                    String userId = dataSnapshot.child("recipientId").getValue(String.class);
+                                    String status = dataSnapshot.child("recipient_status").getValue(String.class);
+                                    if (userId.equals(auth.getCurrentUser().getUid())) {
+                                        userId = dataSnapshot.child("requesterId").getValue(String.class);
+                                        status = dataSnapshot.child("requester_status").getValue(String.class);
+                                    }
+                                    String dob = (String) userHashMap.get(userId).get("dob");
+                                    String userName = (String) userHashMap.get(userId).get("userName");
+                                    String profilepic = (String) userHashMap.get(userId).get("profilepic");
                                     // another user age
                                     int userAge = Calendar.getInstance().get(Calendar.YEAR) - Integer.valueOf(dob.substring(dob.indexOf(",") + 2, dob.length()));
                                     NotificationModel notificationModel = new NotificationModel(dataSnapshot.getKey(),
-                                            finalStatus, finalUserId, dataSnapshot1.child("userName").getValue(String.class),
-                                            String.valueOf(userAge), dataSnapshot1.child("profilepic").getValue(String.class),
+                                            status, userId, userName, String.valueOf(userAge), profilepic,
                                             "request_accept", dataSnapshot.child("timestamp").getValue(Long.class));
                                     if (notificationModel != null)
                                         notificationsList.add(notificationModel);
-                                    adapter.notifyDataSetChanged();
                                 }
-                            });
+                                else if (dataSnapshot.child("requesterId").getValue(String.class).equals(currentUserId) && dataSnapshot.child("status").getValue(String.class).equals("pending")) {
+                                    request_sent_count++;
+                                }
+                                //adapter.notifyDataSetChanged();
+                            }
                         }
-                        if (dataSnapshot.child("requesterId").getValue(String.class).equals(currentUserId) && dataSnapshot.child("status").getValue(String.class).equals("pending")) {
-                            request_sent_count++;
+                        if (notificationsList.size() > 1) {
+                            Collections.sort(notificationsList, new NotificationTimeComparator());
                         }
+                        adapter.notifyDataSetChanged();
+                        badge.setText("(" + matching_request_count + ")");
+                        sent_badge.setText("(" + request_sent_count + ")");
                     }
-                }
-                badge.setText("(" + matching_request_count + ")");
-                sent_badge.setText("(" + request_sent_count + ")");
+                });
             }
 
             @Override
